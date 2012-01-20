@@ -1,4 +1,4 @@
-package org.bitducks.form;
+package org.bitducks.spoofing.main;
 
 public class ThisIsAMain {
 
