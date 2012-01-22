@@ -32,7 +32,7 @@ public class DHCP extends UDPPacket {
 	private ArrayList<DHCPOption> options = new ArrayList<DHCPOption>();
 
 	public DHCP() {
-		super(67, 68);
+		super(68, 67);
 	}
 
 	public Packet forgePacket() {
@@ -40,7 +40,7 @@ public class DHCP extends UDPPacket {
 		int opLength = this.getOptionsLength();
 		byte[] options = this.getOptionsData(opLength);
 
-		this.b = ByteBuffer.allocate(DHCP.HEADER_LENGTH + opLength);
+		this.b = ByteBuffer.allocate(DHCP.HEADER_LENGTH + opLength + 1);
 
 		this.b.put(this.opcode.getOpcode());
 		this.b.put(this.htype);
@@ -58,6 +58,8 @@ public class DHCP extends UDPPacket {
 		this.b.put(this.file);
 
 		this.b.put(options);
+		
+		this.b.put((byte) 255);
 
 		this.data = b.array();
 		
