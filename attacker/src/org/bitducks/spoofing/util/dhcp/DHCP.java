@@ -57,6 +57,9 @@ public class DHCP extends UDPPacket {
 		this.b.put(this.sname);
 		this.b.put(this.file);
 
+		byte[] magicCookie = {99, (byte)130, 83, 99};
+		this.b.put(magicCookie);
+		
 		this.b.put(options);
 		
 		this.b.put((byte) 255);
