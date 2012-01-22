@@ -40,7 +40,7 @@ public class DHCP extends UDPPacket {
 		int opLength = this.getOptionsLength();
 		byte[] options = this.getOptionsData(opLength);
 
-		this.b = ByteBuffer.allocate(DHCP.HEADER_LENGTH + opLength + 1);
+		this.b = ByteBuffer.allocate(DHCP.HEADER_LENGTH + opLength + 4 + 1);
 
 		this.b.put(this.opcode.getOpcode());
 		this.b.put(this.htype);
