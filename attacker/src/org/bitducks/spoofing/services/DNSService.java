@@ -13,7 +13,6 @@ public class DNSService extends Service {
 	public void run() {
 		UDPPacket queryPaquet = (UDPPacket)this.getNextPacket();
 		
-		queryPaquet.
 		
 		/*DNSPacket answerPaquet = PacketFactory.dnsRequest(src_port, 
 				dst_port, 
