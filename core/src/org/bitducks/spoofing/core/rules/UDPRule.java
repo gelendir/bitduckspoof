@@ -5,13 +5,11 @@ import jpcap.packet.UDPPacket;
 
 import org.bitducks.spoofing.core.Rule;
 
-public class DNSRule extends UDPRule {
+public class UDPRule extends Rule {
 
 	@Override
 	public boolean checkRule(Packet p) {
-		return super.checkRule(p) && 
-				( ((UDPPacket)p).src_port == 53 || 
-				((UDPPacket)p).dst_port == 53 );
+		return p instanceof UDPPacket;
 	}
 
 }
