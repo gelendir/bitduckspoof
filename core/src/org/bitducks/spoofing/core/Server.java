@@ -64,17 +64,21 @@ public class Server extends Thread {
 		while (this.active) {
 			Packet packet = captor.getPacket();
 			if (packet != null) {
+				this.checkPolicy(packet);
 
-				// Check for each service to know if it match with the policy
-				for (Service s : this.services ) {
-					if (s.getPolicy().checkIfPolicyValid(packet)) {
-						// It's matching, so we push it to the service's paquetQueue.
-						s.pushPacket(packet);
-					}
-				}
 			}
 		}
 
 		captor.close();
+	}
+	
+	private void checkPolicy(Packet p) {
+		// Check for each service to know if it match with the policy
+		for (Service s : this.services ) {
+			if (s.getPolicy().checkIfPolicyValid(p)) {
+				// It's matching, so we push it to the service's paquetQueue.
+				s.pushPacket(p);
+			}
+		}
 	}
 }
