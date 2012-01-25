@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.core.rule;
+package org.bitducks.spoofing.core.rules;
 
 import jpcap.packet.Packet;
 import jpcap.packet.UDPPacket;
