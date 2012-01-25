@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+
 import org.bitducks.spoofing.util.Constants;
 
 public class IpRangeIterator implements Iterator<InetAddress> {
