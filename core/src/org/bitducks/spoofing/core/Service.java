@@ -53,4 +53,5 @@ public abstract class Service extends Thread {
 		return this.closeRequested;
 	}
 	
+	public abstract void run();
 }
