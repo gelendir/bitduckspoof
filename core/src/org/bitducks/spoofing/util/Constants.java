@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.packet;
+package org.bitducks.spoofing.util;
 
 public class Constants {
 

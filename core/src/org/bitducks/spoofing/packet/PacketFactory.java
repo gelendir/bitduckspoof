@@ -1,6 +1,8 @@
 package org.bitducks.spoofing.packet;
 import java.net.InetAddress;
 
+import org.bitducks.spoofing.util.Constants;
+
 import jpcap.packet.ARPPacket;
 import jpcap.packet.EthernetPacket;
 
