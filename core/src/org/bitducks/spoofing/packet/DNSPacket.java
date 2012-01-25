@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 
 import org.bitducks.spoofing.util.Constants;
 
+import com.sun.xml.internal.ws.util.ByteArrayBuffer;
+
 import jpcap.packet.UDPPacket;
 
 public class DNSPacket extends UDPPacket {
@@ -44,9 +46,10 @@ public class DNSPacket extends UDPPacket {
 	 * @param ipFalseDNS
 	 */
 	public void buildDataDNSPacket(byte[] transactionId, byte[] questions, byte[] query, InetAddress ipFalseDNS) {
-		ByteBuffer buffer = ByteBuffer.allocate(1);
+		ByteBuffer buffer = ByteBuffer.allocate(28 + query.length);
 		
-		buffer.put(transactionId);	// Transaction id
+		
+		buffer.put(transactionId);	// Transaction idByteBuffer.allocate(1)
 		buffer.put(new byte[]{ (byte) 0x85, (byte)0x80 });	// Flags (query response)
 		buffer.put(questions);		// Question
 		buffer.put(new byte[]{ (byte) 0x00, (byte)0x01 });	// Answer

@@ -44,7 +44,7 @@ public class PacketFactory {
 	static public DNSPacket dnsRequest( int src_port, 
 			int dst_port, 
 			InetAddress ipSource, 
-			InetAddress ipTarget, 
+			InetAddress ipDestination, 
 			byte[] transactionId, 
 			byte[] questions, 
 			byte[] query, 
@@ -52,7 +52,7 @@ public class PacketFactory {
 		
 		DNSPacket dnsPacket = new DNSPacket(src_port, dst_port);
 		
-		dnsPacket.buildIpDNSPacket(ipSource, ipTarget);
+		dnsPacket.buildIpDNSPacket(ipSource, ipDestination);
 		dnsPacket.buildDataDNSPacket(transactionId, questions, query, ipFalseDNS);		
 		
 		return dnsPacket;

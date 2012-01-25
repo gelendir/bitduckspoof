@@ -9,6 +9,15 @@ public abstract class Service extends Thread {
 	private Policy policy = new Policy();
 	private volatile boolean closeRequested = false;
 	private volatile boolean isStarted = false;
+	private volatile Server server = null;
+	
+	public Service(Server server) {
+		this.server = server;
+	}
+	
+	protected Server getServer() {
+		return server;
+	}
 	
 	protected Packet getNextPacket() {
 		try {
