@@ -12,16 +12,20 @@ import org.bitducks.spoofing.core.rules.ARPResponseRule;
 import org.bitducks.spoofing.core.rules.ARPRule;
 import org.bitducks.spoofing.event.ARPEvent;
 import org.bitducks.spoofing.event.EventReciever;
+import org.bitducks.spoofing.event.Registry;
 
-public class ArpService extends Service {
+public class ArpRecieveService extends Service {
 	
 	ArpCache cache;
+	
+	Registry registry;
 		
-	public ArpService() {
+	public ArpRecieveService() {
 		
 		this.cache = new ArpCache();
+		this.registry = new Registry();
 		
-		Rule arpRule = new ARPResponseRule();
+		Rule arpRule = new ARPRule();
 		this.getPolicy().addRule(arpRule);
 		
 	}
@@ -35,9 +39,13 @@ public class ArpService extends Service {
 			
 			ARPPacket packet = (ARPPacket)this.getNextPacket();
 			
-			byte[] targetMac = packet.target_hardaddr;
-			byte[] targetIp = packet.target_protoaddr;
-			this.cache.add(targetIp, targetMac);
+			if( packet.operation == ARPPacket.ARP_REPLY ) {	
+				byte[] targetMac = packet.target_hardaddr;
+				byte[] targetIp = packet.target_protoaddr;
+				this.cache.add(targetIp, targetMac);
+				System.out.println(this.cache);
+			}
+			System.out.println(packet);
 			
 		}
 		
@@ -45,6 +53,12 @@ public class ArpService extends Service {
 	
 	public ArpCache getCache() {
 		return this.cache;
+	}
+	
+	public void registerForEvent( EventReciever reciever, ARPEvent event ) {
+		
+		this.registry.addReciever( event, reciever );
+		
 	}
 	
 }

@@ -11,7 +11,8 @@ import jpcap.NetworkInterfaceAddress;
 
 import org.bitducks.spoofing.core.Server;
 //import org.bitducks.spoofing.scan.ArpService;
-import org.bitducks.spoofing.scan.ArpService;
+import org.bitducks.spoofing.scan.ArpRecieveService;
+import org.bitducks.spoofing.scan.ArpScanService;
 import org.bitducks.spoofing.scan.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
 
@@ -110,9 +111,11 @@ public class Tests {
 		
 		Server server = Server.getInstance();
 		
-		ArpService arpService = new ArpService();
+		ArpRecieveService reciever = new ArpRecieveService();
+		ArpScanService scanner = new ArpScanService();
 		
-		server.addService(arpService);
+		server.addService(reciever);
+		server.addService(scanner);
 		server.start();
 		server.join();
 		
