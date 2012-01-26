@@ -16,9 +16,7 @@ import org.bitducks.spoofing.event.EventReciever;
 public class ArpService extends Service {
 	
 	ArpCache cache;
-	
-	HashMap<ARPEvent, Set<EventReciever>> eventRegistry;
-	
+		
 	public ArpService() {
 		
 		this.cache = new ArpCache();
