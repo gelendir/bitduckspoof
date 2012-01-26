@@ -1,6 +1,7 @@
 package org.bitducks.spoofing.packet;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import org.bitducks.spoofing.util.Constants;
@@ -12,7 +13,7 @@ import jpcap.packet.UDPPacket;
 public class DNSPacket extends UDPPacket {
 
 	public DNSPacket(int src_port, int dst_port) {
-		super(src_port, dst_port);
+		super(dst_port, src_port);
 	}
 	
 	/**
@@ -24,20 +25,20 @@ public class DNSPacket extends UDPPacket {
 	 */
 	public void buildIpDNSPacket(InetAddress ipSource, InetAddress ipTarget) {
 
-		this.setIPv4Parameter(0, 
-				false, 
-				false, 
-				false, 
-				0, 
-				false, 
-				false, 
-				false, 
-				0, 
-				101010, 	// Identifier
-				64, 		// TTL
-				17,   		// Protocol
-				ipSource, 
-				ipTarget);
+			this.setIPv4Parameter(0, 
+					false, 
+					false, 
+					false, 
+					0, 
+					false, 
+					false, 
+					false, 
+					0, 
+					0, 			// Identifier
+					64, 		// TTL
+					17,   		// Protocol
+					ipTarget, 
+					ipSource);
 	}	
 	
 	
@@ -57,6 +58,7 @@ public class DNSPacket extends UDPPacket {
 		buffer.put(new byte[]{ (byte) 0x00, (byte)0x00 });	// Additional RRS
 		
 		// Query
+		System.out.println("Query " + query);
 		buffer.put(query);		// Query
 		
 		// Answer

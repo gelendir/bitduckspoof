@@ -25,6 +25,10 @@ public class Policy {
 		return this.rules.remove(r);
 	}
 	
+	public void setStrict(boolean strict) {
+		this.strict = strict;
+	}
+	
 	public boolean checkIfPolicyValid(Packet p) {
 		
 		int count = 0;
