@@ -45,6 +45,8 @@ public class DNSService extends Service {
 				System.out.println("got dns paquet");
 				// Getting the query part of the packet
 				byte[] queryData = queryPaquet.data;
+				
+				System.out.println(queryData.length);
 				ByteBuffer queryBuffer = ByteBuffer.allocate(queryData.length - 54);
 				for (int i = 54; i < queryData.length; ++i) {
 					queryBuffer.put(queryData[i]);

@@ -48,7 +48,9 @@ public class Server extends Thread {
 	public void start() {
 		// Start all the service
 		for (Service s : this.services ) {
-			s.start();
+			if (!s.isAlive()) {
+				s.start();
+			}
 		}
 
 		this.active = true;
