@@ -16,6 +16,22 @@ public class Server extends Thread {
 	private List<Service> services = Collections.synchronizedList(new LinkedList<Service>());
 	private List<Packet> sendingQueue = Collections.synchronizedList(new LinkedList<Packet>());
 	private volatile boolean active = false;
+	
+	private NetworkInterface networkInterface;
+	
+	private static Server instance = null;
+	
+	public static void createInstance(NetworkInterface networkInterface) {
+		Server.instance = new Server(networkInterface);
+	}
+	
+	public static Server getInstance() {
+		return Server.instance;
+	}
+	
+	private Server(NetworkInterface networkInterface) {
+		this.networkInterface = networkInterface;
+	}
 
 	public void addService(Service service) {
 		service.start();
@@ -102,5 +118,9 @@ public class Server extends Thread {
 	
 	public void sendPacket(Packet p) {
 		this.sendingQueue.add(p);
+	}
+	
+	public NetworkInterface getNetworkInterface() {
+		return this.networkInterface;
 	}
 }
