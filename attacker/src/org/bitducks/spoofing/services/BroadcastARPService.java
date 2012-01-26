@@ -9,6 +9,7 @@ import jpcap.packet.ARPPacket;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
+import org.bitducks.spoofing.customrules.DestinationIpRule;
 import org.bitducks.spoofing.packet.PacketFactory;
 import org.bitducks.spoofing.scan.IpRangeIterator;
 import org.bitducks.spoofing.util.IpUtil;
@@ -17,12 +18,20 @@ import org.bitducks.spoofing.util.gateway.GatewayFinder;
 public class BroadcastARPService extends Service {
 	NetworkInterface servInterface;
 	IpRangeIterator iterator;
+	InetAddress gateway;
 	
 	public BroadcastARPService() {
 		servInterface = Server.getInstance().getNetworkInterface();
 		InetAddress firstIp = IpUtil.network(servInterface.addresses[0]);
 		InetAddress lastIp = IpUtil.lastIpInNetwork(servInterface.addresses[0]);
 		iterator = new IpRangeIterator(firstIp, lastIp);
+		try {
+			gateway = GatewayFinder.find(servInterface);
+			//TODO: À REVOIR
+			this.getPolicy().addRule(new DestinationIpRule(gateway));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -39,6 +48,12 @@ public class BroadcastARPService extends Service {
 			}
 		}
 	}
+
+	private void spoofedPackage() {
+		ARPPacket spoofedPacket = PacketFactory.arpRequest(servInterface.mac_address, gateway, getNextIp());
+		System.out.println(spoofedPacket.toString());
+		Server.getInstance().sendPacket(spoofedPacket);
+	}
 	
 	private InetAddress getNextIp() {
 		if(! iterator.hasNext()) {
@@ -46,23 +61,8 @@ public class BroadcastARPService extends Service {
 		}
 		return iterator.next();
 	}
-
-	private void spoofedPackage() {
-		try {
-			
-			InetAddress gateway = GatewayFinder.find(servInterface);
-
-			ARPPacket spoofedPacket = PacketFactory.arpRequest(servInterface.mac_address, gateway, getNextIp());
-
-			Server.getInstance().sendPacket(spoofedPacket);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private void redirectTraffic() {
-		// TODO Auto-generated method stub
-		
+		System.out.println();
 	}
 }

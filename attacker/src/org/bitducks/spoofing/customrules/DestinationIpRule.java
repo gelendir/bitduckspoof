@@ -12,18 +12,14 @@ public class DestinationIpRule extends Rule {
 
 	private InetAddress toFilter;
 	
-	public DestinationIpRule(String ipToFilter) {
-		try {
-			toFilter = InetAddress.getByName(ipToFilter);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public DestinationIpRule(InetAddress ipToFilter) {
+		toFilter = ipToFilter;
 	}
 	
 	@Override
 	public boolean checkRule(Packet p) {
-		if(p instanceof IPPacket && ((IPPacket)p).src_ip == toFilter) {
+		//TODO: Change the rule to redirect packet with my MAC but not my real IP
+		if(p instanceof IPPacket && ((IPPacket)p).dst_ip == toFilter) {
 			return true;
 		}
 		return false;

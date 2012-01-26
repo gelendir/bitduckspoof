@@ -47,7 +47,7 @@ public abstract class Service extends Thread {
 	public void closeService() {
 		this.closeRequested = true;
 		//We push null object to indicate to the service thread to close the thread.
-		this.pushPacket(null);
+		this.pushPacket(Packet.EOF);
 	}
 	
 	public boolean isCloseRequested() {
