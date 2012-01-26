@@ -105,13 +105,6 @@ public class Tests {
 	
 	public static void testArpService() throws Exception {
 		
-		//ArpService arpService = new ArpService();
-		
-		Server server = new Server();
-		//server.addService(arpService);
-		
-		server.start();
-		
 	}
 
 }
