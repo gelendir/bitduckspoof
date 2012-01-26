@@ -2,6 +2,7 @@ package org.bitducks.spoofing.core;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import jpcap.JpcapSender;
 import jpcap.packet.Packet;
 
 public abstract class Service extends Thread {

@@ -14,14 +14,14 @@ import jpcap.packet.Packet;
 
 public class Server extends Thread {
 	private List<Service> services = Collections.synchronizedList(new LinkedList<Service>());
-	private List<Packet> sendingQueue = Collections.synchronizedList(new LinkedList<Packet>());
 	private volatile boolean active = false;
+	private JpcapSender sender = null;
 	
 	private NetworkInterface networkInterface;
 	
 	private static Server instance = null;
 	
-	public static void createInstance(NetworkInterface networkInterface) {
+	public static void createInstance(NetworkInterface networkInterface) throws IOException {
 		Server.instance = new Server(networkInterface);
 	}
 	
@@ -29,8 +29,9 @@ public class Server extends Thread {
 		return Server.instance;
 	}
 	
-	private Server(NetworkInterface networkInterface) {
+	private Server(NetworkInterface networkInterface) throws IOException {
 		this.networkInterface = networkInterface;
+		sender = JpcapSender.openDevice(networkInterface);
 	}
 
 	public void addService(Service service) {
@@ -69,10 +70,9 @@ public class Server extends Thread {
 		// TODO Set the right interface
 		NetworkInterface device = JpcapCaptor.getDeviceList()[0];
 		JpcapCaptor captor = null;
-		JpcapSender sender = null;
+		
 		try {
 			captor = JpcapCaptor.openDevice(device,2000,true, 20);
-			sender = JpcapSender.openDevice(device);
 		} catch (IOException e) {
 			// TODO Error handling
 			e.printStackTrace();
@@ -83,11 +83,7 @@ public class Server extends Thread {
 
 		// Main loop
 		while (this.active) {
-			// Should we do 2 thread for these call ??
-			// What if the loop is stuck into read and never get to read
-			// What if we pass thing we should read
 			this.pushPacketToService(captor);
-			this.readPacketFromService(sender);
 			
 		}
 
@@ -108,17 +104,10 @@ public class Server extends Thread {
 		}		
 	}
 	
-	private void readPacketFromService(JpcapSender sender) {
-		// We send all the packet in the sending queue
-		for (Packet p : this.sendingQueue) {
-			sender.sendPacket(p);
-			this.sendingQueue.remove(p);
-		}
+	public void sendPacket(Packet packet) {
+		sender.sendPacket(packet);
 	}
 	
-	public void sendPacket(Packet p) {
-		this.sendingQueue.add(p);
-	}
 	
 	public NetworkInterface getNetworkInterface() {
 		return this.networkInterface;

@@ -107,10 +107,10 @@ public class Tests {
 		
 		//ArpService arpService = new ArpService();
 		
-		Server server = new Server();
+		//Server server = new Server();
 		//server.addService(arpService);
 		
-		server.start();
+		//server.start();
 		
 	}
 
