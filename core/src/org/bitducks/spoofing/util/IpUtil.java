@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
+import org.bitducks.spoofing.exception.UnexpectedErrorException;
+
 import jpcap.NetworkInterfaceAddress;
 
 public abstract class IpUtil {
@@ -25,11 +27,7 @@ public abstract class IpUtil {
 			network[i] = (byte) (network[i] & mask[i]);
 		}
 		
-		try {
-			return InetAddress.getByAddress(network);
-		} catch (UnknownHostException e) {
-			return null;
-		}
+		return IpUtil.bytesToInet(network);
 		
 	}
 	
@@ -41,12 +39,17 @@ public abstract class IpUtil {
 		ByteBuffer buffer = ByteBuffer.allocate( Constants.IPV4_LEN );
 		buffer.putInt(rawBroadcast);
 		
-		try {
-			return InetAddress.getByAddress(buffer.array());
-		} catch (UnknownHostException e) {
-			return null;
-		}
+		return IpUtil.bytesToInet(buffer.array());
 		
+	}
+	
+	public static InetAddress bytesToInet( byte[] address ) {
+		
+		try{
+			return InetAddress.getByAddress( address );
+		} catch( UnknownHostException e) {
+			throw new UnexpectedErrorException(e, "Error converting ip to InetAddress");
+		}
 	}
 
 }

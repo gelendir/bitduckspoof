@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import jpcap.JpcapCaptor;
 import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
-import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 
 public class Server extends Thread {
@@ -26,7 +24,7 @@ public class Server extends Thread {
 	}
 	
 	public static Server getInstance() {
-		return Server.instance;
+			return Server.instance;
 	}
 	
 	private Server(NetworkInterface networkInterface) throws IOException {

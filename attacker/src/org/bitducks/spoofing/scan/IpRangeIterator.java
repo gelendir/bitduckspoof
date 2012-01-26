@@ -14,11 +14,15 @@ public class IpRangeIterator implements Iterator<InetAddress> {
 	int current;
 	
 	public IpRangeIterator( byte[] ipStart, byte[] ipEnd ) {
-		
 		this.start = ByteBuffer.wrap(ipStart).getInt(0);
 		this.end = ByteBuffer.wrap(ipEnd).getInt(0);
 		this.current = this.start;
 		
+	}
+	
+
+	public IpRangeIterator(InetAddress start, InetAddress end) {
+		this(start.getAddress(), end.getAddress());
 	}
 
 	@Override
@@ -43,6 +47,10 @@ public class IpRangeIterator implements Iterator<InetAddress> {
 	@Override
 	public void remove() {
 		// TODO Auto-generated method stub	
+	}
+
+	public void reset() {
+		this.current = this.start;
 	}	
 
 }

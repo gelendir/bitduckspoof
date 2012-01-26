@@ -11,6 +11,7 @@ import jpcap.NetworkInterfaceAddress;
 
 import org.bitducks.spoofing.core.Server;
 //import org.bitducks.spoofing.scan.ArpService;
+import org.bitducks.spoofing.scan.ArpService;
 import org.bitducks.spoofing.scan.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
 
@@ -31,9 +32,9 @@ public class Tests {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		testIpUtils();
-		testIpMask();
-		testIpRange();
+		//testIpUtils();
+		//testIpMask();
+		//testIpRange();
 		testArpService();
 
 	}
@@ -105,12 +106,16 @@ public class Tests {
 	
 	public static void testArpService() throws Exception {
 		
-		//ArpService arpService = new ArpService();
+		Server.createInstance( getDevice() );
 		
-		//Server server = new Server();
-		//server.addService(arpService);
+		Server server = Server.getInstance();
 		
-		//server.start();
+		ArpService arpService = new ArpService();
+		
+		server.addService(arpService);
+		server.start();
+		server.join();
+		
 		
 	}
 
