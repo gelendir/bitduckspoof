@@ -27,19 +27,27 @@ public class Policy {
 	
 	public boolean checkIfPolicyValid(Packet p) {
 		
+		int count = 0;
 		for (Rule rule : this.rules) {
 			
 			boolean valid = rule.checkRule(p);
 			
 			if (valid && !this.strict) {
 				return true;
-			} else if(!valid && this.strict) {
+			} else if (!valid && this.strict) {
 				return false;
+			}	
+			else if (valid) {
+				++count;
 			}
 			
 		}
 		
-		return true;
-		
+		if (count == this.rules.size()) // All of them are valid
+		{
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
