@@ -5,6 +5,7 @@ import org.bitducks.spoofing.util.Constants;
 
 import jpcap.packet.ARPPacket;
 import jpcap.packet.EthernetPacket;
+import jpcap.packet.UDPPacket;
 
 public class PacketFactory {
 	
@@ -41,18 +42,27 @@ public class PacketFactory {
 		
 	}
 	
-	static public DNSPacket dnsRequest( int src_port, 
-			int dst_port, 
-			InetAddress ipSource, 
-			InetAddress ipDestination, 
+	static public DNSPacket dnsRequest( UDPPacket queryPacket, 
 			byte[] transactionId, 
 			byte[] questions, 
 			byte[] query, 
 			InetAddress ipFalseDNS ) {
 		
-		DNSPacket dnsPacket = new DNSPacket(src_port, dst_port);
+		DNSPacket dnsPacket = new DNSPacket(queryPacket.src_port, queryPacket.dst_port);
 		
-		dnsPacket.buildIpDNSPacket(ipSource, ipDestination);
+		dnsPacket.buildIpDNSPacket(queryPacket.src_ip, queryPacket.dst_ip);
+		
+		//create an Ethernet packet (frame)
+		EthernetPacket ether = new EthernetPacket();
+		//set frame type as IP
+		ether.frametype = EthernetPacket.ETHERTYPE_IP;
+		//set source and destination MAC addresses
+		ether.src_mac = new byte[]{(byte)0x00,(byte)0x1c,(byte)0x10,(byte)0x41,(byte)0x92,(byte)0x0e};
+		ether.dst_mac =  new byte[]{(byte)0x08,(byte)0x00,(byte)0x27,(byte)0x4c,(byte)0x0d,(byte)0x1c};
+		
+		//set the datalink frame of the packet p as ether
+		dnsPacket.datalink = ether;
+		
 		dnsPacket.buildDataDNSPacket(transactionId, questions, query, ipFalseDNS);		
 		
 		return dnsPacket;
