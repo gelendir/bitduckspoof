@@ -22,7 +22,7 @@ public class testSimon {
 		NetworkInterface i = JpcapCaptor.getDeviceList() [ 1 ];
 		Server.createInstance(i);
 		DNSService service = new DNSService();
-		service.setDNSFalseIp("10.17.62.145"); // Setting the default false ip
+		service.setDNSFalseIp("10.0.9.24"); // Setting the default false ip
 		
 		Server.getInstance().addService(service);
 		

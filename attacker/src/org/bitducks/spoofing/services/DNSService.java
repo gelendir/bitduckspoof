@@ -1,6 +1,5 @@
 package org.bitducks.spoofing.services;
 
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -17,8 +16,6 @@ import org.bitducks.spoofing.core.rules.DNSIpv4Rule;
 import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.packet.PacketFactory;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 public class DNSService extends Service {
 	private InetAddress falseDefaultIpAddr = null;
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
@@ -29,12 +26,6 @@ public class DNSService extends Service {
 		this.getPolicy().addRule(new DNSIpv4Rule());
 		
 		this.getPolicy().setStrict(true);
-		try {
-			this.addDnsPacketFilter("facebook.com", InetAddress.getByName("10.17.62.11"));
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		// TODO Get our IP or the IP provided
 		//this.setDNSFalseIp("10.17.62.145");
@@ -49,11 +40,11 @@ public class DNSService extends Service {
 	}
 	
 	public void addDnsPacketFilter(String regex, InetAddress addr) {
-		this.dnsPacketFilter.put(regex, addr);
+		this.dnsPacketFilter.put(regex.replace("*", ".*"), addr);
 	}
 	
 	public void removeDnsPacketFilter(String regex) {
-		this.dnsPacketFilter.remove(regex);
+		this.dnsPacketFilter.remove(regex.replace("*", ".*"));
 	}
 	
 	/**
@@ -63,8 +54,8 @@ public class DNSService extends Service {
 	 * @param addr
 	 */
 	public void editDnsPacketFilter(String oldRegex, String newRegex, InetAddress addr) {
-		this.dnsPacketFilter.remove(oldRegex);
-		this.dnsPacketFilter.put(newRegex, addr);
+		this.dnsPacketFilter.remove(oldRegex.replace("*", ".*"));
+		this.dnsPacketFilter.put(newRegex.replace("*", ".*"), addr);
 	}
 
 	@Override
@@ -112,17 +103,19 @@ public class DNSService extends Service {
 		}
 		
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < p.data.length; ++i) {
+		ByteBuffer buf = ByteBuffer.allocate(p.data.length - 12 - 6);
+		for (int i = 13; i < p.data.length - 5; ++i) {
 			//System.out.println(p.data[i]);
-			builder.append(p.data[i] & 0xff);
+			byte tmpByte = p.data[i];
+			if (tmpByte >= 0x21) { // This is a letters
+				buf.put(tmpByte);		
+			} else {
+				buf.put((byte) 0x2e);
+			}
+			
 		}
-		
-		
-		// TODO Convert byte to ascii .. DAM JAVA
 
-		
-		String data = builder.toString();
-		
+		String data = new String(buf.array());
 		
 		Iterator<String> it = this.dnsPacketFilter.keySet().iterator();
 		// Checking all the filter
