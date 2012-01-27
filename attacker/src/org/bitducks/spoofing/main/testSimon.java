@@ -3,6 +3,7 @@ package org.bitducks.spoofing.main;
 import java.io.IOException;
 
 import jpcap.JpcapCaptor;
+import jpcap.NetworkInterface;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
@@ -18,8 +19,10 @@ public class testSimon {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		
-		Server.createInstance(JpcapCaptor.getDeviceList()[ 0 ]);
-		Service service = new DNSService();
+		NetworkInterface i = JpcapCaptor.getDeviceList() [ 1 ];
+		Server.createInstance(i);
+		DNSService service = new DNSService();
+		service.setDNSFalseIp("10.17.62.145"); // Setting the default false ip
 		
 		Server.getInstance().addService(service);
 		
