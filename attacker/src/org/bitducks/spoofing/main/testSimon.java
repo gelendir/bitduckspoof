@@ -19,9 +19,10 @@ public class testSimon {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		
-		//NetworkInterface i[] = JpcapCaptor.getDeviceList();
-		Server.createInstance(JpcapCaptor.getDeviceList()[ 1 ]);
-		Service service = new DNSService();
+		NetworkInterface i = JpcapCaptor.getDeviceList() [ 1 ];
+		Server.createInstance(i);
+		DNSService service = new DNSService();
+		service.setDNSFalseIp("10.17.62.145"); // Setting the default false ip
 		
 		Server.getInstance().addService(service);
 		
