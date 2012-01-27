@@ -3,6 +3,7 @@ package org.bitducks.spoofing.main;
 import java.io.IOException;
 
 import jpcap.JpcapCaptor;
+import jpcap.NetworkInterface;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
@@ -18,7 +19,8 @@ public class testSimon {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		
-		Server.createInstance(JpcapCaptor.getDeviceList()[ 0 ]);
+		//NetworkInterface i[] = JpcapCaptor.getDeviceList();
+		Server.createInstance(JpcapCaptor.getDeviceList()[ 1 ]);
 		Service service = new DNSService();
 		
 		Server.getInstance().addService(service);
