@@ -14,7 +14,10 @@ public class ThisIsAMain {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-
+		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
+		Server.getInstance().addService(new BroadcastARPService());
+		Thread.sleep(10000);
+		Server.getInstance().stopServer();
 	}
 
 }
