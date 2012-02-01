@@ -16,6 +16,7 @@ public class Server extends Thread {
 	private JpcapSender sender = null;
 	
 	private NetworkInterface networkInterface;
+	private InterfaceInfo info;
 	
 	private static Server instance = null;
 	
@@ -115,4 +116,9 @@ public class Server extends Thread {
 	public NetworkInterface getNetworkInterface() {
 		return this.networkInterface;
 	}
+	
+	public InterfaceInfo getInfo() {
+		return this.info;
+	}
+	
 }
