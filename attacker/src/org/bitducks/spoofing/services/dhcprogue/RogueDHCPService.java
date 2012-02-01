@@ -26,6 +26,10 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPRule;
 import org.bitducks.spoofing.packet.PacketFactory;
+import org.bitducks.spoofing.scan.ArpRecieveService;
+import org.bitducks.spoofing.scan.ArpScanFinish;
+import org.bitducks.spoofing.scan.ArpScanService;
+import org.bitducks.spoofing.scan.ArpScanTimer;
 import org.bitducks.spoofing.scan.IpRange;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpUtil;
@@ -33,7 +37,7 @@ import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 import org.dhcp4java.DHCPResponseFactory;
 
-public class RogueDHCPService extends Service {
+public class RogueDHCPService extends Service implements ArpScanFinish {
 
 	/**
 	 * The available IP address
@@ -61,6 +65,11 @@ public class RogueDHCPService extends Service {
 	private Set<InetAddress> givenAdresses = Collections.synchronizedSet(new HashSet<InetAddress>());
 
 	private Timer timer = new Timer();
+	
+	private ArpScanService arpScan = new ArpScanService();
+	private ArpRecieveService receiver = new ArpRecieveService();
+	
+	private ArpFreeAddressService arpSender = new ArpFreeAddressService();
 
 	public RogueDHCPService() {
 		Policy policy = this.getPolicy();
@@ -76,11 +85,14 @@ public class RogueDHCPService extends Service {
 				IpUtil.lastIpInNetwork2(deviceAddress))
 		.iterator();
 		this.range.next();
+		
+		Server.getInstance().addService(this.arpScan);
+		Server.getInstance().addService(this.receiver);
 	}
 
 	@Override
 	public void run() {
-		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
+		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), 60 * 60 * 1000); //For 1 hour
 
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextBlockingPacket();
@@ -110,7 +122,7 @@ public class RogueDHCPService extends Service {
 		do {
 			offer = this.getAddressOffer();
 			this.givenAdresses.add(offer);
-		} while(this.sendArp(offer, 100)); //While the arp request has a reply, we take the next address
+		} while(this.arpSender.sendARP(offer, 100)); //While the arp request has a reply, we take the next address
 		
 		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.server, "", null);
 
@@ -184,13 +196,20 @@ public class RogueDHCPService extends Service {
 		}
 	}
 
-	/* package visibility */ void addFreeAddress(Collection<InetAddress> address) {
+	/* package visibility  void addFreeAddress(Collection<InetAddress> address) {
 		this.freeAddress.addAll(address);
 		this.givenAdresses.removeAll(address);
 		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
+	}*/
+	
+	@Override
+	public void scanFinished(Collection<InetAddress> addresses) {
+		this.freeAddress.addAll(addresses);
+		this.givenAdresses.removeAll(addresses);
+		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), 60 * 60 * 1000); //For 1 hour
 	}
 
-	private boolean sendArp(InetAddress addr, int timeout) {
+	/*private boolean sendArp(InetAddress addr, int timeout) {
 		try {
 			JpcapCaptor captor = JpcapCaptor.openDevice(Server.getInstance().getNetworkInterface(), 65000, true, timeout);
 
@@ -211,5 +230,5 @@ public class RogueDHCPService extends Service {
 		}
 		
 		return false;
-	}
+	}*/
 }
