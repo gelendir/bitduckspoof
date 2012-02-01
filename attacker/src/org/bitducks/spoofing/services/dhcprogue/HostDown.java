@@ -11,6 +11,7 @@ import jpcap.JpcapCaptor;
 import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
+import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.packet.PacketFactory;
 
@@ -32,8 +33,10 @@ public class HostDown extends TimerTask {
 			for(InetAddress addr : hosts) {
 				captor.setFilter("arp[6:2] == 2 && arp src " + addr.getHostAddress(), false);
 				
-				ARPPacket arp = PacketFactory.arpRequest(Server.getInstance().getNetworkInterface().mac_address,
-						Server.getInstance().getNetworkInterface().addresses[0].address, 
+				InterfaceInfo info = Server.getInstance().getInfo();
+				
+				ARPPacket arp = PacketFactory.arpRequest( info.getMacAddress(),
+						info.getAddress(),
 						addr);
 				
 				Server.getInstance().sendPacket(arp);
