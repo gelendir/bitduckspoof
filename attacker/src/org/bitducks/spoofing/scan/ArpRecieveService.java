@@ -32,15 +32,13 @@ public class ArpRecieveService extends Service {
 	
 	public void run() {
 		
-		boolean run = true;
 		System.out.println("ARP recieving service started");
 		
-		while( run ) {
+		while( !this.isCloseRequested() ) {
 			
 			ARPPacket packet = (ARPPacket)this.getNextBlockingPacket();
 			
 			if( packet == null ) {
-				run = false;
 				return;
 			}
 			
