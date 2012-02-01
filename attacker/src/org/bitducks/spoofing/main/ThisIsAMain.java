@@ -6,7 +6,7 @@ import jpcap.NetworkInterface;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
-import org.bitducks.spoofing.services.RogueDHCPService;
+import org.bitducks.spoofing.services.dhcprogue.RogueDHCPService;
 
 public class ThisIsAMain {
 

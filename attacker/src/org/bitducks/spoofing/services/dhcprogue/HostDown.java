@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.services;
+package org.bitducks.spoofing.services.dhcprogue;
 
 import java.io.IOException;
 import java.net.InetAddress;

