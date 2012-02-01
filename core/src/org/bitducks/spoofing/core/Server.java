@@ -34,7 +34,9 @@ public class Server extends Thread {
 	}
 
 	public void addService(Service service) {
-		service.start();
+		if (this.isAlive() && !service.isAlive()) {
+			service.start();
+		}
 		this.services.add(service);
 	}
 
