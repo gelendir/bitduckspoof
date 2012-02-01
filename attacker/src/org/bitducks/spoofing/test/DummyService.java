@@ -18,7 +18,7 @@ public class DummyService extends Service {
 		
 		while( true ) {
 			System.out.println("waiting for packet");
-			Packet packet = this.getNextPacket();
+			Packet packet = this.getNextBlockingPacket();
 			System.out.println("DUMMY " + packet.toString());
 		}
 		

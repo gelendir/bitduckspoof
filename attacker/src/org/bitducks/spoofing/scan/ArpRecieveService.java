@@ -37,7 +37,7 @@ public class ArpRecieveService extends Service {
 		
 		while( run ) {
 			
-			ARPPacket packet = (ARPPacket)this.getNextPacket();
+			ARPPacket packet = (ARPPacket)this.getNextBlockingPacket();
 			
 			if( packet == null ) {
 				run = false;
