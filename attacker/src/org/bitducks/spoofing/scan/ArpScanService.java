@@ -24,26 +24,11 @@ public class ArpScanService extends Service {
 	@Override
 	public void run() {
 		
-		System.out.println("Arp Scan service started");
-		
-		Server server = Server.getInstance();
-		NetworkInterface device = server.getNetworkInterface();
-		
-		InetAddress start = IpUtil.network( device );
-		InetAddress end = IpUtil.lastIpInNetwork( device );
-		
-		IpRange ipRange = new IpRange(start, end);
-		
-		LinkedList<InetAddress> addresses = new LinkedList<InetAddress>();
-		for( InetAddress address: ipRange ) {
-			addresses.add(address);
-		}
-		
-		this.runScan(addresses);
-		
 	}
 	
 	public void runScan( Collection<InetAddress> addresses ) {
+		
+		System.out.println("Arp scan started");
 		
 		Server server = Server.getInstance();
 		NetworkInterface device = server.getNetworkInterface();
@@ -58,6 +43,28 @@ public class ArpScanService extends Service {
 			
 		}
 		
+	}
+	
+	public void runNetworkScan() {
+		
+		System.out.println("Arp network scan started");
+		
+		Server server = Server.getInstance();
+		NetworkInterface device = server.getNetworkInterface();
+		
+		PacketGenerator generator = new PacketGenerator(device);
+		
+		InetAddress start = IpUtil.network( device );
+		InetAddress end = IpUtil.lastIpInNetwork( device );
+		
+		IpRange ipRange = new IpRange(start, end);
+		
+		for( InetAddress address: ipRange ) {
+			System.out.println("sending request for " + address.toString() );
+			ARPPacket arpRequest = generator.arpRequest(address);	
+			server.sendPacket(arpRequest);
+		}
+			
 	}
 
 }
