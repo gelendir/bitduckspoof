@@ -1,8 +1,8 @@
 package org.bitducks.spoofing.core;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
-import jpcap.JpcapSender;
 import jpcap.packet.Packet;
 
 public abstract class Service extends Thread {
@@ -11,9 +11,20 @@ public abstract class Service extends Thread {
 	private volatile boolean closeRequested = false;
 	private volatile boolean isStarted = false;
 	
-	protected Packet getNextPacket() {
+	protected Packet getNextBlockingPacket() {
 		try {
 			return this.receivePackets.take();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	protected Packet getNextPacket(long timeout) {
+		try {
+			return this.receivePackets.poll(timeout, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
