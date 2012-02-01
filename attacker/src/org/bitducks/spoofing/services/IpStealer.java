@@ -23,6 +23,7 @@ public class IpStealer extends Service {
 
 	@Override
 	public void run() {
+		System.out.println("IpStealer started");
 		
 		this.doDiscover();
 		
@@ -57,8 +58,9 @@ public class IpStealer extends Service {
 		 
 		udpDiscover.data = discover.serialize();
 		
-		
 		Server.getInstance().sendPacket(udpDiscover);
+		
+		System.out.println("Dhcp discovery sended");
 	}
 	
 	/**
@@ -87,7 +89,7 @@ public class IpStealer extends Service {
 		//set frame type as IP
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;
 		//set source and destination MAC addresses
-		ByteBuffer buf = ByteBuffer.allocate(4);
+		ByteBuffer buf = ByteBuffer.allocate(6);
 		buf.put((byte)0x00);
 		buf.put((byte)0x00);
 		buf.putInt(this.macAddr);
