@@ -23,12 +23,10 @@ public class ArpScanService extends Service {
 	public void run() {
 		
 		Server server = Server.getInstance();
-		
 		NetworkInterface device = server.getNetworkInterface();
-		NetworkInterfaceAddress deviceAddress = device.addresses[0];
 		
-		InetAddress start = IpUtil.network(deviceAddress);
-		InetAddress end = IpUtil.lastIpInNetwork(deviceAddress);
+		InetAddress start = IpUtil.network( device );
+		InetAddress end = IpUtil.lastIpInNetwork( device );
 		
 		IpRange ipRange = new IpRange(start, end);
 		
