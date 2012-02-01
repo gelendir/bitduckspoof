@@ -23,13 +23,13 @@ public class ArpCache {
 			
 			entry = new ArpCacheEntry(
 					mac,
-					Util.unixTimestamp() );
+					Util.unixTimestampMillis() );
 			
 			this.addresses.put(address, entry);
 			
 		} else {
 			
-			entry.setTimestamp( Util.unixTimestamp() );
+			entry.setTimestamp( Util.unixTimestampMillis() );
 			
 		}
 				
@@ -58,7 +58,7 @@ public class ArpCache {
 			return false;
 		}
 		
-		int minimum = Util.unixTimestamp() - timeout;
+		long minimum = Util.unixTimestampMillis() - (long)timeout;
 		if( entry.getTimestamp() > minimum ) {
 			return true;
 		}
