@@ -15,10 +15,12 @@ import jpcap.packet.Packet;
 import org.bitducks.spoofing.core.Server;
 //import org.bitducks.spoofing.scan.ArpService;
 import org.bitducks.spoofing.packet.PacketGenerator;
+import org.bitducks.spoofing.scan.ArpCache;
 import org.bitducks.spoofing.scan.ArpRecieveService;
 import org.bitducks.spoofing.scan.ArpScanService;
 import org.bitducks.spoofing.scan.IpRange;
 import org.bitducks.spoofing.test.DummyService;
+import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpUtil;
 
 public class Tests {
@@ -35,9 +37,10 @@ public class Tests {
 		//testIpUtils();
 		//testIpMask();
 		//testIpRange();
-		testArpService();
+		//testArpService();
 		//testArpRequestResponse();
 		//testDummyService();
+		testCache();
 
 	}
 	
@@ -200,11 +203,31 @@ public class Tests {
 		ArpScanService scanner = new ArpScanService();
 		
 		server.addService(reciever);
-		server.addService(scanner);
 		
 		server.start();
+		
+		Thread.sleep(2000);
+		
+		server.addService(scanner);
+		scanner.runNetworkScan();
+		
 		server.join();
 		
+		
+	}
+	
+	public static void testCache() throws Exception {
+		
+		ArpCache cache = new ArpCache();
+		
+		InetAddress address = InetAddress.getByName("192.168.1.1");
+		byte[] mac = Constants.BROADCAST;
+		
+		System.out.println("waiting");
+		cache.add(address, mac);
+		Thread.sleep(2000);
+		
+		System.out.println( cache.hasAddress(address,5) );
 		
 	}
 
