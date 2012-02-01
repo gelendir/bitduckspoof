@@ -176,7 +176,7 @@ public class RogueDHCPService extends Service {
 		}
 	}
 	
-	public void addFreeAddress(Collection<InetAddress> address) {
+	/* package visibility */ void addFreeAddress(Collection<InetAddress> address) {
 		this.freeAddress.addAll(address);
 		this.givenAdresses.removeAll(address);
 		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
