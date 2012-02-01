@@ -84,7 +84,7 @@ public class RogueDHCPService extends Service {
 
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextPacket();
-			//System.out.println(p);
+			
 			if(p != null) {
 				try {
 					DHCPPacket dhcp = DHCPPacket.getPacket(p.data, 0, p.data.length, false);
