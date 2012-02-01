@@ -44,7 +44,7 @@ public class ArpRecieveService extends Service {
 			
 			byte[] senderMac = packet.sender_hardaddr;
 			byte[] senderIp = packet.sender_protoaddr;
-			this.cache.add(senderMac, senderIp);
+			this.cache.add(senderIp, senderMac);
 			System.out.println(this.cache);
 	
 		}
