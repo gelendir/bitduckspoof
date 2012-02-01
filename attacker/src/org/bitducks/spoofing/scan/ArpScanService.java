@@ -2,6 +2,8 @@ package org.bitducks.spoofing.scan;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
@@ -30,9 +32,23 @@ public class ArpScanService extends Service {
 		
 		IpRange ipRange = new IpRange(start, end);
 		
+		LinkedList<InetAddress> addresses = new LinkedList<InetAddress>();
+		for( InetAddress address: ipRange ) {
+			addresses.add(address);
+		}
+		
+		this.runScan(addresses);
+		
+	}
+	
+	public void runScan( Collection<InetAddress> addresses ) {
+		
+		Server server = Server.getInstance();
+		NetworkInterface device = server.getNetworkInterface();
+		
 		PacketGenerator generator = new PacketGenerator(device);
 		
-		for( InetAddress address: ipRange ) {
+		for( InetAddress address: addresses ) {
 			
 			System.out.println("sending request for " + address.toString() );
 			ARPPacket arpRequest = generator.arpRequest(address);	
