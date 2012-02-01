@@ -38,7 +38,7 @@ public abstract class IpUtil {
 		return IpUtil.lastIpInNetwork( address.broadcast );
 	}
 	
-	public static InetAddress lastIpInNetwoek( NetworkInterface device  ) {
+	public static InetAddress lastIpInNetwork( NetworkInterface device  ) {
 		InterfaceInfo info = new InterfaceInfo( device );
 		return IpUtil.lastIpInNetwork( info.getSubnet() );
 	}
