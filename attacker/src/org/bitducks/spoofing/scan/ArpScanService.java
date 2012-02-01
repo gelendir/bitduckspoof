@@ -1,6 +1,7 @@
 package org.bitducks.spoofing.scan;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
@@ -35,6 +36,7 @@ public class ArpScanService extends Service {
 		
 		for( InetAddress address: ipRange ) {
 			
+			System.out.println("sending request for " + address.toString() );
 			ARPPacket arpRequest = generator.arpRequest(address);	
 			server.sendPacket(arpRequest);
 			
