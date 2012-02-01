@@ -63,7 +63,7 @@ public class DNSService extends Service {
 		
 		System.out.println("DNS Starting");
 		UDPPacket queryPaquet = null;
-		while ((queryPaquet = (UDPPacket)this.getNextBlockingPacket()) != null) {
+		while ((queryPaquet = (UDPPacket)this.getNextBlockingPacket()) != Packet.EOF) {
 			
 			InetAddress falseIpAddr = null;
 			if ((falseIpAddr = this.isDNSPacketMatchingWithFilter(queryPaquet)) != null) {
