@@ -83,7 +83,7 @@ public class RogueDHCPService extends Service {
 		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
 
 		while(!this.isCloseRequested()) {
-			Packet p = this.getNextPacket();
+			Packet p = this.getNextBlockingPacket();
 			
 			if(p != null) {
 				try {

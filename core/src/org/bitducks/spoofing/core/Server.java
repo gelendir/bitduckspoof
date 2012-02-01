@@ -16,7 +16,6 @@ public class Server extends Thread {
 	private JpcapSender sender = null;
 	
 	private NetworkInterface networkInterface;
-	private InterfaceInfo info;
 	
 	private static Server instance = null;
 	
@@ -30,7 +29,7 @@ public class Server extends Thread {
 	
 	private Server(NetworkInterface networkInterface) throws IOException {
 		this.networkInterface = networkInterface;
-		this.sender = JpcapSender.openDevice(networkInterface);
+		sender = JpcapSender.openDevice(networkInterface);
 	}
 
 	public void addService(Service service) {
@@ -69,7 +68,7 @@ public class Server extends Thread {
 	@Override
 	public void run() {		
 		// TODO Set the right interface
-		NetworkInterface device = this.networkInterface;
+		NetworkInterface device = JpcapCaptor.getDeviceList()[0];
 		JpcapCaptor captor = null;
 		
 		try {
@@ -89,7 +88,6 @@ public class Server extends Thread {
 		}
 
 		captor.close();
-		System.out.println("end");
 	}
 	
 	private void pushPacketToService(JpcapCaptor captor) {
@@ -114,9 +112,4 @@ public class Server extends Thread {
 	public NetworkInterface getNetworkInterface() {
 		return this.networkInterface;
 	}
-	
-	public InterfaceInfo getInfo() {
-		return this.info;
-	}
-	
 }

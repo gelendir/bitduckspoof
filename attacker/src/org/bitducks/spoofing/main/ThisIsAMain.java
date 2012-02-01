@@ -2,11 +2,9 @@ package org.bitducks.spoofing.main;
 import java.io.IOException;
 
 import jpcap.JpcapCaptor;
-import jpcap.NetworkInterface;
 
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.core.Service;
-import org.bitducks.spoofing.services.dhcprogue.RogueDHCPService;
+import org.bitducks.spoofing.services.BroadcastARPService;
 
 public class ThisIsAMain {
 
@@ -16,16 +14,10 @@ public class ThisIsAMain {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-		
-		Server.createInstance(JpcapCaptor.getDeviceList()[ 0 ]);
-		Service service = new RogueDHCPService();
-		
-		Server.getInstance().addService(service);
-		
-		Server.getInstance().start();
-		
-		// NEVER END !!
-		Server.getInstance().join();
+		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
+		Server.getInstance().addService(new BroadcastARPService());
+		Thread.sleep(10000);
+		Server.getInstance().stopServer();
 	}
 
 }
