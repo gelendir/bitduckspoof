@@ -30,7 +30,29 @@ public class Policy {
 	}
 
 	public boolean checkIfPolicyValid(Packet p) {
-		if(!this.strict) {
+
+		int count = 0;
+		for (Rule rule : this.rules) {
+
+			boolean valid = rule.checkRule(p);
+
+			if (valid && !this.strict) {
+				return true;
+			} else if (!valid && this.strict) {
+				return false;
+			} else if (valid) {
+				++count;
+			}
+
+		}
+
+		if (count == this.rules.size()) { // All of them are valid
+			return true;
+		} else {
+			return false;
+		}
+
+		/*if(!this.strict) {
 			for (Rule rule : this.rules) {
 
 				boolean valid = rule.checkRule(p);
@@ -38,7 +60,7 @@ public class Policy {
 					return true;
 				}
 			}
-			
+
 			return false;
 		} else {
 
@@ -51,5 +73,6 @@ public class Policy {
 			}
 			return true;
 		}
+	}*/
 	}
 }

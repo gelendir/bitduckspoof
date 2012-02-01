@@ -25,7 +25,7 @@ public class ArpRecieveService extends Service {
 		this.cache = new ArpCache();
 		this.registry = new Registry();
 		
-		Rule arpRule = new ARPRule();
+		Rule arpRule = new ARPResponseRule();
 		this.getPolicy().addRule(arpRule);
 		
 	}
@@ -33,20 +33,22 @@ public class ArpRecieveService extends Service {
 	public void run() {
 		
 		boolean run = true;
-		System.out.println("ARP service started");
+		System.out.println("ARP recieving service started");
 		
 		while( run ) {
 			
 			ARPPacket packet = (ARPPacket)this.getNextPacket();
 			
-			if( packet.operation == ARPPacket.ARP_REPLY ) {	
-				byte[] targetMac = packet.target_hardaddr;
-				byte[] targetIp = packet.target_protoaddr;
-				this.cache.add(targetIp, targetMac);
-				System.out.println(this.cache);
+			if( packet == null ) {
+				run = false;
+				return;
 			}
-			System.out.println(packet);
 			
+			byte[] senderMac = packet.sender_hardaddr;
+			byte[] senderIp = packet.sender_protoaddr;
+			this.cache.add(senderMac, senderIp);
+			System.out.println(this.cache);
+	
 		}
 		
 	}

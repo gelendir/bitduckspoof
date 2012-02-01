@@ -5,20 +5,74 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import jpcap.JpcapCaptor;
+import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
+import jpcap.packet.ARPPacket;
+import jpcap.packet.Packet;
 
 
 import org.bitducks.spoofing.core.Server;
 //import org.bitducks.spoofing.scan.ArpService;
+import org.bitducks.spoofing.packet.PacketGenerator;
 import org.bitducks.spoofing.scan.ArpRecieveService;
 import org.bitducks.spoofing.scan.ArpScanService;
 import org.bitducks.spoofing.scan.IpRange;
+import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.IpUtil;
 
 public class Tests {
 	
 	final static private int NB_DEVICE = 0;
+	
+	/**
+	 * @param args
+	 * @throws UnknownHostException 
+	 */
+	public static void main(String[] args) throws Exception {
+		
+		greeting();
+		//testIpUtils();
+		//testIpMask();
+		//testIpRange();
+		testArpService();
+		//testArpRequestResponse();
+		//testDummyService();
+
+	}
+	
+	public static void printDevices() {
+		
+		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
+		
+		//for each network interface
+		for (int i = 0; i < devices.length; i++) {
+		  //print out its name and description
+		  System.out.println(i+": "+devices[i].name + "(" + devices[i].description+")");
+
+		  //print out its datalink name and description
+		  System.out.println(" datalink: "+devices[i].datalink_name + "(" + devices[i].datalink_description+")");
+
+		  //print out its MAC address
+		  System.out.print(" MAC address:");
+		  for (byte b : devices[i].mac_address)
+		    System.out.print(Integer.toHexString(b&0xff) + ":");
+		  System.out.println();
+
+		  //print out its IP address, subnet mask and broadcast address
+		  for (NetworkInterfaceAddress a : devices[i].addresses) {
+		    System.out.println(" address:"+a.address + " " + a.subnet + " "+ a.broadcast);
+		  }
+		}
+		
+	}
+	
+	public static void greeting() {
+		
+		NetworkInterface device = getDevice();
+		System.out.println( device.addresses[0].address );
+		
+	}
 	
 	public static NetworkInterface getDevice() {
 		
@@ -27,19 +81,7 @@ public class Tests {
 		
 	}
 
-	/**
-	 * @param args
-	 * @throws UnknownHostException 
-	 */
-	public static void main(String[] args) throws Exception {
-		
-		//testIpUtils();
-		//testIpMask();
-		//testIpRange();
-		testArpService();
 
-	}
-	
 	private static void testIpUtils() {
 		
 		NetworkInterface device = getDevice();
@@ -105,6 +147,49 @@ public class Tests {
 		
 	}
 	
+	public static void testArpRequestResponse() throws Exception {
+		
+		JpcapCaptor captor = JpcapCaptor.openDevice( getDevice(), 2000, false, 20 );
+		JpcapSender sender = JpcapSender.openDevice( getDevice() );
+		
+		InetAddress start = InetAddress.getByName("192.168.1.221");
+		InetAddress end = InetAddress.getByName("192.168.1.222");
+		
+		IpRange range = new IpRange( start, end );
+		
+		PacketGenerator generator = new PacketGenerator( getDevice() );
+		
+		for( InetAddress a: range ) {
+			ARPPacket request = generator.arpRequest( a );
+			System.out.println("sending " + request.toString() );
+			sender.sendPacket(request);
+		}
+		
+		while( true ) {
+			Packet packet = captor.getPacket();
+			if( packet != null ) {
+				System.out.println(packet);
+			}
+		}
+		
+	}
+	
+	public static void testDummyService() throws Exception {
+		
+		NetworkInterface i = JpcapCaptor.getDeviceList() [ Tests.NB_DEVICE ];
+		Server.createInstance(i);
+		
+		DummyService dummy = new DummyService();
+		
+		Server.getInstance().addService(dummy);
+		
+		Server.getInstance().start();
+		
+		// NEVER END !!
+		Server.getInstance().join();
+		
+	}
+	
 	public static void testArpService() throws Exception {
 		
 		Server.createInstance( getDevice() );
@@ -113,9 +198,11 @@ public class Tests {
 		
 		ArpRecieveService reciever = new ArpRecieveService();
 		ArpScanService scanner = new ArpScanService();
+		DummyService dummy = new DummyService();
 		
 		server.addService(reciever);
 		server.addService(scanner);
+		//server.addService(dummy);
 		server.start();
 		server.join();
 		

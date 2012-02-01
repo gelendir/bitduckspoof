@@ -18,6 +18,21 @@ public abstract class IpUtil {
 		return IpUtil.lastIpInNetwork( address.broadcast );
 	}
 	
+	public static InetAddress lastIpInNetwork2( NetworkInterfaceAddress address ) {
+		return IpUtil.lastIpInNetwork2( address.address, address.subnet );
+	}
+	
+	public static InetAddress lastIpInNetwork2( InetAddress address, InetAddress subnet ) {
+		byte[] network = address.getAddress();
+		byte[] mask = subnet.getAddress();
+		
+		for( int i = 0; i < network.length; ++i ) {
+			network[i] = (byte) ((network[i] & mask[i]) | (mask[i] ^ (byte)0xff));
+		}
+		
+		return IpUtil.lastIpInNetwork(IpUtil.bytesToInet(network));
+	}
+	
 	public static InetAddress network( InetAddress address, InetAddress subnet ) {
 		
 		byte[] network = address.getAddress();
