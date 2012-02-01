@@ -227,7 +227,7 @@ public class Tests {
 		cache.add(address, mac);
 		Thread.sleep(2000);
 		
-		System.out.println( cache.hasAddress(address,5) );
+		System.out.println( cache.hasAddress(address,1000) );
 		
 	}
 

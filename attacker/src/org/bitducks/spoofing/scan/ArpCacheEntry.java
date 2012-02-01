@@ -3,9 +3,9 @@ package org.bitducks.spoofing.scan;
 public class ArpCacheEntry {
 	
 	private byte[] macAddress;
-	private int timestamp;
+	private long timestamp;
 
-	public ArpCacheEntry( byte[] macAddress, int timestamp ) {
+	public ArpCacheEntry( byte[] macAddress, long timestamp ) {
 		this.macAddress = macAddress;
 		this.timestamp = timestamp;
 	}
@@ -14,11 +14,11 @@ public class ArpCacheEntry {
 		return macAddress;
 	}
 
-	public int getTimestamp() {
+	public long getTimestamp() {
 		return timestamp;
 	}
 	
-	public void setTimestamp( int timestamp ) {
+	public void setTimestamp( long timestamp ) {
 		this.timestamp = timestamp;
 	}
 	
