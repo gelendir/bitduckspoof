@@ -68,7 +68,7 @@ public class Server extends Thread {
 	@Override
 	public void run() {		
 		// TODO Set the right interface
-		NetworkInterface device = JpcapCaptor.getDeviceList()[1];
+		NetworkInterface device = this.networkInterface;
 		JpcapCaptor captor = null;
 		
 		try {
