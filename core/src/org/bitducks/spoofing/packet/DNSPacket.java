@@ -23,22 +23,22 @@ public class DNSPacket extends UDPPacket {
 	 * @param ipSource
 	 * @param ipTarget
 	 */
-	public void buildIpDNSPacket(InetAddress ipSource, InetAddress ipTarget) {
+	public void buildIpDNSPacket(InetAddress ipSource, InetAddress ipTarget, int identifier) {
 
-			this.setIPv4Parameter(0, 
-					false, 
-					false, 
-					false, 
-					0, 
-					false, 
-					false, 
-					false, 
-					0, 
-					0, 			// Identifier
-					64, 		// TTL
-					17,   		// Protocol
-					ipTarget, 
-					ipSource);
+				this.setIPv4Parameter(0, 
+						false, 
+						false, 
+						false, 
+						0, 
+						false, 
+						false, 
+						false, 
+						0, 
+						identifier,	// Identifier
+						64, 		// TTL
+						17,   		// Protocol
+						ipTarget, 
+						ipSource);
 	}	
 	
 	
@@ -51,14 +51,13 @@ public class DNSPacket extends UDPPacket {
 		
 		
 		buffer.put(transactionId);	// Transaction idByteBuffer.allocate(1)
-		buffer.put(new byte[]{ (byte) 0x85, (byte)0x80 });	// Flags (query response)
+		buffer.put(new byte[]{ (byte) 0x81, (byte)0x80 });	// Flags (query response)
 		buffer.put(questions);		// Question
 		buffer.put(new byte[]{ (byte) 0x00, (byte)0x01 });	// Answer
 		buffer.put(new byte[]{ (byte) 0x00, (byte)0x00 });	// Authority RRS
 		buffer.put(new byte[]{ (byte) 0x00, (byte)0x00 });	// Additional RRS
 		
 		// Query
-		System.out.println("Query " + query);
 		buffer.put(query);		// Query
 		
 		// Answer

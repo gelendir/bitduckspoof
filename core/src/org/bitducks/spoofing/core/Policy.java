@@ -41,6 +41,7 @@ public class Policy {
 			
 			return false;
 		} else {
+
 			for (Rule rule : this.rules) {
 
 				boolean valid = rule.checkRule(p);
@@ -48,7 +49,6 @@ public class Policy {
 					return false;
 				}
 			}
-			
 			return true;
 		}
 	}

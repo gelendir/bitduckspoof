@@ -50,7 +50,7 @@ public class PacketFactory {
 		
 		DNSPacket dnsPacket = new DNSPacket(queryPacket.src_port, queryPacket.dst_port);
 		
-		dnsPacket.buildIpDNSPacket(queryPacket.src_ip, queryPacket.dst_ip);
+		dnsPacket.buildIpDNSPacket(queryPacket.src_ip, queryPacket.dst_ip, dnsPacket.ident);
 		
 		//create an Ethernet packet (frame)
 		EthernetPacket ether = new EthernetPacket();
