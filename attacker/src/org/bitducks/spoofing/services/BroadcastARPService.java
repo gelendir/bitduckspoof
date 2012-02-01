@@ -9,7 +9,7 @@ import jpcap.packet.ARPPacket;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
-import org.bitducks.spoofing.customrules.DestinationIpRule;
+import org.bitducks.spoofing.customrules.IpFilterRule;
 import org.bitducks.spoofing.packet.PacketFactory;
 import org.bitducks.spoofing.scan.IpRangeIterator;
 import org.bitducks.spoofing.util.IpUtil;
@@ -28,10 +28,10 @@ public class BroadcastARPService extends Service {
 		try {
 			gateway = GatewayFinder.find(servInterface);
 			//TODO: À REVOIR
-			this.getPolicy().addRule(new DestinationIpRule(gateway));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.getPolicy().addRule(new IpFilterRule(gateway));
 	}
 	
 	@Override

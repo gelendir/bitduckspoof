@@ -8,18 +8,18 @@ import jpcap.packet.Packet;
 
 import org.bitducks.spoofing.core.Rule;
 
-public class DestinationIpRule extends Rule {
+public class IpFilterRule extends Rule {
 
 	private InetAddress toFilter;
 	
-	public DestinationIpRule(InetAddress ipToFilter) {
+	public IpFilterRule(InetAddress ipToFilter) {
 		toFilter = ipToFilter;
 	}
 	
 	@Override
 	public boolean checkRule(Packet p) {
 		//TODO: Change the rule to redirect packet with my MAC but not my real IP
-		if(p instanceof IPPacket && ((IPPacket)p).dst_ip == toFilter) {
+		if( ((IPPacket)p).dst_ip != toFilter) {
 			return true;
 		}
 		return false;
