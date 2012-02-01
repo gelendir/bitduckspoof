@@ -198,11 +198,10 @@ public class Tests {
 		
 		ArpRecieveService reciever = new ArpRecieveService();
 		ArpScanService scanner = new ArpScanService();
-		DummyService dummy = new DummyService();
 		
 		server.addService(reciever);
 		server.addService(scanner);
-		//server.addService(dummy);
+		
 		server.start();
 		server.join();
 		

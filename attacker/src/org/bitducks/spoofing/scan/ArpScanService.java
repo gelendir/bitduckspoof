@@ -24,6 +24,8 @@ public class ArpScanService extends Service {
 	@Override
 	public void run() {
 		
+		System.out.println("Arp Scan service started");
+		
 		Server server = Server.getInstance();
 		NetworkInterface device = server.getNetworkInterface();
 		
