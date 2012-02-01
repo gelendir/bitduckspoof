@@ -5,11 +5,11 @@ import java.net.InetAddress;
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
 
-public class Info {
+public class InterfaceInfo {
 	
 	NetworkInterface device;
 	
-	public Info( NetworkInterface device ) {
+	public InterfaceInfo( NetworkInterface device ) {
 		this.device = device;
 	}
 	
