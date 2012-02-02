@@ -32,8 +32,8 @@ public class ArpFreeAddressService extends Service {
 		//We delete all old arp packet in the queue
 		while(this.getNextNonBlockingPacket() != null);
 
-		ARPPacket arp = PacketFactory.arpRequest(Server.getInstance().getNetworkInterface().mac_address,
-				Server.getInstance().getNetworkInterface().addresses[0].address, 
+		ARPPacket arp = PacketFactory.arpRequest(Server.getInstance().getInfo().getMacAddress(),
+				Server.getInstance().getInfo().getAddress(), 
 				addr);
 
 		Server.getInstance().sendPacket(arp);
