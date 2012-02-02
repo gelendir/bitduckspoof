@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.TimerTask;
 
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
+import org.bitducks.spoofing.services.dhcprogue.RogueDHCPService;
 
 public class ArpScanTimer extends TimerTask {
 	
@@ -39,7 +40,7 @@ public class ArpScanTimer extends TimerTask {
 		LinkedList<InetAddress> noResponse = new LinkedList<InetAddress>();
 		
 		for( InetAddress address: this.addresses ) {
-			if( !this.reciever.getCache().hasAddress( address ) ) {
+			if( !this.reciever.getCache().hasAddress( address, RogueDHCPService.TIME_TO_CHECK_IP ) ) {
 				noResponse.add( address );
 			}
 		}

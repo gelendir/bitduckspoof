@@ -7,26 +7,18 @@ import jpcap.packet.Packet;
 
 import org.bitducks.spoofing.core.rules.ARPRule;
 
-public class ARPTimeoutService extends ARPRule {
+public class ARPTimeoutRule extends ARPRule {
 	private InetAddress addr;
 	
 	@Override
 	public boolean checkRule(Packet p) {
-		if(super.checkRule(p)) {
+		if(super.checkRule(p) && this.addr != null) {
 			ARPPacket arp = (ARPPacket)p;
 			if(arp.operation == 2) {
-				byte[] bAddr = this.addr.getAddress();
-				for(int i = 0; i < bAddr.length; ++i) {
-					if(bAddr[i] != arp.sender_protoaddr[i]) {
-						return false;
-					}
-				}
+				return this.addr.equals(arp.getSenderProtocolAddress());
 			}
-			
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	public void setInetAddress(InetAddress addr) {

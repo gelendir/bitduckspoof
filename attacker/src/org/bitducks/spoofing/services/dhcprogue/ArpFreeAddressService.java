@@ -7,12 +7,12 @@ import jpcap.packet.Packet;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
-import org.bitducks.spoofing.customrules.ARPTimeoutService;
+import org.bitducks.spoofing.customrules.ARPTimeoutRule;
 import org.bitducks.spoofing.packet.PacketFactory;
 
 public class ArpFreeAddressService extends Service {
 
-	private ARPTimeoutService rule = new ARPTimeoutService();
+	private ARPTimeoutRule rule = new ARPTimeoutRule();
 
 	public ArpFreeAddressService() {
 		this.getPolicy().addRule(this.rule);
@@ -25,12 +25,12 @@ public class ArpFreeAddressService extends Service {
 	}
 
 	public boolean sendARP(InetAddress addr, int timeout) {
-
-		//We delete all old arp packet in the queue
-		while(this.getNextNonBlockingPacket() != null);
 		
 		//captor.setFilter("arp[6:2] == 2 && arp src " + addr.getHostAddress(), false);
 		this.rule.setInetAddress(addr);
+		
+		//We delete all old arp packet in the queue
+		while(this.getNextNonBlockingPacket() != null);
 
 		ARPPacket arp = PacketFactory.arpRequest(Server.getInstance().getNetworkInterface().mac_address,
 				Server.getInstance().getNetworkInterface().addresses[0].address, 
@@ -38,10 +38,14 @@ public class ArpFreeAddressService extends Service {
 
 		Server.getInstance().sendPacket(arp);
 		Packet p = this.getNextPacket(timeout);
+		
+		//We set the address of the rule to null to do not get other packet.
+		this.rule.setInetAddress(null);
+		
 		if(p != null) {
 			return true;
 		}
-
+		
 		return false;
 	}
 }

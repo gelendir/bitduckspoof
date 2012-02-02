@@ -32,7 +32,7 @@ public class ArpRecieveService extends Service {
 	
 	public void run() {
 		
-		System.out.println("ARP recieving service started");
+		//System.out.println("ARP recieving service started");
 		
 		while( !this.isCloseRequested() ) {
 			
@@ -45,7 +45,7 @@ public class ArpRecieveService extends Service {
 			byte[] senderMac = packet.sender_hardaddr;
 			byte[] senderIp = packet.sender_protoaddr;
 			this.cache.add(senderIp, senderMac);
-			System.out.println(this.cache);
+			//System.out.println(this.cache);
 	
 		}
 		

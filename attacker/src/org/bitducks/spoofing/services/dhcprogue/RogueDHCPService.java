@@ -67,9 +67,12 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	private Timer timer = new Timer();
 	
 	private ArpScanService arpScan = new ArpScanService();
+	
 	private ArpRecieveService receiver = new ArpRecieveService();
 	
 	private ArpFreeAddressService arpSender = new ArpFreeAddressService();
+	
+	public static final int TIME_TO_CHECK_IP = 10 * 1000; //60 * 60 * 1000; //For 1 hour
 
 	public RogueDHCPService() {
 		Policy policy = this.getPolicy();
@@ -88,11 +91,12 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		
 		Server.getInstance().addService(this.arpScan);
 		Server.getInstance().addService(this.receiver);
+		Server.getInstance().addService(this.arpSender);
 	}
 
 	@Override
 	public void run() {
-		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), 60 * 60 * 1000); //For 1 hour
+		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
 
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextBlockingPacket();
@@ -199,14 +203,16 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	/* package visibility  void addFreeAddress(Collection<InetAddress> address) {
 		this.freeAddress.addAll(address);
 		this.givenAdresses.removeAll(address);
-		this.timer.schedule(new HostDown(this, this.givenAdresses), 60 * 60 * 1000); //For 1 hour
+		this.timer.schedule(new HostDown(this, this.givenAdresses), RogueDHCPService.TIME_TO_CHECK_IP);
 	}*/
 	
 	@Override
 	public void scanFinished(Collection<InetAddress> addresses) {
+		System.out.println("Free address: " + this.freeAddress.toString());
+		System.out.println("Given address: " + this.givenAdresses.toString());
 		this.freeAddress.addAll(addresses);
 		this.givenAdresses.removeAll(addresses);
-		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), 60 * 60 * 1000); //For 1 hour
+		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
 	}
 
 	/*private boolean sendArp(InetAddress addr, int timeout) {
