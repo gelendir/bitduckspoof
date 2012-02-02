@@ -13,7 +13,7 @@ public class InterfaceInfo {
 		this.device = device;
 	}
 	
-	private NetworkInterfaceAddress getDeviceAddress() {
+	public NetworkInterfaceAddress getDeviceAddress() {
 		return this.device.addresses[0];
 	}
 	
