@@ -20,7 +20,7 @@ public class testSimon {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		
-		NetworkInterface i = JpcapCaptor.getDeviceList() [ 1 ];
+		NetworkInterface i = JpcapCaptor.getDeviceList() [ 0 ];
 		Server.createInstance(i);
 		
 		/*DNSService service = new DNSService();
@@ -30,9 +30,9 @@ public class testSimon {
 		
 		IpStealer service = new IpStealer();
 		
-		Server.getInstance().addService(service);
-		
 		Server.getInstance().start();
+		
+		Server.getInstance().addService(service);
 		
 		// NEVER END !!
 		Server.getInstance().join();
