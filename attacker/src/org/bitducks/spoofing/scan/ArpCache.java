@@ -4,12 +4,15 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bitducks.spoofing.util.Util;
 
 public class ArpCache {
 	
-	HashMap<InetAddress, ArpCacheEntry> addresses;
+	private HashMap<InetAddress, ArpCacheEntry> addresses;
 	
 	public ArpCache() {
 		this.addresses = new HashMap<InetAddress, ArpCacheEntry>();
@@ -64,6 +67,27 @@ public class ArpCache {
 		}
 		
 		return false;
+		
+	}
+	
+	public Set<InetAddress> allAdresses() {
+		return this.addresses.keySet();
+	}
+	
+	public Set<InetAddress> allAddresses( int timeout ) {
+		
+		long minimum = Util.unixTimestampMillis() - (long)timeout;
+		
+		Set<InetAddress> alive = new HashSet<InetAddress>();
+		for( Entry<InetAddress, ArpCacheEntry> entry: this.addresses.entrySet() ) {
+			
+			if( entry.getValue().getTimestamp() > minimum ) {
+				alive.add( entry.getKey() );
+			}
+			
+		}
+		
+		return alive;
 		
 	}
 	

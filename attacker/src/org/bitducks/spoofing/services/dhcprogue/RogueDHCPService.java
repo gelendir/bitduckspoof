@@ -21,6 +21,7 @@ import org.bitducks.spoofing.core.Policy;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPRule;
+import org.bitducks.spoofing.exception.UnexpectedErrorException;
 import org.bitducks.spoofing.scan.ArpRecieveService;
 import org.bitducks.spoofing.scan.ArpScanFinish;
 import org.bitducks.spoofing.scan.ArpScanService;
@@ -86,8 +87,17 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 
 	@Override
 	public void run() {
+		this.arpScan.runNetworkScan();
+
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			throw new UnexpectedErrorException( e, "error while sleeping in ArpScanTimer" );
+		}
+
 		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
 
+		System.out.println("DHCP rogue ready");
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextBlockingPacket();
 
@@ -104,7 +114,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 						this.makeAck(dhcp);
 						break;
 					}
-				} catch(Exception e) /* We catch all exception if the packet is bad */{ e.printStackTrace(); }
+				} catch(Exception e) /* We catch all exception if the packet is bad */ { e.printStackTrace(); }
 			}
 		}
 
@@ -116,7 +126,8 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		do {
 			offer = this.getAddressOffer();
 			this.givenAdresses.add(offer);
-		} while(this.arpSender.sendARP(offer, 100)); //While the arp request has a reply, we take the next address
+		} while(this.receiver.getCache().hasAddress(offer, RogueDHCPService.TIME_TO_CHECK_IP));
+		//} while(this.arpSender.sendARP(offer, 100)); //While the arp request has a reply, we take the next address 
 
 		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.DHCPServerIP, "", null);
 

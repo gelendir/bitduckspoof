@@ -14,7 +14,7 @@ public class ThisIsAMain {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-		Server.createInstance(JpcapCaptor.getDeviceList()[1]);
+		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
 		
 		Server.getInstance().addService(new RogueDHCPService());
 		Server.getInstance().start();
