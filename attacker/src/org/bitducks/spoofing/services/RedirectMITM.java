@@ -29,7 +29,6 @@ public class RedirectMITM extends Service {
 	}
 
 	private void redirectPacket(Packet p) {
-		if 
 	}
 	
 	
