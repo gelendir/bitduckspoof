@@ -40,7 +40,7 @@ public abstract class IpUtil {
 	
 	public static InetAddress lastIpInNetwork( NetworkInterface device  ) {
 		InterfaceInfo info = new InterfaceInfo( device );
-		return IpUtil.lastIpInNetwork( info.getSubnet() );
+		return IpUtil.lastIpInNetwork( info.getBroadcast() );
 	}
 	
 	public static InetAddress lastIpInNetwork( InetAddress broadcast ) {

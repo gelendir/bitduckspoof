@@ -33,6 +33,10 @@ public abstract class Service extends Thread {
 		return null;
 	}
 	
+	protected Packet getNextNonBlockingPacket() {
+		return this.receivePackets.poll();
+	}
+	
 	public void pushPacket(Packet p) {
 		this.receivePackets.add(p);
 	}

@@ -13,7 +13,7 @@ public class InterfaceInfo {
 		this.device = device;
 	}
 	
-	private NetworkInterfaceAddress getDeviceAddress() {
+	public NetworkInterfaceAddress getDeviceAddress() {
 		return this.device.addresses[0];
 	}
 	
@@ -35,6 +35,10 @@ public class InterfaceInfo {
 	
 	public byte[] getMacAddress() {
 		return this.getDevice().mac_address;
+	}
+	
+	public InetAddress getBroadcast() {
+		return this.getDeviceAddress().broadcast;
 	}
 
 }
