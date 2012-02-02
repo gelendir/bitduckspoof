@@ -31,6 +31,7 @@ public class Server extends Thread {
 	private Server(NetworkInterface networkInterface) throws IOException {
 		this.networkInterface = networkInterface;
 		this.sender = JpcapSender.openDevice(networkInterface);
+		this.info = new InterfaceInfo(this.networkInterface);
 	}
 
 	public void addService(Service service) {
