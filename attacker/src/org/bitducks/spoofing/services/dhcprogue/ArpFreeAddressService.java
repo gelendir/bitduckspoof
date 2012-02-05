@@ -10,20 +10,42 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.customrules.ARPTimeoutRule;
 import org.bitducks.spoofing.packet.PacketFactory;
 
+/**
+ * This service aims to send ARP packet and
+ * receive response with a timeout.
+ * @author Frédérik Paradis
+ */
 public class ArpFreeAddressService extends Service {
 
+	/**
+	 * The rule use to specify the ARP source IP to
+	 * receive.
+	 */
 	private ARPTimeoutRule rule = new ARPTimeoutRule();
 
+	/**
+	 * This constructor initialize the service. 
+	 */
 	public ArpFreeAddressService() {
 		this.getPolicy().addRule(this.rule);
 	}
 	
+	/**
+	 * This method does actually nothing.
+	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		//This method has nothing to do.
 	}
 
+	/**
+	 * This method send an ARP Packet and receive the answer
+	 * if available.
+	 * @param addr The IP address to send ARP
+	 * @param timeout The receive timeout
+	 * @return Return true if the IP answer to the request; in another
+	 * case, false.
+	 */
 	public boolean sendARP(InetAddress addr, int timeout) {
 		
 		//captor.setFilter("arp[6:2] == 2 && arp src " + addr.getHostAddress(), false);

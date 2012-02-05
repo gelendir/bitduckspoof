@@ -13,6 +13,7 @@ import jpcap.packet.Packet;
 
 
 import org.bitducks.spoofing.core.Server;
+import org.bitducks.spoofing.gui.DeviceSelection;
 //import org.bitducks.spoofing.scan.ArpService;
 import org.bitducks.spoofing.packet.PacketGenerator;
 import org.bitducks.spoofing.scan.ArpCache;
@@ -40,7 +41,8 @@ public class Tests {
 		//testArpService();
 		//testArpRequestResponse();
 		//testDummyService();
-		testCache();
+		//testCache();
+		testGui();
 
 	}
 	
@@ -228,6 +230,14 @@ public class Tests {
 		Thread.sleep(2000);
 		
 		System.out.println( cache.hasAddress(address,1000) );
+		
+	}
+	
+	public static void testGui() throws Exception {
+		
+		NetworkInterface device = DeviceSelection.getSelectedDevice();
+		System.out.println(device);
+		System.out.println("done");
 		
 	}
 

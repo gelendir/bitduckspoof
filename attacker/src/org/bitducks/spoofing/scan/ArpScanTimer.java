@@ -8,13 +8,43 @@ import java.util.TimerTask;
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
 import org.bitducks.spoofing.services.dhcprogue.RogueDHCPService;
 
+/**
+ * This class aims to scan a collection of InetAddress
+ * with ARP request. This class is habitually use by a
+ * timer.
+ * @author Frédérik Paradis
+ *
+ */
 public class ArpScanTimer extends TimerTask {
 	
+	/**
+	 * The collection of IP address to scan.
+	 */
 	private Collection<InetAddress> addresses;
+	
+	/**
+	 * The ArpScanService used by this class.
+	 */
 	private ArpScanService arpScan;
+	
+	/**
+	 * The ArpRecieveService used by this class.
+	 */
 	private ArpRecieveService reciever;
+	
+	/**
+	 * The object to which we send the result of the scan.
+	 */
 	private ArpScanFinish finish;
 
+	/**
+	 * This constructor initialize the object with
+	 * the parameters. 
+	 * @param addresses The collection of address to scan
+	 * @param arpScan The ArpScanService used by this class.
+	 * @param reciever The ArpRecieveService used by this class.
+	 * @param finish The object to which we send the result of the scan.
+	 */
 	public ArpScanTimer( Collection<InetAddress> addresses, 
 			ArpScanService arpScan, 
 			ArpRecieveService reciever,
@@ -26,6 +56,12 @@ public class ArpScanTimer extends TimerTask {
 		
 	}
 
+	/**
+	 * This method is called by the timer. It scan the IP addresses given
+	 * in the constructor and send to the ArpScanFinish given the IP
+	 * addresses who has not answered. The call of this method may take 
+	 * few seconds.
+	 */
 	@Override
 	public void run() {
 		
@@ -45,7 +81,7 @@ public class ArpScanTimer extends TimerTask {
 			}
 		}
 		
-		finish.scanFinished( noResponse );
+		this.finish.scanFinished( noResponse );
 		
 	}
 
