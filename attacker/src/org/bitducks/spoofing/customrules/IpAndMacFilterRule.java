@@ -1,6 +1,7 @@
 package org.bitducks.spoofing.customrules;
 
 import java.net.InetAddress;
+import java.util.Arrays;
 
 import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
@@ -12,16 +13,22 @@ public class IpAndMacFilterRule extends Rule {
 
 	private InetAddress ipToFilter;
 	private byte[] macToFilter;
-	
+
 	public IpAndMacFilterRule(InetAddress ipToFilter, byte[] macToFilter) {
 		this.ipToFilter = ipToFilter;
 		this.macToFilter = macToFilter;
 	}
-	
+
 	@Override
 	public boolean checkRule(Packet p) {
-		if( ((IPPacket)p).dst_ip != ipToFilter && ((EthernetPacket)p.datalink).dst_mac == macToFilter ) {
-			return true;
+		if(p instanceof IPPacket) {
+			if ( Arrays.equals( ((EthernetPacket)p.datalink).dst_mac, macToFilter) ) {
+				if( ((IPPacket)p).dst_ip.equals(ipToFilter)) {
+					System.out.println("Check rule true -- > Packet to redirect received");
+					return true;
+				}
+			}
+
 		}
 		return false;
 	}

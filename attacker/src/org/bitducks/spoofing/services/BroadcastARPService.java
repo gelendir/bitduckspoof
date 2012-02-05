@@ -46,7 +46,7 @@ public class BroadcastARPService extends Service {
 
 	private void broadcastSpoof() {
 		ARPPacket spoofedPacket = PacketFactory.arpRequest(infoInterface.getMacAddress(), gateway, getNextIp());
-		System.out.println(spoofedPacket.toString());
+		System.out.println("New spoofed packet sent!: " + spoofedPacket.toString());
 		Server.getInstance().sendPacket(spoofedPacket);
 	}
 	
