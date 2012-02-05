@@ -84,12 +84,6 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	private ArpRecieveService receiver = new ArpRecieveService();
 
 	/**
-	 * The service who is called periodically to know if the given addresses are
-	 * yet active on the network.
-	 */
-	private ArpFreeAddressService arpSender = new ArpFreeAddressService();
-
-	/**
 	 * The time between each call to the ArpFreeAddressService.
 	 */
 	public static final int TIME_TO_CHECK_IP = 10 * 1000; //60 * 60 * 1000; //For 1 hour
@@ -116,7 +110,6 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 			e.printStackTrace();
 		}
 		Server.getInstance().addService(this.arpScan);
-		Server.getInstance().addService(this.arpSender);
 	}
 
 	/***
