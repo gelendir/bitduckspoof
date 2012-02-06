@@ -25,6 +25,7 @@ public class Server extends Thread {
 	}
 	
 	public static Server getInstance() {
+		//TODO:Throw exception if not created... not a NPE
 			return Server.instance;
 	}
 	
