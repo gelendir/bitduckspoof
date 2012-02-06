@@ -32,6 +32,9 @@ public class Gui extends JFrame {
 		
 		view = new DNSServiceView();
 		tab.addTab(view.getTitle(), view);
+		
+		LogView logView = new LogView();
+		tab.addTab("Logs", logView);
 
 		this.add(tab, BorderLayout.CENTER);
 	}
