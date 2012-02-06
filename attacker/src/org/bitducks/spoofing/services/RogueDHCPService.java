@@ -93,8 +93,8 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	 * needed. The initialization may take few seconds.
 	 */
 	public RogueDHCPService() {
-		Policy policy = this.getPolicy();
-		policy.addRule(new DHCPRule());
+		super();
+		this.getPolicy().addRule(new DHCPRule());
 
 		this.range = new IpRange(
 				IpUtil.network(this.info.getDeviceAddress()), 
