@@ -13,6 +13,7 @@ import jpcap.packet.Packet;
 
 
 import org.bitducks.spoofing.core.Server;
+import org.bitducks.spoofing.gateway.GatewayFindService;
 import org.bitducks.spoofing.gui.DeviceSelection;
 //import org.bitducks.spoofing.scan.ArpService;
 import org.bitducks.spoofing.packet.PacketGenerator;
@@ -23,6 +24,7 @@ import org.bitducks.spoofing.scan.IpRange;
 import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpUtil;
+import org.bitducks.spoofing.util.gateway.GatewayFinder;
 
 public class Tests {
 	
@@ -42,10 +44,30 @@ public class Tests {
 		//testArpRequestResponse();
 		//testDummyService();
 		//testCache();
-		testGui();
+		//testGui();
+		testGatewayFinder();
 
 	}
 	
+	private static void testGatewayFinder() throws Exception {
+		
+		Server.createInstance( getDevice() );
+		Server server = Server.getInstance();
+		server.start();
+		Thread.sleep(1000);
+		
+		System.out.println("adding service");
+		GatewayFindService finder = new GatewayFindService();
+		server.addService(finder);
+		
+		byte[] address = finder.getMacAddress();
+		
+		System.out.println("mac found: " + IpUtil.prettyPrintMac( address ) );
+		
+		
+		
+	}
+
 	public static void printDevices() {
 		
 		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
