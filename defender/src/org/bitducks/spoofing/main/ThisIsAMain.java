@@ -27,7 +27,7 @@ public class ThisIsAMain {
 		Thread.sleep(500);
 		
 		ArrayList<InetAddress> addr = new ArrayList<InetAddress>();
-		addr.add(InetAddress.getByName("10.17.65.2"));
+		//addr.add(InetAddress.getByName("10.17.65.2"));
 		
 		RogueDHCPDetectionService service = new RogueDHCPDetectionService(addr);
 		Server.getInstance().addService(service);
