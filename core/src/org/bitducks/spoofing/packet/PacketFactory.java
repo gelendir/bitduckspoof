@@ -69,4 +69,25 @@ public class PacketFactory {
 		return dnsPacket;
 	}
 
+	public static ARPPacket arpReply(byte[] macSource, InetAddress gateway, InetAddress victim, byte[] macVictim) {
+		
+		ARPPacket reply = new ARPPacket();
+		
+		reply.hlen = (short)Constants.MAC_LEN;
+		reply.plen = (short)Constants.IPV4_LEN;
+		
+		reply.datalink = PacketFactory.ethernet( macSource, macVictim );
+		
+		reply.hardtype = ARPPacket.HARDTYPE_ETHER;
+		reply.prototype = ARPPacket.PROTOTYPE_IP;
+		reply.operation = ARPPacket.ARP_REPLY;
+		
+		reply.sender_hardaddr = macSource;
+		reply.sender_protoaddr = gateway.getAddress();
+		reply.target_hardaddr = macVictim;
+		reply.target_protoaddr = victim.getAddress();
+		
+		return reply;
+	}
+
 }
