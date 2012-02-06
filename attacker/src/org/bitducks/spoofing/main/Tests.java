@@ -73,7 +73,7 @@ public class Tests {
 		
 		server.start();
 		
-		Gui gui = new Gui();
+		Gui gui = new Gui( getDevice() );
 		gui.setVisible(true);
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
