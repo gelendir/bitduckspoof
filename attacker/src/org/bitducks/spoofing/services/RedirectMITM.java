@@ -9,6 +9,7 @@ import jpcap.packet.EthernetPacket;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
 
+import org.apache.log4j.Logger;
 import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
@@ -23,8 +24,8 @@ public class RedirectMITM extends Service {
 	private byte[] gatewayMAC;
 
 	public RedirectMITM() {
+		logger = Logger.getLogger(RedirectMITM.class);
 		serverInfo = Server.getInstance().getInfo();
-		System.out.println(serverInfo.getAddress());
 		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getAddress(), serverInfo.getMacAddress()));
 		try {
 			gatewayIP = GatewayFinder.find(serverInfo.getDevice());
@@ -35,9 +36,10 @@ public class RedirectMITM extends Service {
 
 	@Override
 	public void run() {
-		System.out.println("Redirect MITM started");
+		logger.info("Traffic redirection started");
 		while(! this.isCloseRequested()){
 			Packet toTransfer = this.getNextBlockingPacket();
+			logger.info("Packet to be redirected found");
 			redirectPacket(toTransfer);
 		}
 	}
@@ -51,11 +53,11 @@ public class RedirectMITM extends Service {
 				ipToMac.put(victmIP.src_ip, victimEthernet.src_mac);
 			}
 			else {
-				System.out.println("Invalid IP<-->MAC correspondence detected!");
+				logger.error("Invalid IP (" + victmIP + ") <--> MAC (" + ipToMac.get(victmIP) + ")correspondence detected! Overriding the old one");
 				ipToMac.put(victmIP.src_ip, victimEthernet.src_mac);
 			}
 			victimEthernet.src_mac = serverInfo.getMacAddress();
-			//TODO: victimEthernet.dst_mac = ADRESSE MAC DU GATEWAY
+			//victimEthernet.dst_mac = MAC DE LA GATEWAY!!
 			p.datalink = victimEthernet;
 			Server.getInstance().sendPacket(p);
 		}
@@ -67,7 +69,7 @@ public class RedirectMITM extends Service {
 				Server.getInstance().sendPacket(p);
 			}
 			else {
-				System.out.println("No MAC correspondence found for the packet");
+				logger.error("No MAC correspondence found for the packet");
 			}
 		}
 

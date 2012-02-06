@@ -5,11 +5,14 @@ import java.util.concurrent.TimeUnit;
 
 import jpcap.packet.Packet;
 
+import org.apache.log4j.Logger;
+
 public abstract class Service extends Thread {
 	private LinkedBlockingQueue<Packet> receivePackets = new LinkedBlockingQueue<Packet>();
 	private Policy policy = new Policy();
 	private volatile boolean closeRequested = false;
 	private volatile boolean isStarted = false;
+	protected Logger logger;
 	
 	protected Packet getNextBlockingPacket() {
 		try {
@@ -70,4 +73,5 @@ public abstract class Service extends Thread {
 	}
 	
 	public abstract void run();
+
 }
