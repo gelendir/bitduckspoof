@@ -1,20 +1,25 @@
 package org.bitducks.spoofing.gui;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
+import jpcap.NetworkInterface;
+
+import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.gui.serviceView.DNSServiceView;
 
 public class Gui extends JFrame {
 	
 	private JTabbedPane tab = new JTabbedPane(JTabbedPane.NORTH);
 
-	public Gui() {
+	public Gui(NetworkInterface myInterface) throws IOException {
 
+		Server.getInstance().createInstance(myInterface);
+		Server.getInstance().start();
+		
 		this.setUpUi();
 		//this.setSize(500, 500);
 		//this.repaint();
