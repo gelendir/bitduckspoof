@@ -15,13 +15,12 @@ import org.bitducks.spoofing.util.gateway.GatewayFinder;
 
 
 public class ReplyARPService extends Service {
-
 	private InterfaceInfo infoInterface;
 	private InetAddress victim;
 	private InetAddress gateway;
 	
 	public ReplyARPService(InetAddress victim) {
-		logger = Logger.getLogger(ReplyARPService.class);
+		super();
 		this.victim = victim;
 		infoInterface = Server.getInstance().getInfo();
 		try {

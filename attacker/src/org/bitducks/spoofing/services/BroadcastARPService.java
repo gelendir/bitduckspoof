@@ -20,7 +20,7 @@ public class BroadcastARPService extends Service {
 	private InetAddress gateway;
 	
 	public BroadcastARPService() {
-		logger = Logger.getLogger(BroadcastARPService.class);
+		super();
 		infoInterface = Server.getInstance().getInfo();
 		InetAddress firstIp = IpUtil.network(infoInterface.getDevice());
 		InetAddress lastIp = IpUtil.lastIpInNetwork(infoInterface.getDevice());
