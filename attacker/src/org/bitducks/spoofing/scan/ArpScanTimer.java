@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.TimerTask;
 
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
-import org.bitducks.spoofing.services.dhcprogue.RogueDHCPService;
+import org.bitducks.spoofing.services.RogueDHCPService;
 
 /**
  * This class aims to scan a collection of InetAddress

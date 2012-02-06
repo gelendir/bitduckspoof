@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.services.dhcprogue;
+package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

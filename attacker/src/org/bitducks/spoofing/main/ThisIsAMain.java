@@ -4,7 +4,7 @@ import java.io.IOException;
 import jpcap.JpcapCaptor;
 
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.services.dhcprogue.RogueDHCPService;
+import org.bitducks.spoofing.services.RogueDHCPService;
 
 public class ThisIsAMain {
 
