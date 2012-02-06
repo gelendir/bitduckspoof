@@ -14,6 +14,10 @@ public abstract class Service extends Thread {
 	private volatile boolean isStarted = false;
 	protected Logger logger;
 	
+	public Service() {
+		this.logger = Logger.getLogger(this.getClass());
+	}
+	
 	protected Packet getNextBlockingPacket() {
 		try {
 			return this.receivePackets.take();
