@@ -16,6 +16,9 @@ public class Gui extends JFrame {
 	public Gui() {
 
 		this.setUpUi();
+		//this.setSize(500, 500);
+		//this.repaint();
+		//this.revalidate();
 		this.pack();
 	}
 	

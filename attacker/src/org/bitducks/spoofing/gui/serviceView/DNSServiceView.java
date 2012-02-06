@@ -5,15 +5,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.bitducks.spoofing.gui.View;
+import org.bitducks.spoofing.services.DNSService;
 
 public class DNSServiceView extends View {
 
 	public DNSServiceView() {
-		this.title = "DNS Poisoning";
+		super("DNS Poisoning", new DNSService());
 		
-		JLabel button = new JLabel( "Button" );
-		//button.setSize(100, 100);
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.add(button);
+		setUpServicePanel();
+	}
+	
+	public void setUpServicePanel() {
+		this.servicePanel.add(new JButton("LOLOLOLOLOLOLOLO"));
 	}
 }
