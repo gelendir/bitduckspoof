@@ -49,16 +49,16 @@ public class Server extends Thread {
 
 	@Override
 	public void start() {
+		this.active = true;
+		// Start the thread
+		super.start();
+		
 		// Start all the service
 		for (Service s : this.services ) {
 			if (!s.isAlive()) {
 				s.start();
 			}
 		}
-
-		this.active = true;
-		// Start the thread
-		super.start();
 	}
 
 	public void stopServer() {

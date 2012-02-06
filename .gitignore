@@ -1,4 +1,5 @@
 attacker/bin
 core/bin
+defender/bin
 .classpath
 .settings

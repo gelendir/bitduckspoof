@@ -7,15 +7,14 @@ import org.bitducks.spoofing.core.Rule;
 
 public class DHCPRule extends UDPRule {
 
+	private DHCPClientRule client = new DHCPClientRule();
+	private DHCPServerRule server = new DHCPServerRule();
+	
 	@Override
 	public boolean checkRule(Packet p) {
 		return super.checkRule(p) && 
-				(
-						( ((UDPPacket)p).src_port == 67 && 
-						((UDPPacket)p).dst_port == 68 ) || 
-						( ((UDPPacket)p).src_port == 68 &&
-						((UDPPacket)p).dst_port == 67 )
-						);
+				(this.client.checkRule(p) || 
+				this.server.checkRule(p));
 	}
 
 }
