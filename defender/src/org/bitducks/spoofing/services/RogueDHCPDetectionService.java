@@ -17,6 +17,7 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPServerRule;
 import org.bitducks.spoofing.util.Constants;
+import org.bitducks.spoofing.util.IllegalAddressDetection;
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
@@ -24,7 +25,7 @@ public class RogueDHCPDetectionService extends Service {
 
 	private InterfaceInfo info = Server.getInstance().getInfo();
 	private ArrayList<InetAddress> availableDHCPServer =  new ArrayList<InetAddress>();
-	private Set<InetAddress> illegalServer = null;
+	private Collection<InetAddress> illegalServer = null;
 	private Collection<InetAddress> supposedServer;
 
 
@@ -51,8 +52,7 @@ public class RogueDHCPDetectionService extends Service {
 			p = (UDPPacket)this.getNextNonBlockingPacket();
 		}
 
-		this.illegalServer = new HashSet<InetAddress>(this.availableDHCPServer);
-		this.illegalServer.removeAll(this.supposedServer);
+		this.illegalServer = IllegalAddressDetection.getIllegalAddress(this.supposedServer, this.availableDHCPServer);
 		
 		if(!this.illegalServer.isEmpty()) {
 			this.logger.info("There is " + this.illegalServer.size() + " illegal DHCP server on the network: " +
