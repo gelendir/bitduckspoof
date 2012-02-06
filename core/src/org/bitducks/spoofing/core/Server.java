@@ -14,21 +14,21 @@ public class Server extends Thread {
 	private List<Service> services = Collections.synchronizedList(new LinkedList<Service>());
 	private volatile boolean active = false;
 	private JpcapSender sender = null;
-	
+
 	private NetworkInterface networkInterface;
 	private InterfaceInfo info;
-	
+
 	private static Server instance = null;
-	
+
 	public static void createInstance(NetworkInterface networkInterface) throws IOException {
 		Server.instance = new Server(networkInterface);
 	}
-	
+
 	public static Server getInstance() {
 		//TODO:Throw exception if not created... not a NPE
-			return Server.instance;
+		return Server.instance;
 	}
-	
+
 	private Server(NetworkInterface networkInterface) throws IOException {
 		this.networkInterface = networkInterface;
 		this.sender = JpcapSender.openDevice(networkInterface);
@@ -52,11 +52,13 @@ public class Server extends Thread {
 		this.active = true;
 		// Start the thread
 		super.start();
-		
-		// Start all the service
-		for (Service s : this.services ) {
-			if (!s.isAlive()) {
-				s.start();
+
+		synchronized(this.services) {
+			// Start all the service
+			for (Service s : this.services ) {
+				if (!s.isAlive()) {
+					s.start();
+				}
 			}
 		}
 	}
@@ -64,9 +66,11 @@ public class Server extends Thread {
 	public void stopServer() {
 		this.active = false;
 
-		// End all the service
-		for (Service s : this.services ) {
-			s.closeService();
+		synchronized(this.services) {
+			// End all the service
+			for (Service s : this.services ) {
+				s.closeService();
+			}
 		}
 	}
 
@@ -75,7 +79,7 @@ public class Server extends Thread {
 		// TODO Set the right interface
 		NetworkInterface device = this.networkInterface;
 		JpcapCaptor captor = null;
-		
+
 		try {
 			captor = JpcapCaptor.openDevice(device,2000,true, 20);
 		} catch (IOException e) {
@@ -89,38 +93,40 @@ public class Server extends Thread {
 		// Main loop
 		while (this.active) {
 			this.pushPacketToService(captor);
-			
+
 		}
 
 		captor.close();
 		System.out.println("end");
 	}
-	
+
 	private void pushPacketToService(JpcapCaptor captor) {
 		Packet packet = captor.getPacket();
 		if (packet != null) {
 
-			// Check for each service to know if it match with the policy
-			for (Service s : this.services ) {
-				if (s.getPolicy().checkIfPolicyValid(packet)) {
-					// It's matching, so we push it to the service's paquetQueue.
-					s.pushPacket(packet);
+			synchronized(this.services) {
+				// Check for each service to know if it match with the policy
+				for (Service s : this.services ) {
+					if (s.getPolicy().checkIfPolicyValid(packet)) {
+						// It's matching, so we push it to the service's paquetQueue.
+						s.pushPacket(packet);
+					}
 				}
 			}
 		}		
 	}
-	
+
 	public void sendPacket(Packet packet) {
 		sender.sendPacket(packet);
 	}
-	
-	
+
+
 	public NetworkInterface getNetworkInterface() {
 		return this.networkInterface;
 	}
-	
+
 	public InterfaceInfo getInfo() {
 		return this.info;
 	}
-	
+
 }
