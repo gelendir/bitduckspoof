@@ -78,5 +78,37 @@ public abstract class IpUtil {
 			throw new UnexpectedErrorException(e, "Error converting ip to InetAddress");
 		}
 	}
+	
+	public static String prettyPrintMac( byte[] mac ) {
+			
+		char[] adr=new char[17];
+		
+			for(int i=0;i<5;i++){
+				adr[i*3] = IpUtil.hexUpperChar(mac[i]);
+				adr[i*3+1] = IpUtil.hexLowerChar(mac[i]);
+				adr[i*3+2]=':';
+			}
+		
+	    adr[15]=hexUpperChar(mac[5]);
+	    adr[16]=hexLowerChar(mac[5]);
+	
+	    return new String(adr);
+		
+	}
+	
+    public static char hexUpperChar(byte b){
+        b=(byte)((b>>4)&0xf);
+        if(b==0) return '0';
+        else if(b<10) return (char)('0'+b);
+        else return (char)('a'+b-10);
+    }
+
+    public static char hexLowerChar(byte b){
+        b=(byte)(b&0xf);
+        if(b==0) return '0';
+        else if(b<10) return (char)('0'+b);
+        else return (char)('a'+b-10);
+    }
+
 
 }
