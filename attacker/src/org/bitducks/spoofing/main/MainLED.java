@@ -25,7 +25,7 @@ public class MainLED {
 		Server.getInstance().addService(new BroadcastARPService());
 		Server.getInstance().addService(new RedirectMITM());
 		Server.getInstance().start();
-		Thread.sleep(10000);
+		Server.getInstance().join();
 		Server.getInstance().stopServer();
 
 	}

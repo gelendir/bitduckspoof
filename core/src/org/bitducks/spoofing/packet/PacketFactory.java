@@ -69,7 +69,7 @@ public class PacketFactory {
 		return dnsPacket;
 	}
 
-	public static ARPPacket arpReply(byte[] macSource, InetAddress gateway, InetAddress victim, byte[] macVictim) {
+	public static ARPPacket arpReply(byte[] macSource, InetAddress source, byte[] macVictim, InetAddress victim) {
 		
 		ARPPacket reply = new ARPPacket();
 		
@@ -83,11 +83,10 @@ public class PacketFactory {
 		reply.operation = ARPPacket.ARP_REPLY;
 		
 		reply.sender_hardaddr = macSource;
-		reply.sender_protoaddr = gateway.getAddress();
+		reply.sender_protoaddr = source.getAddress();
 		reply.target_hardaddr = macVictim;
 		reply.target_protoaddr = victim.getAddress();
 		
 		return reply;
 	}
-
 }

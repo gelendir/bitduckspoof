@@ -5,7 +5,6 @@ import java.net.InetAddress;
 
 import jpcap.packet.ARPPacket;
 
-import org.apache.log4j.Logger;
 import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
@@ -25,6 +24,7 @@ public class BroadcastARPService extends Service {
 		InetAddress firstIp = IpUtil.network(infoInterface.getDevice());
 		InetAddress lastIp = IpUtil.lastIpInNetwork(infoInterface.getDevice());
 		ipRange = new IpRangeIterator(firstIp, lastIp);
+		
 		try {
 			gateway = GatewayFinder.find(infoInterface.getDevice());
 		} catch (IOException e) {
@@ -37,9 +37,12 @@ public class BroadcastARPService extends Service {
 		while(! this.isCloseRequested()){
 			broadcastSpoof();
 			
-			//Waiting 500ms to be sure we don't use all the CPU
+			//Waiting 50ms to be sure we don't use all the CPU
+			//It need to be fast because each packet sent from the real Gateway 
+			//to a victim will reset his ARP cache so we spam it
+			//TODO: Make a NAT and change the port
 			try {
-				Thread.sleep(500);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
