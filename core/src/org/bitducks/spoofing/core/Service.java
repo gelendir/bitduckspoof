@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import jpcap.packet.Packet;
 
+import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
 
 public abstract class Service extends Thread {
@@ -78,5 +79,19 @@ public abstract class Service extends Thread {
 	}
 	
 	public abstract void run();
+	
+	public void addLogAppender( Appender appender ) {
+		this.logger.addAppender( appender );
+	}
+	
+	public void removeLogAppender( Appender appender ) {
+		this.logger.removeAppender( appender );
+	}
+	
+	public String serviceName() {
+		return this.getClass().getCanonicalName();
+	}
+
+
 
 }

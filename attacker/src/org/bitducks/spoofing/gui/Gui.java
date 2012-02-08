@@ -17,8 +17,10 @@ public class Gui extends JFrame {
 
 	public Gui(NetworkInterface myInterface) throws IOException {
 
-		Server.getInstance().createInstance(myInterface);
-		Server.getInstance().start();
+		if( Server.getInstance() == null ) {
+			Server.createInstance(myInterface);
+			Server.getInstance().start();
+		}
 		
 		this.setUpUi();
 		//this.setSize(500, 500);
@@ -37,6 +39,9 @@ public class Gui extends JFrame {
 		
 		view = new DNSServiceView();
 		tab.addTab(view.getTitle(), view);
+		
+		LogView logView = new LogView();
+		tab.addTab("Logs", logView);
 
 		this.add(tab, BorderLayout.CENTER);
 	}

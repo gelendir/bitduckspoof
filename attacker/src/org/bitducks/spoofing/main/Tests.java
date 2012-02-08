@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
+import javax.swing.WindowConstants;
+
 import jpcap.JpcapCaptor;
 import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
@@ -12,15 +14,22 @@ import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.gateway.GatewayFindService;
 import org.bitducks.spoofing.gui.DeviceSelection;
+import org.bitducks.spoofing.gui.Gui;
+import org.bitducks.spoofing.gui.LogView;
 //import org.bitducks.spoofing.scan.ArpService;
 import org.bitducks.spoofing.packet.PacketGenerator;
 import org.bitducks.spoofing.scan.ArpCache;
 import org.bitducks.spoofing.scan.ArpRecieveService;
 import org.bitducks.spoofing.scan.ArpScanService;
 import org.bitducks.spoofing.scan.IpRange;
+import org.bitducks.spoofing.test.CustomAppender;
 import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpUtil;
@@ -45,10 +54,52 @@ public class Tests {
 		//testDummyService();
 		//testCache();
 		//testGui();
-		testGatewayFinder();
+		//testGatewayFinder();
+		//testLogging();
+		testLogView();
+		
 
 	}
 	
+	private static void testLogView() throws Exception {
+		
+		BasicConfigurator.configure();
+		
+		//Server.createInstance( getDevice() );
+		//Server server = Server.getInstance();
+		
+		
+		//Server.getInstance().addService(dummy);
+		
+		//server.start();
+		
+		Gui gui = new Gui( getDevice() );
+		
+		DummyService dummy = new DummyService();
+		Server.getInstance().addService(dummy);
+		
+		gui.setVisible(true);
+		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+	}
+
+	private static Layout defaultLayout() {
+		return new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN);
+	}
+	
+	private static void testLogging() {
+		
+		//BasicConfigurator.configure();
+		CustomAppender appender = new CustomAppender( defaultLayout() );
+		
+		
+		Logger logger = Logger.getLogger( Tests.class );
+		logger.addAppender(appender);
+		
+		logger.info("HELLO WORLD");
+		
+	}
+
 	private static void testGatewayFinder() throws Exception {
 		
 		Server.createInstance( getDevice() );

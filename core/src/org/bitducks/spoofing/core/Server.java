@@ -1,6 +1,7 @@
 package org.bitducks.spoofing.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -128,5 +129,14 @@ public class Server extends Thread {
 	public InterfaceInfo getInfo() {
 		return this.info;
 	}
-
+	
+	public ArrayList<Service> getServices() {
+		ArrayList<Service> services = new ArrayList<Service>();
+		for( Service service: this.services ) {
+			services.add( service );
+		}
+		return services;
+		
+	}
+	
 }
