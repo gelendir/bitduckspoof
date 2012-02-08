@@ -65,8 +65,11 @@ public class DNSService extends Service {
 		
 		System.out.println("DNS Starting");
 		UDPPacket queryPaquet = null;
-		while ((queryPaquet = (UDPPacket)this.getNextBlockingPacket()) != Packet.EOF) {
-			
+		// If the packet is an EOF we will not be able to cast it to UPDPacket
+		Packet tmpPacket = this.getNextBlockingPacket();
+		
+		while (!tmpPacket.equals(Packet.EOF)) {
+			queryPaquet = (UDPPacket)tmpPacket;
 			InetAddress falseIpAddr = null;
 			if ((falseIpAddr = this.isDNSPacketMatchingWithFilter(queryPaquet)) != null) {
 				
@@ -87,7 +90,8 @@ public class DNSService extends Service {
 				
 				this.sendDNSPacket(answerPaquet);
 			}
-				
+			
+			tmpPacket = this.getNextBlockingPacket();
 		}
 	}
 	
