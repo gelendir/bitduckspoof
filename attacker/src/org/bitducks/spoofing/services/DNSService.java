@@ -21,22 +21,24 @@ public class DNSService extends Service {
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
 	
 	public DNSService() {
-		
-		// TODO Add rule
 		this.getPolicy().addRule(new DNSIpv4Rule());
 		
 		this.getPolicy().setStrict(true);
 		
 		// TODO Get our IP or the IP provided
-		//this.setDNSFalseIp("10.17.62.145");
+		this.setDNSFalseIp(Server.getInstance().getInfo().getAddress());
 	}
 	
 	public void setDNSFalseIp(String falseHostIp) {
 		try {
-			this.falseDefaultIpAddr = InetAddress.getByName(falseHostIp);
+			this.setDNSFalseIp(InetAddress.getByName(falseHostIp));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	public void setDNSFalseIp(InetAddress falseHostIp) {
+		this.falseDefaultIpAddr = falseHostIp;
 	}
 	
 	public void addDnsPacketFilter(String regex, InetAddress addr) {
