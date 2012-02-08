@@ -1,5 +1,6 @@
 package org.bitducks.spoofing.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -44,7 +45,7 @@ public abstract class View extends JPanel implements ActionListener {
 		
 		this.add(Box.createRigidArea(new Dimension(0, 5)));
 		
-		this.add(this.servicePanel);
+		this.add(this.servicePanel, BorderLayout.CENTER);
 		
 		this.add(Box.createRigidArea(new Dimension(0, 10)));
 		
@@ -104,6 +105,7 @@ public abstract class View extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}	
 			
+			service = null;
 			this.start.setEnabled(true);
 			this.stop.setEnabled(false);
 			this.start.setText(View.START);
