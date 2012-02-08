@@ -84,8 +84,14 @@ public abstract class Service extends Thread {
 		this.logger.addAppender( appender );
 	}
 	
+	public void removeLogAppender( Appender appender ) {
+		this.logger.removeAppender( appender );
+	}
+	
 	public String serviceName() {
 		return this.getClass().getCanonicalName();
 	}
+
+
 
 }
