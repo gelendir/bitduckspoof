@@ -65,15 +65,19 @@ public class Tests {
 		
 		BasicConfigurator.configure();
 		
-		Server.createInstance( getDevice() );
-		Server server = Server.getInstance();
+		//Server.createInstance( getDevice() );
+		//Server server = Server.getInstance();
+		
+		
+		//Server.getInstance().addService(dummy);
+		
+		//server.start();
+		
+		Gui gui = new Gui( getDevice() );
 		
 		DummyService dummy = new DummyService();
 		Server.getInstance().addService(dummy);
 		
-		server.start();
-		
-		Gui gui = new Gui( getDevice() );
 		gui.setVisible(true);
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
