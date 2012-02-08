@@ -4,8 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,37 +28,59 @@ public class LogView extends JPanel implements ActionListener {
 	
 	private JTextArea logView = null;
 	private JPanel serviceList = null;
+	private JButton refresh = null;
 	
-	private HashMap<JCheckBox, Service> checkboxTable = new HashMap<JCheckBox, Service>();
-	
-	private ArrayList<Service> checkedServices = null;
+	private ArrayList<LogCheckBox> checkboxes = null;
 	
 	public LogView() {
 		super();
 		
-		this.checkedServices = new ArrayList<Service>();
+		this.checkboxes = new ArrayList<LogCheckBox>();
 		
 		this.setLayout( new BoxLayout(this, BoxLayout.Y_AXIS) );
-		this.addServiceList();
-		this.addLogView();
-
+		
+		this.serviceList = this.generateServiceList();
+		this.logView = this.generateLogView();
+		this.refresh = this.generateRefreshButton();
+		
+		this.refreshPanel();
+		
 	}
 	
-	private void addServiceList() {
-		this.add( this.generateServiceList() );
-	}
-
-	private void addLogView() {
-		this.logView = new JTextArea();
-		this.logView.setColumns( LogView.NB_COLS );
-		this.logView.setRows( LogView.NB_COLS );
-
-		DefaultCaret caret = (DefaultCaret)this.logView.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+	public void refreshPanel() {
+		
+		this.removeAll();
+		this.add( this.serviceList );
+		this.add( this.refresh );
 		
 		JScrollPane scroll = new JScrollPane(this.logView);
-		
 		this.add( scroll );
+		
+		this.revalidate();
+		
+	}
+
+	private JTextArea generateLogView() {
+		
+		JTextArea textArea = new JTextArea();
+		
+		textArea = new JTextArea();
+		textArea.setColumns( LogView.NB_COLS );
+		textArea.setRows( LogView.NB_COLS );
+
+		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
+		return textArea;
+		
+	}
+	
+	private JButton generateRefreshButton() {
+		
+		JButton button = new JButton("Refresh service list");
+		button.addActionListener( this );
+		return button;
+		
 	}
 	
 	private JPanel generateServiceList() {
@@ -64,27 +88,30 @@ public class LogView extends JPanel implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ) );
 		
-		System.out.println( Server.getInstance().getServices() );
+		HashSet<Service> activeServices = new HashSet<Service>();
+		
+		for( LogCheckBox checkbox: this.checkboxes ) {
+			panel.add( checkbox );
+			activeServices.add( checkbox.getService() );
+		}
 		
 		for( Service service: Server.getInstance().getServices() ) {
-			JCheckBox checkBox = this.serviceCheckBox( service );
-			panel.add(checkBox);
+			if( !activeServices.contains( service ) ) {
+				LogCheckBox checkBox = this.serviceCheckBox( service );
+				panel.add(checkBox);
+			}
 		}
 		
 		return panel;
 		
 	}
 	
-	private JCheckBox serviceCheckBox( Service service ) {
+	private LogCheckBox serviceCheckBox( Service service ) {
 			
-		JCheckBox checkbox = new JCheckBox( service.serviceName() );
+		LogCheckBox checkbox = new LogCheckBox( service );
 		checkbox.addActionListener( this );
-		this.checkboxTable.put( checkbox, service );
 		
-		if( this.checkedServices.contains( service ) ) {
-			checkbox.setSelected(true);
-
-		}
+		this.checkboxes.add(checkbox);
 		
 		return checkbox;
 		
@@ -94,17 +121,28 @@ public class LogView extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		
 		Object source = event.getSource();
-		if( source instanceof JCheckBox ) {
+		if( source instanceof LogCheckBox ) {
 			
-			JCheckBox checkBox = (JCheckBox)source;
+			LogCheckBox checkBox = (LogCheckBox)source;
 			
 			if( checkBox.isSelected() ) {
 				
-				Service service = this.checkboxTable.get( event.getSource() );
 				GUILogAppender appender = new GUILogAppender( this.logView, LogView.defaultLayout );
-				service.addLogAppender( appender );
+				checkBox.activateLogAppender( appender );
 			
+			} else {
+				
+				checkBox.removeLogAppender();
+				
 			}
+			
+		} else if ( source instanceof JButton && source == this.refresh ) {
+			
+			System.out.println("CLICKED");
+			
+			this.remove( this.serviceList );
+			this.serviceList = this.generateServiceList();
+			this.refreshPanel();
 			
 		}
 
