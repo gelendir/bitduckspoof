@@ -8,6 +8,7 @@ import jpcap.JpcapCaptor;
 
 import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.core.Server;
+import org.bitducks.spoofing.services.DNSProtection;
 import org.bitducks.spoofing.services.RogueDHCPDetectionService;
 
 public class ThisIsAMain {
@@ -21,9 +22,9 @@ public class ThisIsAMain {
 		// Set up a simple configuration that logs on the console.
 		BasicConfigurator.configure();
 		
-		Server.createInstance(JpcapCaptor.getDeviceList()[1]);
+		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
 		
-		Server.getInstance().start();
+		/*Server.getInstance().start();
 		Thread.sleep(500);
 		
 		ArrayList<InetAddress> addr = new ArrayList<InetAddress>();
@@ -31,6 +32,12 @@ public class ThisIsAMain {
 		
 		RogueDHCPDetectionService service = new RogueDHCPDetectionService(addr);
 		Server.getInstance().addService(service);
+		
+		Server.getInstance().join();*/
+		
+		Server.getInstance().start();
+		
+		Server.getInstance().addService(new DNSProtection());
 		
 		Server.getInstance().join();
 		
