@@ -52,6 +52,9 @@ public class DNSServiceView extends View implements ActionListener{
 		super( DNSServiceView.TITLE );
 		
 		setUpServicePanel();
+		
+		dnsPacketFilter.put("*", Server.getInstance().getInfo().getDeviceAddress().address);
+		this.refreshList();
 	}
 	
 	public void setUpServicePanel() {
@@ -115,7 +118,6 @@ public class DNSServiceView extends View implements ActionListener{
 		String splitResult[] = line.split(":");
 		
 		this.dnsPacketFilter.remove(splitResult[0].trim());
-		System.out.println("Reponse :" + splitResult[0].trim() + ":");
 	}
 	
 	private void refreshList() {
@@ -176,10 +178,14 @@ public class DNSServiceView extends View implements ActionListener{
 			}
 			
 			try {
+				this.removeFromList("*: ");
+				this.addToList("*", ipAddr);
 				this.defaultFalseIp = InetAddress.getByName(ipAddr);
 			} catch (UnknownHostException e1) {
 				JOptionPane.showMessageDialog(null, DNSServiceView.ERROR_BAD_IP);
 			}
+			
+			this.refreshList();
 			break;
 		}
 		

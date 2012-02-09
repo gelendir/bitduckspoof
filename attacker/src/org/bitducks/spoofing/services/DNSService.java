@@ -21,6 +21,7 @@ public class DNSService extends Service {
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
 	
 	public DNSService() {
+		super();
 		this.getPolicy().addRule(new DNSIpv4Rule());
 		
 		this.getPolicy().setStrict(true);
@@ -81,7 +82,7 @@ public class DNSService extends Service {
 					queryBuffer.put(queryData[i]);
 				}
 				
-				this.logger.info("Spoof DNS from " + queryPaquet.src_ip.getHostAddress());				
+				this.logger.info("Spoof " + this.getWebDNSFromPacket(queryPaquet) + " from " + queryPaquet.src_ip.getHostAddress());				
 				
 				DNSPacket answerPaquet = PacketFactory.dnsRequest(queryPaquet,
 						new byte[] { queryData[0], queryData[1] },   // Transaction
@@ -112,18 +113,7 @@ public class DNSService extends Service {
 			return this.falseDefaultIpAddr;
 		}
 		
-		ByteBuffer buf = ByteBuffer.allocate(p.data.length - 12 - 6);
-		for (int i = 13; i < p.data.length - 5; ++i) {
-			byte tmpByte = p.data[i];
-			if (tmpByte >= 0x21) { // This is a letters
-				buf.put(tmpByte);		
-			} else {
-				buf.put((byte) 0x2e);
-			}
-			
-		}
-
-		String data = new String(buf.array());
+		String data = this.getWebDNSFromPacket(p);
 		
 		Iterator<String> it = this.dnsPacketFilter.keySet().iterator();
 		// Checking all the filter
@@ -137,6 +127,30 @@ public class DNSService extends Service {
 		return null;  // When none of the filter are matching
 	}
 	
+	/**
+	 * Get Web server address from DNS Query packet
+	 * @param p
+	 * @return
+	 */
+	private String getWebDNSFromPacket(Packet p) {
+		ByteBuffer buf = ByteBuffer.allocate(p.data.length - 12 - 6);
+		for (int i = 13; i < p.data.length - 5; ++i) {
+			byte tmpByte = p.data[i];
+			if (tmpByte >= 0x21) { // This is a letters
+				buf.put(tmpByte);		
+			} else {
+				buf.put((byte) 0x2e);
+			}
+			
+		}
+
+		return new String(buf.array());
+	}
+	
+	/**
+	 * Send a DNS Packet answer
+	 * @param packet
+	 */
 	private void sendDNSPacket(DNSPacket packet) {
 		Server.getInstance().sendPacket(packet);
 	}

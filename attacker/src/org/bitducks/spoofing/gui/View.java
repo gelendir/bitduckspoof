@@ -10,7 +10,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
@@ -19,7 +21,7 @@ public abstract class View extends JPanel implements ActionListener {
 	
 	private static final String STOP = "Stop";
 	private static final String START = "Start";
-	private static final String STARTED = "Started";
+ 	private static final String STARTED = "Started";
 	
 	private String title = "";
 	protected Service service = null;
@@ -29,6 +31,8 @@ public abstract class View extends JPanel implements ActionListener {
 	
 	private JButton start = new JButton();
 	private JButton stop = new JButton();
+	
+	GUILogAppender logger = null;
 	
 	public View(String title) {
 		this.title = title;
@@ -55,7 +59,7 @@ public abstract class View extends JPanel implements ActionListener {
 		this.add(Box.createRigidArea(new Dimension(0, 5)));
 		
 		this.setUpTerminal();
-		this.add(this.terminal);
+		//this.add(this.terminal);
 		
 		this.add(Box.createRigidArea(new Dimension(0, 5)));
 		
@@ -79,6 +83,14 @@ public abstract class View extends JPanel implements ActionListener {
 	
 	private void setUpTerminal() {
 		this.terminal.setEditable(false);
+		JScrollPane scroll = new JScrollPane(this.terminal);
+		
+		this.terminal.setRows(20);
+		
+		DefaultCaret caret = (DefaultCaret)this.terminal.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
+		this.add(scroll, BorderLayout.CENTER);
 	}
 
 	@Override
@@ -93,8 +105,12 @@ public abstract class View extends JPanel implements ActionListener {
 			// Create the Service instance
 			this.service = this.createService();
 			this.start.setText(View.STARTED);
+			
+			// Setup the logger
+			this.logger = new GUILogAppender(this.terminal);
+			this.service.addLogAppender(this.logger);
+			// Start the service
 			Server.getInstance().addService(this.service);
-			this.service.addLogAppender(new GUILogAppender(this.terminal));
 			break;
 			
 		case View.STOP:
@@ -104,9 +120,11 @@ public abstract class View extends JPanel implements ActionListener {
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}	
+			}
+			this.service.removeLogAppender(this.logger);
 			
-			service = null;
+			this.logger = null;
+			this.service = null;
 			this.start.setEnabled(true);
 			this.stop.setEnabled(false);
 			this.start.setText(View.START);
