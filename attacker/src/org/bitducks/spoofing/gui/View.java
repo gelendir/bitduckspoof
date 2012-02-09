@@ -94,6 +94,7 @@ public abstract class View extends JPanel implements ActionListener {
 			this.service = this.createService();
 			this.start.setText(View.STARTED);
 			Server.getInstance().addService(this.service);
+			this.service.addLogAppender(new GUILogAppender(this.terminal, null));
 			break;
 			
 		case View.STOP:

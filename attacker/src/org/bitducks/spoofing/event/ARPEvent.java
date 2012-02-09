@@ -1,5 +1,7 @@
 package org.bitducks.spoofing.event;
 
-public class ARPEvent extends Event {
+import jpcap.packet.ARPPacket;
+
+public abstract class ARPEvent extends Event {
 
 }
