@@ -24,6 +24,8 @@ public class RedirectMITM extends Service {
 	private InetAddress gatewayIP;
 	private byte[] gatewayMAC;
 
+	//TODO: Make a NAT and change the port
+	
 	public RedirectMITM() {
 		logger = Logger.getLogger(RedirectMITM.class);
 		serverInfo = Server.getInstance().getInfo();

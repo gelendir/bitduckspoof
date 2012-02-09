@@ -40,7 +40,6 @@ public class BroadcastARPService extends Service {
 			//Waiting 50ms to be sure we don't use all the CPU
 			//It need to be fast because each packet sent from the real Gateway 
 			//to a victim will reset his ARP cache so we spam it
-			//TODO: Make a NAT and change the port
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {

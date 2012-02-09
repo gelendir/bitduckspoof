@@ -1,6 +1,5 @@
 package org.bitducks.spoofing.services;
 
-import java.io.IOException;
 import java.net.InetAddress;
 
 import jpcap.packet.ARPPacket;
@@ -10,7 +9,6 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.SingleARPResponseRule;
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
 import org.bitducks.spoofing.packet.PacketGenerator;
-import org.bitducks.spoofing.util.gateway.GatewayFinder;
 
 public class MacFindService extends Service {
 	
@@ -19,7 +17,7 @@ public class MacFindService extends Service {
 	
 	public MacFindService( InetAddress ipAddress ) {
 		
-		this.ipAddress = this.ipAddress;
+		this.ipAddress = ipAddress;
 		
 		this.getPolicy().addRule(
 				new SingleARPResponseRule( this.ipAddress ) );
