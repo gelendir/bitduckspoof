@@ -22,12 +22,11 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPRule;
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
-import org.bitducks.spoofing.scan.ArpRecieveService;
-import org.bitducks.spoofing.scan.ArpScanFinish;
-import org.bitducks.spoofing.scan.ArpScanService;
+
 import org.bitducks.spoofing.scan.ArpScanTimer;
-import org.bitducks.spoofing.scan.IpRange;
+import org.bitducks.spoofing.services.arp.ArpScanFinish;
 import org.bitducks.spoofing.util.Constants;
+import org.bitducks.spoofing.util.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
