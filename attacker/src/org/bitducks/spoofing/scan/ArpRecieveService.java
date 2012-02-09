@@ -19,6 +19,8 @@ public class ArpRecieveService extends Service {
 	ArpCache cache;
 	
 	Registry registry;
+	
+	
 		
 	public ArpRecieveService() {
 		
@@ -32,7 +34,7 @@ public class ArpRecieveService extends Service {
 	
 	public void run() {
 		
-		System.out.println("ARP recieving service started");
+		this.logger.info("ARP recieving service started");		
 		
 		while( !this.isCloseRequested() ) {
 			
@@ -45,12 +47,24 @@ public class ArpRecieveService extends Service {
 			byte[] senderMac = packet.sender_hardaddr;
 			byte[] senderIp = packet.sender_protoaddr;
 			this.cache.add(senderIp, senderMac);
-			System.out.println(this.cache);
+			
+			this.dispatchEvents( packet );
+			
+			this.logger.debug(this.cache.toString());
+			
 	
 		}
 		
 	}
 	
+	private void dispatchEvents(ARPPacket packet) {
+		
+		
+		
+		
+		
+	}
+
 	public ArpCache getCache() {
 		return this.cache;
 	}

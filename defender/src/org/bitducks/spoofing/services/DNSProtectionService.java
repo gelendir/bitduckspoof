@@ -10,9 +10,9 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DNSRule;
 
-public class DNSProtection extends Service {
+public class DNSProtectionService extends Service {
 
-	public DNSProtection() {
+	public DNSProtectionService() {
 		super();
 		this.getPolicy().addRule(new DNSRule());
 	}

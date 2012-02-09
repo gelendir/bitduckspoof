@@ -8,7 +8,7 @@ import jpcap.JpcapCaptor;
 
 import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.services.DNSProtection;
+import org.bitducks.spoofing.services.DNSProtectionService;
 import org.bitducks.spoofing.services.RogueDHCPDetectionService;
 
 public class ThisIsAMain {
@@ -37,7 +37,7 @@ public class ThisIsAMain {
 		
 		Server.getInstance().start();
 		
-		Server.getInstance().addService(new DNSProtection());
+		Server.getInstance().addService(new DNSProtectionService());
 		
 		Server.getInstance().join();
 		
