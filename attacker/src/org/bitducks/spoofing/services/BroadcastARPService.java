@@ -10,7 +10,7 @@ import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.packet.PacketFactory;
-import org.bitducks.spoofing.scan.IpRangeIterator;
+import org.bitducks.spoofing.util.IpRangeIterator;
 import org.bitducks.spoofing.util.IpUtil;
 import org.bitducks.spoofing.util.gateway.GatewayFinder;
 

@@ -63,7 +63,7 @@ public class DNSService extends Service {
 	@Override
 	public void run() {
 		
-		System.out.println("DNS Starting");
+		this.logger.info("DNS Spoof service is started ...");
 		UDPPacket queryPaquet = null;
 		// If the packet is an EOF we will not be able to cast it to UPDPacket
 		Packet tmpPacket = this.getNextBlockingPacket();
@@ -81,6 +81,7 @@ public class DNSService extends Service {
 					queryBuffer.put(queryData[i]);
 				}
 				
+				this.logger.info("Spoof DNS from " + queryPaquet.src_ip.getHostAddress());				
 				
 				DNSPacket answerPaquet = PacketFactory.dnsRequest(queryPaquet,
 						new byte[] { queryData[0], queryData[1] },   // Transaction
@@ -88,11 +89,14 @@ public class DNSService extends Service {
 						queryBuffer.array(), 
 						falseIpAddr);
 				
+				
 				this.sendDNSPacket(answerPaquet);
 			}
 			
 			tmpPacket = this.getNextBlockingPacket();
 		}
+		
+		this.logger.info("DNS Spoof service will shutdown NOW ...");
 	}
 	
 	/**
@@ -108,10 +112,8 @@ public class DNSService extends Service {
 			return this.falseDefaultIpAddr;
 		}
 		
-		StringBuilder builder = new StringBuilder();
 		ByteBuffer buf = ByteBuffer.allocate(p.data.length - 12 - 6);
 		for (int i = 13; i < p.data.length - 5; ++i) {
-			//System.out.println(p.data[i]);
 			byte tmpByte = p.data[i];
 			if (tmpByte >= 0x21) { // This is a letters
 				buf.put(tmpByte);		
