@@ -6,7 +6,9 @@ import java.util.Set;
 import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
+import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Rule;
+import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.ARPResponseRule;
 import org.bitducks.spoofing.core.rules.ARPRule;
@@ -27,7 +29,10 @@ public class ArpRecieveService extends Service {
 	
 	public void run() {
 		
-		this.logger.info("ARP recieving service started");		
+		this.logger.info("ARP recieving service started");
+		
+		InterfaceInfo info = Server.getInstance().getInfo();
+		this.cache.add( info.getAddress().getAddress(), info.getMacAddress() );
 		
 		while( !this.isCloseRequested() ) {
 			
