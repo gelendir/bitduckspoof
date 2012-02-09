@@ -6,7 +6,10 @@ import java.util.LinkedList;
 import java.util.TimerTask;
 
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
+import org.bitducks.spoofing.services.ArpRecieveService;
+import org.bitducks.spoofing.services.ArpScanService;
 import org.bitducks.spoofing.services.RogueDHCPService;
+import org.bitducks.spoofing.services.arp.ArpScanFinish;
 
 /**
  * This class aims to scan a collection of InetAddress
