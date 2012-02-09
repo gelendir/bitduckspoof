@@ -4,9 +4,12 @@ import javax.swing.JTextArea;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
 
 public class GUILogAppender extends AppenderSkeleton {
+	
+	private static Layout defaultLayout = new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN);
 	
 	private JTextArea logView;
 	boolean active = true;
@@ -14,6 +17,10 @@ public class GUILogAppender extends AppenderSkeleton {
 	public GUILogAppender( JTextArea logView, Layout layout ) {
 		this.logView = logView;
 		this.layout = layout;
+	}
+	
+	public GUILogAppender( JTextArea logView ) {
+		this( logView, GUILogAppender.defaultLayout );
 	}
 
 	@Override
