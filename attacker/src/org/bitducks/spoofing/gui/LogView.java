@@ -21,8 +21,6 @@ import org.bitducks.spoofing.core.Service;
 
 public class LogView extends JPanel implements ActionListener {
 	
-	private static Layout defaultLayout = new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN);
-	
 	private static int NB_COLS = 40;
 	private static int NB_ROWS = 60;
 	
@@ -127,7 +125,7 @@ public class LogView extends JPanel implements ActionListener {
 			
 			if( checkBox.isSelected() ) {
 				
-				GUILogAppender appender = new GUILogAppender( this.logView, LogView.defaultLayout );
+				GUILogAppender appender = new GUILogAppender( this.logView );
 				checkBox.activateLogAppender( appender );
 			
 			} else {
