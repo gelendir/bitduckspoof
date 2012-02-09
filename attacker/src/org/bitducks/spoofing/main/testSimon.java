@@ -1,6 +1,7 @@
 package org.bitducks.spoofing.main;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
@@ -23,12 +24,8 @@ public class testSimon {
 		NetworkInterface i = JpcapCaptor.getDeviceList() [ 0 ];
 		Server.createInstance(i);
 		
-		/*DNSService service = new DNSService();
-		service.setDNSFalseIp("10.0.9.24"); // Setting the default false ip
-		Server.getInstance().addService(service);*/
-		
-		
-		IpStealer service = new IpStealer();
+		DNSService service = new DNSService();
+		service.addDnsPacketFilter("*osnews.com", InetAddress.getByName("2.2.2.2"));
 		
 		Server.getInstance().start();
 		

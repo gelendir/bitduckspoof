@@ -136,7 +136,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextBlockingPacket();
 
-			if(p != null) {
+			if(p != null && !p.equals(Packet.EOF)) {
 				try {
 					DHCPPacket dhcp = DHCPPacket.getPacket(p.data, 0, p.data.length, false);
 					byte option = dhcp.getDHCPMessageType();
