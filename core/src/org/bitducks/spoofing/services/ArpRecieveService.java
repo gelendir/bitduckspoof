@@ -35,20 +35,18 @@ public class ArpRecieveService extends Service {
 		this.cache.add( info.getAddress().getAddress(), info.getMacAddress() );
 		
 		while( !this.isCloseRequested() ) {
-			
-			ARPPacket packet = (ARPPacket)this.getNextBlockingPacket();
-			
-			if( packet == null ) {
+			Packet p = this.getNextBlockingPacket();
+			if( p == null || p.equals(Packet.EOF) ) {
 				return;
 			}
+			
+			ARPPacket packet = (ARPPacket)p;
 			
 			byte[] senderMac = packet.sender_hardaddr;
 			byte[] senderIp = packet.sender_protoaddr;
 			this.cache.add(senderIp, senderMac);
 			
 			this.logger.debug(this.cache.toString());
-			
-	
 		}
 		
 	}
