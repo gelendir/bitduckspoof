@@ -49,6 +49,10 @@ public abstract class Service extends Thread {
 		this.receivePackets.add(p);
 	}
 	
+	public void clearQueue() {
+		this.receivePackets.clear();
+	}
+	
 	public Policy getPolicy() {
 		return this.policy;
 	}
