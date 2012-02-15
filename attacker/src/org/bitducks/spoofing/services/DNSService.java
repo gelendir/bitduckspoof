@@ -17,7 +17,7 @@ import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.packet.PacketFactory;
 
 public class DNSService extends Service {
-	private InetAddress falseDefaultIpAddr = null;
+	//private InetAddress falseDefaultIpAddr = null;
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
 	
 	public DNSService() {
@@ -27,10 +27,10 @@ public class DNSService extends Service {
 		this.getPolicy().setStrict(true);
 		
 		// TODO Get our IP or the IP provided
-		this.setDNSFalseIp(Server.getInstance().getInfo().getAddress());
+		//this.setDNSFalseIp(Server.getInstance().getInfo().getAddress());
 	}
 	
-	public void setDNSFalseIp(String falseHostIp) {
+	/*public void setDNSFalseIp(String falseHostIp) {
 		try {
 			this.setDNSFalseIp(InetAddress.getByName(falseHostIp));
 		} catch (UnknownHostException e) {
@@ -40,14 +40,14 @@ public class DNSService extends Service {
 	
 	public void setDNSFalseIp(InetAddress falseHostIp) {
 		this.falseDefaultIpAddr = falseHostIp;
-	}
+	}*/
 	
 	public void addDnsPacketFilter(String regex, InetAddress addr) {
-		this.dnsPacketFilter.put(regex.replace("*", ".*"), addr);
+		this.dnsPacketFilter.put(regex, addr);
 	}
 	
 	public void removeDnsPacketFilter(String regex) {
-		this.dnsPacketFilter.remove(regex.replace("*", ".*"));
+		this.dnsPacketFilter.remove(regex);
 	}
 	
 	/**
@@ -105,23 +105,33 @@ public class DNSService extends Service {
 	 * @param p
 	 * @return 	InetAddress		The false Ip address to send in the packet, 
 	 * 			NULL 			If the list contain something and is not matching with the packet
-	 * 			DefaultFalseIp  If the list is empty.
+	 * 			NULL  If the list is empty.
 	 */
 	public InetAddress isDNSPacketMatchingWithFilter(Packet p) {
-		// If empty
+		// If empty --
 		if (this.dnsPacketFilter.isEmpty()) {
-			return this.falseDefaultIpAddr;
+			//return this.falseDefaultIpAddr;
+			return null;
 		}
 		
 		String data = this.getWebDNSFromPacket(p);
+		boolean foundStar = false;
 		
 		Iterator<String> it = this.dnsPacketFilter.keySet().iterator();
 		// Checking all the filter
 		while (it.hasNext()) {
 			String regex = it.next();
 			if (data.matches(regex)) {
-				return this.dnsPacketFilter.get(regex);
+				if (regex == ".*") {
+					foundStar = true;
+				} else {
+					return this.dnsPacketFilter.get(regex);
+				}
 			}
+		}
+		
+		if (foundStar) {
+			return this.dnsPacketFilter.get(".*");
 		}
 		
 		return null;  // When none of the filter are matching
