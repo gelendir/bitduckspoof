@@ -7,7 +7,7 @@ import jpcap.packet.Packet;
 
 import org.bitducks.spoofing.core.rules.ARPRule;
 
-public class ARPTimeoutRule extends ARPRule {
+public class ARPReplyReceiverRule extends ARPRule {
 	private InetAddress addr;
 	
 	@Override
