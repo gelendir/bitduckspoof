@@ -1,5 +1,10 @@
 package org.bitducks.spoofing.services;
 
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
@@ -25,28 +30,44 @@ public class ARPReplyRateService extends Service {
 				e.printStackTrace();
 			}
 
-			int nbRequest = 0;
-			int nbReply = 0;
+			Map<InetAddress, Integer> c = new HashMap<InetAddress, Integer>();
 
 			Packet p = this.getNextNonBlockingPacket();
 			while(p != null && !p.equals(Packet.EOF)) {
 				ARPPacket arp = (ARPPacket)p;
+				InetAddress addr = null;
+				int bound = 0;
 
 				if(arp.operation == 1) {
-					++nbRequest;
+					addr = (InetAddress) arp.getTargetProtocolAddress();
+					bound = -1;
 				} else if(arp.operation == 2) {
-					++nbReply;
+					addr = (InetAddress) arp.getSenderProtocolAddress();
+					bound = 1;
 				}
-
+				
+				if(arp.operation == 1 || arp.operation == 2) {
+					if(c.containsKey(addr)) {
+						c.put(addr, c.get(addr) + bound);
+					} else {
+						c.put(addr, bound);
+					}	
+				}
+				
 				p = this.getNextNonBlockingPacket();
 			}
-
-			if(nbReply > nbRequest) {
-				this.logger.warn("There is a possibility that you are under ARP spoofing.");
-			} else {
+			
+			boolean possible = false;
+			for(Entry<InetAddress, Integer> entry : c.entrySet()) {
+				if(entry.getValue() > 0) {
+					this.logger.warn("There is a possibility of spoof of the address " + entry.getKey().getHostAddress());
+					possible = true;
+				}
+			}
+			
+			if(!possible) {
 				this.logger.info("There is NO possibility that you are under ARP spoofing.");
 			}
 		}
 	}
-
 }

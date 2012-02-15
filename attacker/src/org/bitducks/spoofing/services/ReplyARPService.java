@@ -25,10 +25,8 @@ public class ReplyARPService extends Service {
 	
 	@Override
 	public void run() {
-		System.out.println("MOFOS!");
 		MacFindService finderTarget = new MacFindService(target);
 		Server.getInstance().addService(finderTarget);
-		System.out.println("FinderTarget added");
 		targetMAC = finderTarget.getMacAddress();
 		System.out.println(Arrays.toString(targetMAC));
 		
@@ -37,7 +35,7 @@ public class ReplyARPService extends Service {
 			
 			//Waiting 500ms to be sure we don't use all the CPU
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

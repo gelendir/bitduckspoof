@@ -6,8 +6,6 @@ import java.util.Arrays;
 import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
-import org.bitducks.spoofing.core.Rule;
-
 public class SingleARPResponseRule extends ARPResponseRule {
 	
 	private byte[] address;
