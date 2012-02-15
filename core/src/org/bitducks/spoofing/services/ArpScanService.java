@@ -29,8 +29,8 @@ public class ArpScanService extends Service {
 	
 	public void runScan( Collection<InetAddress> addresses ) {
 		
-		System.out.println("Arp scan started");
-		
+		this.logger.info("Arp scan started");
+
 		Server server = Server.getInstance();
 		NetworkInterface device = server.getNetworkInterface();
 		
@@ -38,7 +38,7 @@ public class ArpScanService extends Service {
 		
 		for( InetAddress address: addresses ) {
 			
-			System.out.println("sending request for " + address.toString() );
+			this.logger.info("sending request for " + address.toString() );
 			ARPPacket arpRequest = generator.arpRequest(address);	
 			server.sendPacket(arpRequest);
 			
@@ -48,7 +48,7 @@ public class ArpScanService extends Service {
 	
 	public void runNetworkScan() {
 		
-		System.out.println("Arp network scan started");
+		this.logger.info("Arp network scan started");
 		
 		Server server = Server.getInstance();
 		NetworkInterface device = server.getNetworkInterface();
@@ -61,7 +61,7 @@ public class ArpScanService extends Service {
 		IpRange ipRange = new IpRange(start, end);
 		
 		for( InetAddress address: ipRange ) {
-			System.out.println("sending request for " + address.toString() );
+			this.logger.info("sending request for " + address.toString() );
 			ARPPacket arpRequest = generator.arpRequest(address);	
 			server.sendPacket(arpRequest);
 		}
