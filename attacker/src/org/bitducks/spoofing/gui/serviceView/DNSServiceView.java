@@ -35,6 +35,7 @@ public class DNSServiceView extends View implements ActionListener{
 	public static final String ENTER_IP_ADDR = "Enter the IP address you want to redirect the user to.";
 	public static final String ERROR_BAD_IP = "Invalid operation: The Ip address you have provided is not valid.";
 	public static final String ERROR_BAD_CHARACTER = "Invalid operation: ':' is prohibited.";
+	public static final String TITLE = "DNS Poisoning";
 	
 	private JList<String> jlist;
 	private DefaultListModel<String> modelList = new DefaultListModel<String>();
@@ -48,7 +49,7 @@ public class DNSServiceView extends View implements ActionListener{
 	
 
 	public DNSServiceView() {
-		super("DNS Poisoning");
+		super( DNSServiceView.TITLE );
 		
 		setUpServicePanel();
 	}
