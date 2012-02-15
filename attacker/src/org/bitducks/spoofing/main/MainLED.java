@@ -18,6 +18,12 @@ public class MainLED {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
+		//TODO: tester les fucking byte[] et le InetAddress dans un hashmap
+		//HashMap<InetAddress, byte[]> ipToMac = new HashMap<InetAddress, byte[]>();
+		
+		//ipToMac.put(InetAddress.getByName("192.168.2.110"), new byte[]{1,1});
+		
+		
 		// Set up a simple configuration that logs on the console.
 		BasicConfigurator.configure();
 
@@ -30,7 +36,7 @@ public class MainLED {
 		Server.getInstance().start();
 		Server.getInstance().join();
 		Server.getInstance().stopServer();
-
+		
 	}
 
 }

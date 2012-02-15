@@ -118,6 +118,9 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	 */
 	@Override
 	public void run() {
+		
+		this.logger.info("Rogue DHCP service started...");
+		
 		this.arpScan.runNetworkScan();
 
 		try {
@@ -125,13 +128,15 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		} catch (InterruptedException e) {
 			throw new UnexpectedErrorException( e, "error while sleeping in ArpScanTimer" );
 		}
-		System.out.println(this.receiver.getCache().allAdresses());
+	
+		this.logger.debug(this.receiver.getCache().allAdresses());
+		
 		this.givenAdresses.addAll(this.receiver.getCache().allAdresses());
 		this.givenAdresses.add(this.info.getAddress());
 
 		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
 
-		System.out.println("DHCP rogue ready");
+		this.logger.info("DHCP rogue ready");
 		while(!this.isCloseRequested()) {
 			Packet p = this.getNextBlockingPacket();
 
@@ -153,6 +158,8 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		}
 
 		this.timer.cancel();
+		
+		this.logger.info("Rogue DHCP Service finished.");
 	}
 
 	/**
@@ -282,45 +289,19 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		return offer;
 	}
 
-	/* package visibility  void addFreeAddress(Collection<InetAddress> address) {
-		this.freeAddress.addAll(address);
-		this.givenAdresses.removeAll(address);
-		this.timer.schedule(new HostDown(this, this.givenAdresses), RogueDHCPService.TIME_TO_CHECK_IP);
-	}*/
-
 	/**
 	 * This method is called when the scan of the given addresses
 	 * is finish.
 	 */
 	@Override
 	public void scanFinished(Collection<InetAddress> addresses) {
-		System.out.println("Free address: " + this.freeAddress.toString());
-		System.out.println("Given address: " + this.givenAdresses.toString());
+		
+		this.logger.debug("Free address: " + this.freeAddress.toString());
+		this.logger.debug("Given address: " + this.givenAdresses.toString());
+		
 		this.freeAddress.addAll(addresses);
 		this.givenAdresses.removeAll(addresses);
 		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
 	}
 
-	/*private boolean sendArp(InetAddress addr, int timeout) {
-		try {
-			JpcapCaptor captor = JpcapCaptor.openDevice(Server.getInstance().getNetworkInterface(), 65000, true, timeout);
-
-			captor.setFilter("arp[6:2] == 2 && arp src " + addr.getHostAddress(), false);
-
-			ARPPacket arp = PacketFactory.arpRequest(Server.getInstance().getNetworkInterface().mac_address,
-					Server.getInstance().getNetworkInterface().addresses[0].address, 
-					addr);
-
-			Server.getInstance().sendPacket(arp);
-			Packet p = captor.getPacket();
-			if(p != null) {
-				return true;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return false;
-	}*/
 }
