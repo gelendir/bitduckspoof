@@ -135,9 +135,7 @@ public class LogView extends JPanel implements ActionListener {
 			}
 			
 		} else if ( source instanceof JButton && source == this.refresh ) {
-			
-			System.out.println("CLICKED");
-			
+						
 			this.remove( this.serviceList );
 			this.serviceList = this.generateServiceList();
 			this.refreshPanel();
