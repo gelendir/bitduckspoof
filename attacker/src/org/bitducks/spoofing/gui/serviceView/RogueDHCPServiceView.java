@@ -27,8 +27,7 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 	public static final String BEGIN_TEXT_GATEWAY = "Gateway : ";
 	public static final String BEGIN_TEXT_DNS = "DNS : ";
 	
-	public static final String ENTER_DNS_NAME = "Enter the DNS name you want to add rule.";
-	public static final String ENTER_IP_ADDR = "Enter the IP address you want to redirect the user to.";
+	public static final String ENTER_IP_ADDR = "Enter the IP address for the choosen field.";
 	public static final String ERROR_BAD_IP = "Invalid operation: The Ip address you have provided is not valid.";
 	
 	
