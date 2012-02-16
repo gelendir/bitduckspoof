@@ -3,6 +3,8 @@ package org.bitducks.spoofing.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -18,7 +20,7 @@ import javax.swing.border.Border;
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 
-public class DeviceSelection extends JDialog implements ActionListener {
+public class DeviceSelection extends JDialog implements ActionListener, MouseListener  {
 	
 	private JList deviceList;
 	
@@ -82,6 +84,7 @@ public class DeviceSelection extends JDialog implements ActionListener {
 		panel.add(label);
 		
 		this.deviceList = new JList(this.deviceList());
+		this.deviceList.addMouseListener( this );
 		this.deviceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.deviceList.setLayoutOrientation(JList.VERTICAL);		
 		
@@ -147,6 +150,41 @@ public class DeviceSelection extends JDialog implements ActionListener {
 		}
 		this.setVisible(false);
 		this.dispose();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+		if( e.getClickCount() >= 2 ) {
+			this.index = this.deviceList.getSelectedIndex();
+			this.setVisible(false);
+			this.dispose();
+		}
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

@@ -21,7 +21,7 @@ public abstract class View extends JPanel implements ActionListener {
 	
 	private static final String STOP = "Stop";
 	private static final String START = "Start";
-	private static final String STARTED = "Started";
+ 	private static final String STARTED = "Started";
 	
 	private String title = "";
 	protected Service service = null;

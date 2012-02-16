@@ -9,7 +9,11 @@ import javax.swing.JTabbedPane;
 import jpcap.NetworkInterface;
 
 import org.bitducks.spoofing.core.Server;
+import org.bitducks.spoofing.gui.serviceView.BroadcastARPServiceView;
 import org.bitducks.spoofing.gui.serviceView.DNSServiceView;
+import org.bitducks.spoofing.gui.serviceView.IPStealerServiceView;
+import org.bitducks.spoofing.gui.serviceView.RogueDHCPServiceView;
+import org.bitducks.spoofing.services.IpStealer;
 
 public class Gui extends JFrame {
 	
@@ -31,13 +35,16 @@ public class Gui extends JFrame {
 	
 	private void setUpUi() {
 		
-		DNSServiceView view = new DNSServiceView();
+		View view = new DNSServiceView();
 		tab.addTab(view.getTitle(), view);
 		
-		view = new DNSServiceView();
+		view = new IPStealerServiceView();
 		tab.addTab(view.getTitle(), view);
 		
-		view = new DNSServiceView();
+		view = new RogueDHCPServiceView();
+		tab.addTab(view.getTitle(), view);
+		
+		view = new BroadcastARPServiceView();
 		tab.addTab(view.getTitle(), view);
 		
 		LogView logView = new LogView();

