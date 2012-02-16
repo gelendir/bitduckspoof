@@ -1,10 +1,7 @@
 package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import jpcap.packet.ARPPacket;
@@ -13,8 +10,6 @@ import jpcap.packet.Packet;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.ARPRule;
-import org.bitducks.spoofing.exception.UnexpectedErrorException;
-import org.bitducks.spoofing.services.arp.ArpCache;
 
 public class ActiveARPProtectionService extends Service {
 
