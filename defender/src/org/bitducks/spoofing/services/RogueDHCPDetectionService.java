@@ -19,14 +19,40 @@ import org.bitducks.spoofing.util.Constants;
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
+/**
+ * This class is used to detect rogue DHCP servers by sending
+ * a DHCP discover and comparing the offers with the available
+ * trusted DHCP servers.
+ * @author Frédérik Paradis
+ */
 public class RogueDHCPDetectionService extends Service {
 
+	/**
+	 * The information about the actual host.
+	 */
 	private InterfaceInfo info = Server.getInstance().getInfo();
+	
+	/**
+	 * The available DHCP servers who reply to the DHCP discovery.
+	 */
 	private ArrayList<InetAddress> availableDHCPServer =  new ArrayList<InetAddress>();
+	
+	/**
+	 * The DHCP servers who has reply to the DHCP discovery and are not
+	 * a trusted DHCP severs.
+	 */
 	private Collection<InetAddress> illegalServer = null;
+	
+	/**
+	 * The available trusted DHCP servers.
+	 */
 	private Collection<InetAddress> supposedServer;
 
-
+	/**
+	 * The constructor initialize the service with a collection
+	 * of trusted DHCP servers.
+	 * @param supposedServer Trusted DHCP servers 
+	 */
 	public RogueDHCPDetectionService(Collection<InetAddress> supposedServer) {
 		super();
 		this.getPolicy().addRule(new DHCPServerRule());
@@ -61,15 +87,29 @@ public class RogueDHCPDetectionService extends Service {
 		}
 	}
 
-
+	/**
+	 * This method return all DHCP server who reply
+	 * to the DHCP discover.
+	 * @return Return all DHCP server who reply
+	 * to the DHCP discover.
+	 */
 	public Collection<InetAddress> getAvailableDHCPServer() {
 		return this.availableDHCPServer;
 	}
 
+	/**
+	 * This method return a collection of a IP address
+	 * who is a rogue DHCP.
+	 * @return Return a collection of a IP address
+	 * who is a rogue DHCP.
+	 */
 	public Collection<InetAddress> getIllegalServer() {
 		return this.illegalServer;
 	}
 
+	/**
+	 * This method send a DHCP discover packet on the network.
+	 */
 	private void doDiscover() {
 		UDPPacket udpDiscover = new UDPPacket(68, 67);
 
@@ -94,6 +134,13 @@ public class RogueDHCPDetectionService extends Service {
 		Server.getInstance().sendPacket(udpDiscover);
 	}
 
+	/**
+	 * This method set the IP header and the Ethernet header in
+	 * the UDPPacket for a DHCP discover or request. 
+	 * @param packet The UDPPacket to set the header.
+	 * @param source The source IP address
+	 * @param destination The destination IP address.
+	 */
 	private void setHeader(UDPPacket packet, InetAddress source, InetAddress destination) {
 
 		packet.setIPv4Parameter(0, 
