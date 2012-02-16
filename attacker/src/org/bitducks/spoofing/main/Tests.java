@@ -30,6 +30,7 @@ import org.bitducks.spoofing.packet.PacketGenerator;
 
 import org.bitducks.spoofing.services.ArpRecieveService;
 import org.bitducks.spoofing.services.ArpScanService;
+import org.bitducks.spoofing.services.MacFindService;
 import org.bitducks.spoofing.services.arp.ArpCache;
 import org.bitducks.spoofing.test.CustomAppender;
 import org.bitducks.spoofing.test.DummyService;
@@ -59,11 +60,41 @@ public class Tests {
 		//testGui();
 		//testGatewayFinder();
 		//testLogging();
-		testLogView();
+		//testLogView();
+		testMacFinder();		
 		
 
 	}
 	
+	private static void testMacFinder() throws Exception {
+		
+		Server.createInstance( getDevice() );
+		Server server = Server.getInstance();
+		server.start();
+		//Thread.sleep(50);
+		
+		InetAddress address = InetAddress.getByName("10.17.65.1");
+		
+		System.out.println("adding service");
+		
+		MacFindService finder = new MacFindService( address );
+		
+		server.addService(finder);
+		
+		byte[] macFound = finder.getMacAddress();
+		
+		System.out.println("mac found: " + IpUtil.prettyPrintMac( macFound ) );
+		
+		finder = new MacFindService( address );
+		
+		server.addService(finder);
+		
+		macFound = finder.getMacAddress();
+		
+		System.out.println("mac found: " + IpUtil.prettyPrintMac( macFound ) );
+		
+	}
+
 	private static void testLogView() throws Exception {
 		
 		BasicConfigurator.configure();
