@@ -8,7 +8,8 @@ import jpcap.JpcapCaptor;
 
 import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.services.ARPProtectionService;
+import org.bitducks.spoofing.services.ActiveARPProtectionService;
+import org.bitducks.spoofing.services.ARPReplyRateService;
 import org.bitducks.spoofing.services.DNSProtectionService;
 import org.bitducks.spoofing.services.RogueDHCPDetectionService;
 
@@ -23,9 +24,9 @@ public class ThisIsAMain {
 		// Set up a simple configuration that logs on the console.
 		BasicConfigurator.configure();
 		
-		Server.createInstance(JpcapCaptor.getDeviceList()[1]);
+		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
 		
-		System.out.println(JpcapCaptor.getDeviceList()[1].name);
+		System.out.println(JpcapCaptor.getDeviceList()[0].name);
 		
 		/*Server.getInstance().start();
 		Thread.sleep(500);
@@ -40,7 +41,7 @@ public class ThisIsAMain {
 		
 		Server.getInstance().start();
 		
-		Server.getInstance().addService(new ARPProtectionService());
+		Server.getInstance().addService(new ActiveARPProtectionService());
 		
 		Server.getInstance().join();
 		

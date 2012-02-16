@@ -86,7 +86,17 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	 * The time between each call to the ArpFreeAddressService.
 	 */
 	public static final int TIME_TO_CHECK_IP = 10 * 1000; //60 * 60 * 1000; //For 1 hour
+	
+	private InetAddress gateway;
+	
+	private InetAddress dns;
 
+	public RogueDHCPService(InetAddress gateway, InetAddress dns) {
+		this();
+		this.gateway = gateway;
+		this.dns = dns;
+	}
+	
 	/**
 	 * This constructor initialize the service and start all service 
 	 * needed. The initialization may take few seconds.
@@ -263,10 +273,10 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		dhcp.setOptionRaw((byte) 28, this.info.getBroadcast().getAddress());
 
 		// Gateway
-		dhcp.setOptionAsInetAddress((byte) 3, this.DHCPServerIP);
+		dhcp.setOptionAsInetAddress((byte) 3, this.gateway);
 
 		//DNS Server
-		dhcp.setOptionAsInetAddresses((byte) 6, new InetAddress[] {this.DHCPServerIP, this.DHCPServerIP});
+		dhcp.setOptionAsInetAddress((byte) 6, this.dns);
 	}
 
 	/**
@@ -302,6 +312,22 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		this.freeAddress.addAll(addresses);
 		this.givenAdresses.removeAll(addresses);
 		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
+	}
+
+	public InetAddress getDNS() {
+		return dns;
+	}
+
+	public void setDNS(InetAddress dns) {
+		this.dns = dns;
+	}
+
+	public InetAddress getGateway() {
+		return gateway;
+	}
+
+	public void setGateway(InetAddress gateway) {
+		this.gateway = gateway;
 	}
 
 }
