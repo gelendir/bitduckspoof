@@ -12,15 +12,32 @@ import org.bitducks.spoofing.core.rules.DNSRule;
 import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.util.IpUtil;
 
+/**
+ * This class is use to know if there is a rogue DNS on the 
+ * network. This service works in this manner: it wait that the
+ * client do an DNS request and do again the same DNS request but 
+ * with a non existing DNS server. If there is a reply from this 
+ * server, this means that there is a rogue DNS on the network.
+ * @author Frédérik Paradis
+ */
 public class DNSProtectionService extends Service {
 	
 	private static InetAddress fakeDNS = IpUtil.bytesToInet(new byte[] {(byte)240,1,2,3} );
 
+	/**
+	 * This constructor initialize the DNSProtectionService.
+	 */
 	public DNSProtectionService() {
 		super();
 		this.getPolicy().addRule(new DNSRule());
 	}
 
+	/**
+	 * This method wait that the client do an DNS request and do 
+	 * again the same DNS request but with a non existing DNS 
+	 * server. If there is a reply from this server, this means that 
+	 * there is a rogue DNS on the network.
+	 */
 	@Override
 	public void run() {
 		
