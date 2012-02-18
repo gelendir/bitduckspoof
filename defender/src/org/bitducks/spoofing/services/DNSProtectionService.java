@@ -9,6 +9,8 @@ import jpcap.packet.UDPPacket;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DNSRule;
+import org.bitducks.spoofing.packet.DNSPacket;
+import org.bitducks.spoofing.util.IpUtil;
 
 /**
  * This class is used to know if there is a rogue DNS on the 
@@ -19,6 +21,8 @@ import org.bitducks.spoofing.core.rules.DNSRule;
  * @author Frédérik Paradis
  */
 public class DNSProtectionService extends Service {
+	
+	private static InetAddress fakeDNS = IpUtil.bytesToInet(new byte[] {(byte)240,1,2,3} );
 
 	/**
 	 * This constructor initialize the DNSProtectionService.
@@ -36,6 +40,9 @@ public class DNSProtectionService extends Service {
 	 */
 	@Override
 	public void run() {
+		
+		this.logger.info("DNS protection service started.");
+		
 		InetAddress fakeDNSIP = null;
 		try {
 			fakeDNSIP = InetAddress.getByAddress(new byte[] {(byte)240, 1, 2, 3});
@@ -49,6 +56,9 @@ public class DNSProtectionService extends Service {
 
 			if(p != null && !p.equals(Packet.EOF)) {
 				UDPPacket dns = (UDPPacket)p;
+				
+				this.logIfNeeded(dns);
+				
 				if(dns.src_port == 53) {
 					if(dns.src_ip.equals(fakeDNSIP)) {
 						this.logger.warn("DNS spoofing detected!");
@@ -60,6 +70,21 @@ public class DNSProtectionService extends Service {
 			}
 		}
 
+	}
+	
+	private void logIfNeeded(UDPPacket packet) {
+		
+		InetAddress source = packet.src_ip;
+		InetAddress destination = packet.dst_ip;
+		if( !destination.equals( fakeDNS ) ) {
+			
+			this.logger.info(
+					"source: " + source.toString() + 
+					" destination: " + destination.toString() +
+					" query: " + new DNSPacket(packet).getDomainName() );
+			
+		}
+		
 	}
 
 }

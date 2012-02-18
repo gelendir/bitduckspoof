@@ -32,6 +32,7 @@ public class ARPReplyRateService extends Service {
 	 * of the rate in second.
 	 */
 	public ARPReplyRateService(int interval) {
+		//TODO: greg: intervalle d'attente avant de verifier le ratio
 		this.getPolicy().addRule(new ARPRule());
 		this.interval = interval;
 	}

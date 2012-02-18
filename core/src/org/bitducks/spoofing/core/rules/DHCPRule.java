@@ -6,7 +6,13 @@ import jpcap.packet.UDPPacket;
 import org.bitducks.spoofing.core.Rule;
 
 /**
- * This method check if a packet is a DHCP packet.
+ * This rule filters DHCP Packets on the network.
+ * Both DHCP client and DHCP server packets are
+ * intercepted by this rule.
+ * 
+ * @see DHCPClientRule
+ * @see DHCPServerRule
+ * 
  * @author Frédérik Paradis
  */
 public class DHCPRule extends UDPRule {

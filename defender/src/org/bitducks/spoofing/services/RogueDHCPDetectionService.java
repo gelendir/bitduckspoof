@@ -54,6 +54,7 @@ public class RogueDHCPDetectionService extends Service {
 	 * @param supposedServer Trusted DHCP servers 
 	 */
 	public RogueDHCPDetectionService(Collection<InetAddress> supposedServer) {
+		//TODO: greg: supposedServer sont les serveurs DHCP valides
 		super();
 		this.getPolicy().addRule(new DHCPServerRule());
 		this.supposedServer = supposedServer;

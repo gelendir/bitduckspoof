@@ -6,13 +6,16 @@ import jpcap.packet.Packet;
 import org.bitducks.spoofing.core.Rule;
 
 /**
- * This rule check if the packet is an ARP reply.
+ * This rule filters ARP Response Packets. ARP responses
+ * after sending an ARP request to retrieve an IP's MAC address
+ * on the network.
+ * 
  * @author Louis-Étienne Dorval
  */
 public class ARPResponseRule extends Rule {
 
 	/**
-	 * This method check if the packet is an ARP reply.
+	 * Returns true if the packet is an ARP response.
 	 */
 	@Override
 	public boolean checkRule(Packet p) {
