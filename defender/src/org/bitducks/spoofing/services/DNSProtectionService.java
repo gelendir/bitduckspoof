@@ -13,11 +13,12 @@ import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.util.IpUtil;
 
 /**
- * This class is used to know if there is a rogue DNS on the 
- * network. This service works in this manner: it wait that the
- * client do an DNS request and do again the same DNS request but 
+ * This class is used to detect the presence of a rogue DNS on the 
+ * network. This service works in the following manner: it waits for a
+ * client to send a DNS request and repeats the same DNS request but 
  * with a non existing DNS server. If there is a reply from this 
  * server, this means that there is a rogue DNS on the network.
+ * 
  * @author Frédérik Paradis
  */
 public class DNSProtectionService extends Service {
@@ -25,7 +26,7 @@ public class DNSProtectionService extends Service {
 	private static InetAddress fakeDNS = IpUtil.bytesToInet(new byte[] {(byte)240,1,2,3} );
 
 	/**
-	 * This constructor initialize the DNSProtectionService.
+	 * This constructor. Initializes the DNSProtectionService.
 	 */
 	public DNSProtectionService() {
 		super();
@@ -33,8 +34,8 @@ public class DNSProtectionService extends Service {
 	}
 
 	/**
-	 * This method wait that the client do an DNS request and do 
-	 * again the same DNS request but with a non existing DNS 
+	 * This method waits for a DNS request from a Client and re-sends 
+	 * the same DNS request but to a non existing DNS 
 	 * server. If there is a reply from this server, this means that 
 	 * there is a rogue DNS on the network.
 	 */
@@ -72,6 +73,11 @@ public class DNSProtectionService extends Service {
 
 	}
 	
+	/**
+	 * Log a message to the logger only if needed. Used mainly as a helper for the GUI interface.
+	 * 
+	 * @param packet Packet received by the service.
+	 */
 	private void logIfNeeded(UDPPacket packet) {
 		
 		InetAddress source = packet.src_ip;

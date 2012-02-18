@@ -28,18 +28,18 @@ import org.dhcp4java.DHCPPacket;
 public class RogueDHCPDetectionService extends Service {
 
 	/**
-	 * The information about the actual host.
+	 * The information about our network interface.
 	 */
 	private InterfaceInfo info = Server.getInstance().getInfo();
 	
 	/**
-	 * The available DHCP servers who reply to the DHCP discovery.
+	 * All available DHCP servers who have replied to a DHCP discovery.
 	 */
 	private ArrayList<InetAddress> availableDHCPServer =  new ArrayList<InetAddress>();
 	
 	/**
-	 * The DHCP servers who has reply to the DHCP discovery and are not
-	 * a trusted DHCP severs.
+	 * The DHCP servers who have replied to the DHCP discovery and are not
+	 * part of the trusted DHCP servers.
 	 */
 	private Collection<InetAddress> illegalServer = null;
 	
@@ -49,7 +49,7 @@ public class RogueDHCPDetectionService extends Service {
 	private Collection<InetAddress> supposedServer;
 
 	/**
-	 * The constructor initialize the service with a collection
+	 * The constructor. Initializes the service with a collection
 	 * of trusted DHCP servers.
 	 * @param supposedServer Trusted DHCP servers 
 	 */
@@ -61,7 +61,7 @@ public class RogueDHCPDetectionService extends Service {
 	}
 
 	/**
-	 * This method send a DHCP discover and verify if all offer fit with
+	 * This method sends a DHCP discover and verifies if all the offers match with
 	 * the trusted DHCP servers given.
 	 */
 	@Override
@@ -93,27 +93,26 @@ public class RogueDHCPDetectionService extends Service {
 	}
 
 	/**
-	 * This method return all DHCP server who reply
-	 * to the DHCP discover.
-	 * @return Return all DHCP server who reply
-	 * to the DHCP discover.
+	 * This method returns all the DHCP server who have replied
+	 * to a DHCP discover.
+	 * @return Return all DHCP server who have replied.
 	 */
 	public Collection<InetAddress> getAvailableDHCPServer() {
 		return this.availableDHCPServer;
 	}
 
 	/**
-	 * This method return a collection of a IP address
-	 * who is a rogue DHCP.
-	 * @return Return a collection of a IP address
-	 * who is a rogue DHCP.
+	 * This method returns a collection of a IP addresses
+	 * who are rogue DHCP servers.
+	 * @return Return a collection of all IP address
+	 * who are rogue DHCP servers.
 	 */
 	public Collection<InetAddress> getIllegalServer() {
 		return this.illegalServer;
 	}
 
 	/**
-	 * This method send a DHCP discover packet on the network.
+	 * This method sends a DHCP discover packet on the network.
 	 */
 	private void doDiscover() {
 		UDPPacket udpDiscover = new UDPPacket(68, 67);
@@ -140,7 +139,7 @@ public class RogueDHCPDetectionService extends Service {
 	}
 
 	/**
-	 * This method set the IP header and the Ethernet header in
+	 * This method sets the IP header and the Ethernet header in
 	 * the UDPPacket for a DHCP discover or request. 
 	 * @param packet The UDPPacket to set the header.
 	 * @param source The source IP address

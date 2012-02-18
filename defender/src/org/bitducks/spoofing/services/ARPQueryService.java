@@ -13,7 +13,7 @@ import org.bitducks.spoofing.packet.PacketGenerator;
 
 /**
  * This class is used by ActiveARPProtectionService class as a worker to 
- * verify if a ARP reply is legitimate or not. The main task of this class
+ * verify if an ARP reply is legitimate or not. The main task of this class
  * is to send an ARP query, to get the reply and verify the mac address. 
  * @author Frédérik Paradis
  */
@@ -31,12 +31,12 @@ public class ARPQueryService extends Service {
 	
 	/**
 	 * The ActiveARPProtectionService to warn when the analysis of 
-	 * the ARP replies is finish.
+	 * the ARP replies is finished.
 	 */
 	private ActiveARPProtectionService callback;
 	
 	/**
-	 * The address to send the ARP request.
+	 * The IP address that we need to verify.
 	 */
 	private InetAddress next;
 	
@@ -46,8 +46,9 @@ public class ARPQueryService extends Service {
 	private byte[] mac;
 
 	/**
-	 * Constructor initialize the ARPQueryService with the IP address and 
-	 * the MAC address taken from an ARP reply and a callback instance. 
+	 * Constructor. initializes the ARPQueryService with the IP address and 
+	 * the MAC address taken from an ARP reply and a callback instance. The callback
+	 * represents the service that needs to be notified once the MAC address has been verified. 
 	 * @param next The IP address taken from an ARP reply
 	 * @param mac The MAC address taken from an ARP reply
 	 * @param callback A callback instance
@@ -61,10 +62,10 @@ public class ARPQueryService extends Service {
 	}
 
 	/**
-	 * This method do the main task of this class. It send an 
+	 * Main task. The method sends an 
 	 * ARP request to the given IP address in the constructor, 
-	 * verify if the reply match with the MAC address also given
-	 * in the constructor and call the callback object.
+	 * verifies if the reply matches with the MAC address also given
+	 * in the constructor and calls the callback object once finished.
 	 */
 	@Override
 	public void run() {

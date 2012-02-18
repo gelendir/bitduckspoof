@@ -26,11 +26,11 @@ public class DNSPacket extends UDPPacket {
 	}
 	
 	/**
-	 * Build the ip header
-	 * @param macSource
-	 * @param macTarget
-	 * @param ipSource
-	 * @param ipTarget
+	 * Build the ip header that will be used in a DNS packet.
+	 * 
+	 * @param ipSource Source IP of the packet
+	 * @param ipTarget Target IP of the packet
+	 * @param identifier DNS identifier for the packet
 	 */
 	public void buildIpDNSPacket(InetAddress ipSource, InetAddress ipTarget, int identifier) {
 

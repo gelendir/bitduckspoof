@@ -12,27 +12,28 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.ARPRule;
 
 /**
- * This class is an active ARP protection service. The 'active' qualify 
- * means that when the service receive a ARP reply, it send a request to
- * verify if the reply was good or not. 
+ * This class is an active ARP protection service. By active, we mean 
+ * that when the service receives an ARP reply, it will send a request to
+ * verify if the reply was authentic or not.
+ *  
  * @author Frédérik Paradis
  */
 public class ActiveARPProtectionService extends Service {
 
 	/**
-	 * A blacklist of IP address who are currently being scanned.
+	 * A blacklist of IP addresses who are currently being scanned.
 	 */
 	private Set<InetAddress> blacklist = new HashSet<InetAddress>();
 
 	/**
-	 * The constructor initialize the ActiveARPProtectionService.
+	 * The constructor initializes the ActiveARPProtectionService.
 	 */
 	public ActiveARPProtectionService() {
 		this.getPolicy().addRule(new ARPRule());
 	}
 
 	/**
-	 * This method wait for ARP reply and send ARP request to
+	 * This method waits for an ARP reply and sends an ARP request to
 	 * verify if the reply was legitimate.
 	 */
 	@Override
@@ -55,7 +56,7 @@ public class ActiveARPProtectionService extends Service {
 	}
 
 	/**
-	 * This method is used to indicate that an IP address is spoofed.
+	 * This method is used to indicate that an IP address is being spoofed.
 	 * @param addr The IP address
 	 */
 	/* package visibility */ void setBadAddress(InetAddress addr) {
@@ -64,7 +65,7 @@ public class ActiveARPProtectionService extends Service {
 	}
 
 	/**
-	 * This method is used to indicate that an IP address is not spoofed.
+	 * This method is used to indicate that an IP address is not being spoofed.
 	 * @param addr The IP address
 	 */
 	/* package visibility */ void setGoodAddress(InetAddress addr) {
