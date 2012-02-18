@@ -6,9 +6,7 @@ import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
 import org.bitducks.spoofing.core.rules.ARPRule;
-/**
- * A rule to receive the reply from a know host.
- */
+
 /**
  * This class is a rule to receive the reply from a known host.
  * @author Frédérik Paradis

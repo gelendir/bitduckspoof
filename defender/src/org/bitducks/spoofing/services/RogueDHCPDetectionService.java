@@ -59,6 +59,10 @@ public class RogueDHCPDetectionService extends Service {
 		this.supposedServer = supposedServer;
 	}
 
+	/**
+	 * This method send a DHCP discover and verify if all offer fit with
+	 * the trusted DHCP servers given.
+	 */
 	@Override
 	public void run() {
 		this.logger.info("Discovery in progress...");

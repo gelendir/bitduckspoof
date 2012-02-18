@@ -2,8 +2,6 @@ package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
