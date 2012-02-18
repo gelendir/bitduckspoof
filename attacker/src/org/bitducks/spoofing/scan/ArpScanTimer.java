@@ -13,7 +13,7 @@ import org.bitducks.spoofing.services.arp.ArpScanFinish;
 
 /**
  * This class aims to scan a collection of InetAddress
- * with ARP request. This class is habitually use by a
+ * with ARP request. This class is habitually used by a
  * timer.
  * @author Frédérik Paradis
  *

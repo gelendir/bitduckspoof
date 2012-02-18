@@ -55,7 +55,7 @@ public class ActiveARPProtectionService extends Service {
 	}
 
 	/**
-	 * This method is use to indicate that an IP address is spoofed.
+	 * This method is used to indicate that an IP address is spoofed.
 	 * @param addr The IP address
 	 */
 	/* package visibility */ void setBadAddress(InetAddress addr) {
@@ -64,7 +64,7 @@ public class ActiveARPProtectionService extends Service {
 	}
 
 	/**
-	 * This method is use to indicate that an IP address is not spoofed.
+	 * This method is used to indicate that an IP address is not spoofed.
 	 * @param addr The IP address
 	 */
 	/* package visibility */ void setGoodAddress(InetAddress addr) {

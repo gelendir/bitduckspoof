@@ -28,7 +28,7 @@ public class MacFindService extends Service {
 		
 		Server server = Server.getInstance();
 		
-		PacketGenerator generator = new PacketGenerator( server.getNetworkInterface() );
+		PacketGenerator generator = new PacketGenerator( Server.getInstance().getInfo().getDevice() );
 		ARPPacket request = generator.arpRequest( this.ipAddress );
 		
 		server.sendPacket( request );

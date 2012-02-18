@@ -1,12 +1,9 @@
 package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import jpcap.NetworkInterface;
-import jpcap.NetworkInterfaceAddress;
 import jpcap.packet.ARPPacket;
 
 import org.bitducks.spoofing.core.Server;
@@ -32,7 +29,7 @@ public class ArpScanService extends Service {
 		this.logger.info("Arp scan started");
 
 		Server server = Server.getInstance();
-		NetworkInterface device = server.getNetworkInterface();
+		NetworkInterface device = server.getInfo().getDevice();
 		
 		PacketGenerator generator = new PacketGenerator(device);
 		
@@ -51,7 +48,7 @@ public class ArpScanService extends Service {
 		this.logger.info("Arp network scan started");
 		
 		Server server = Server.getInstance();
-		NetworkInterface device = server.getNetworkInterface();
+		NetworkInterface device = server.getInfo().getDevice();
 		
 		PacketGenerator generator = new PacketGenerator(device);
 		

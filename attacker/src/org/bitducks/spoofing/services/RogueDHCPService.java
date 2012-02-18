@@ -132,7 +132,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	}
 
 	/***
-	 * This method is use by the Thread class to start
+	 * This method is used by the Thread class to start
 	 * the service. A scan of all the netwok is made before
 	 * the start and may take few seconds.
 	 */

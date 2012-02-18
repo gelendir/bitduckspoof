@@ -11,7 +11,7 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DNSRule;
 
 /**
- * This class is use to know if there is a rogue DNS on the 
+ * This class is used to know if there is a rogue DNS on the 
  * network. This service works in this manner: it wait that the
  * client do an DNS request and do again the same DNS request but 
  * with a non existing DNS server. If there is a reply from this 

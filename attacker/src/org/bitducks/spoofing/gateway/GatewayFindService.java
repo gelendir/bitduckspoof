@@ -31,7 +31,7 @@ public class GatewayFindService extends Service {
 		
 		try {
 			gateway = GatewayFinder.find(
-					Server.getInstance().getNetworkInterface() );
+					Server.getInstance().getInfo().getDevice());
 		} catch (IOException e) {
 			throw new UnexpectedErrorException( e, "error querying OS for gateway");
 		}
@@ -45,7 +45,7 @@ public class GatewayFindService extends Service {
 		
 		Server server = Server.getInstance();
 		
-		PacketGenerator generator = new PacketGenerator( server.getNetworkInterface() );
+		PacketGenerator generator = new PacketGenerator( Server.getInstance().getInfo().getDevice() );
 		ARPPacket request = generator.arpRequest( this.ipAddress );
 		
 		server.sendPacket( request );
