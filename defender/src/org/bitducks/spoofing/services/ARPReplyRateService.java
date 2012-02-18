@@ -12,24 +12,26 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.ARPRule;
 
 /**
- * This class is a detector of ARP spoofing. It calculate the
- * rate between the number of the receive ARP reply and the number
- * of the receive ARP request. If there is more ARP reply for an
+ * This class is a detector of ARP spoofing. It calculates the
+ * rate between the number of the ARP replies and ARP requests
+ * received. If there is more than one ARP reply for an
  * IP address, this means that this IP address may be spoofed.
+ * 
  * @author Frédérik Paradis
  */
 public class ARPReplyRateService extends Service {
 
 	/**
-	 * The interval between each calculation of the rate in second.
+	 * The interval between each calculation of the rate in seconds.
 	 */
 	private int interval;
 
 	/**
-	 * This constructor initialize the service with the 
+	 * This constructor. Initializes the service with the 
 	 * interval between each calculation of the rate.
+	 * 
 	 * @param interval The interval between each calculation
-	 * of the rate in second.
+	 * of the rate in seconds.
 	 */
 	public ARPReplyRateService(int interval) {
 		//TODO: greg: intervalle d'attente avant de verifier le ratio
@@ -38,9 +40,9 @@ public class ARPReplyRateService extends Service {
 	}
 
 	/**
-	 * This method wait for an interval and calculate the rate between
-	 * the number of the receive ARP reply and the number of the receive
-	 * ARP request. If there is more ARP reply for an IP address, this 
+	 * This method waits for an interval and calculates the rate between
+	 * the number of ARP requests and ARP responses received. 
+	 * If there is more than one ARP reply for an IP address, this 
 	 * means that this IP address may be spoofed.
 	 */
 	@Override
