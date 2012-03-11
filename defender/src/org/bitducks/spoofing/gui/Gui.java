@@ -28,8 +28,19 @@ public class Gui extends JFrame {
 	private void setUpUi() {
 		
 		View view = new DNSProtectionServiceView();
-		this.tab.addTab( DNSProtectionServiceView.TITLE , view);
+		this.tab.addTab( view.getTitle() , view);
+		this.add(this.tab, BorderLayout.CENTER);
 		
+		view = new ActiveARPProtectionServiceView();
+		this.tab.addTab( view.getTitle() , view);
+		this.add(this.tab, BorderLayout.CENTER);
+		
+		view = new ARPReplyRateServiceView();
+		this.tab.addTab( view.getTitle() , view);
+		this.add(this.tab, BorderLayout.CENTER);
+		
+		view = new RogueDHCPDetectionServiceView();
+		this.tab.addTab( view.getTitle() , view);
 		this.add(this.tab, BorderLayout.CENTER);
 		
 	}
