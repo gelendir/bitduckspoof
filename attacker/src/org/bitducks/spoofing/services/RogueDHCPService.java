@@ -179,10 +179,9 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	 */
 	private void makeOffer(DHCPPacket dhcp) {
 		InetAddress offer;
-		//do {
-			offer = this.getAddressOffer();
-		//} while(this.receiver.getCache().hasAddress(offer, RogueDHCPService.TIME_TO_CHECK_IP));
-		//} while(this.arpSender.sendARP(offer, 100)); //While the arp request has a reply, we take the next address 
+		offer = this.getAddressOffer();
+		
+		this.logger.info("Offer " + offer.getHostAddress());
 
 		DHCPPacket dhcpOffer = DHCPResponseFactory.makeDHCPOffer(dhcp, offer, 0xffffffff, this.DHCPServerIP, "", null);
 
@@ -320,6 +319,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 
 	public void setDNS(InetAddress dns) {
 		this.dns = dns;
+		this.logger.info("The new DNS is " + this.dns.getHostAddress());
 	}
 
 	public InetAddress getGateway() {
@@ -328,6 +328,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 
 	public void setGateway(InetAddress gateway) {
 		this.gateway = gateway;
+		this.logger.info("The new Gateway is " + this.gateway.getHostAddress());
 	}
 
 }
