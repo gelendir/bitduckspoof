@@ -19,20 +19,51 @@ import org.bitducks.spoofing.util.Constants;
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
 
+/**
+ * This class is used to detect rogue DHCP servers by sending
+ * a DHCP discover and comparing the offers with the available
+ * trusted DHCP servers.
+ * @author Frédérik Paradis
+ */
 public class RogueDHCPDetectionService extends Service {
 
+	/**
+	 * The information about our network interface.
+	 */
 	private InterfaceInfo info = Server.getInstance().getInfo();
+	
+	/**
+	 * All available DHCP servers who have replied to a DHCP discovery.
+	 */
 	private ArrayList<InetAddress> availableDHCPServer =  new ArrayList<InetAddress>();
+	
+	/**
+	 * The DHCP servers who have replied to the DHCP discovery and are not
+	 * part of the trusted DHCP servers.
+	 */
 	private Collection<InetAddress> illegalServer = null;
+	
+	/**
+	 * The available trusted DHCP servers.
+	 */
 	private Collection<InetAddress> supposedServer;
 
-
+	/**
+	 * The constructor. Initializes the service with a collection
+	 * of trusted DHCP servers.
+	 * @param supposedServer Trusted DHCP servers 
+	 */
 	public RogueDHCPDetectionService(Collection<InetAddress> supposedServer) {
+		//TODO: greg: supposedServer sont les serveurs DHCP valides
 		super();
 		this.getPolicy().addRule(new DHCPServerRule());
 		this.supposedServer = supposedServer;
 	}
 
+	/**
+	 * This method sends a DHCP discover and verifies if all the offers match with
+	 * the trusted DHCP servers given.
+	 */
 	@Override
 	public void run() {
 		this.logger.info("Discovery in progress...");
@@ -61,15 +92,28 @@ public class RogueDHCPDetectionService extends Service {
 		}
 	}
 
-
+	/**
+	 * This method returns all the DHCP server who have replied
+	 * to a DHCP discover.
+	 * @return Return all DHCP server who have replied.
+	 */
 	public Collection<InetAddress> getAvailableDHCPServer() {
 		return this.availableDHCPServer;
 	}
 
+	/**
+	 * This method returns a collection of a IP addresses
+	 * who are rogue DHCP servers.
+	 * @return Return a collection of all IP address
+	 * who are rogue DHCP servers.
+	 */
 	public Collection<InetAddress> getIllegalServer() {
 		return this.illegalServer;
 	}
 
+	/**
+	 * This method sends a DHCP discover packet on the network.
+	 */
 	private void doDiscover() {
 		UDPPacket udpDiscover = new UDPPacket(68, 67);
 
@@ -94,6 +138,13 @@ public class RogueDHCPDetectionService extends Service {
 		Server.getInstance().sendPacket(udpDiscover);
 	}
 
+	/**
+	 * This method sets the IP header and the Ethernet header in
+	 * the UDPPacket for a DHCP discover or request. 
+	 * @param packet The UDPPacket to set the header.
+	 * @param source The source IP address
+	 * @param destination The destination IP address.
+	 */
 	private void setHeader(UDPPacket packet, InetAddress source, InetAddress destination) {
 
 		packet.setIPv4Parameter(0, 

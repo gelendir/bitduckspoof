@@ -3,11 +3,14 @@ package org.bitducks.spoofing.packet;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.bitducks.spoofing.util.Constants;
 
-import com.sun.xml.internal.ws.util.ByteArrayBuffer;
-
+import jpcap.packet.DatalinkPacket;
+import jpcap.packet.EthernetPacket;
+import jpcap.packet.Packet;
 import jpcap.packet.UDPPacket;
 
 public class DNSPacket extends UDPPacket {
@@ -16,12 +19,18 @@ public class DNSPacket extends UDPPacket {
 		super(dst_port, src_port);
 	}
 	
+	public DNSPacket(UDPPacket packet) {
+		super(packet.dst_port, packet.src_port);
+		this.data = Arrays.copyOf( packet.data, packet.data.length );
+		this.datalink = packet.datalink;
+	}
+	
 	/**
-	 * Build the ip header
-	 * @param macSource
-	 * @param macTarget
-	 * @param ipSource
-	 * @param ipTarget
+	 * Build the ip header that will be used in a DNS packet.
+	 * 
+	 * @param ipSource Source IP of the packet
+	 * @param ipTarget Target IP of the packet
+	 * @param identifier DNS identifier for the packet
 	 */
 	public void buildIpDNSPacket(InetAddress ipSource, InetAddress ipTarget, int identifier) {
 
@@ -71,6 +80,40 @@ public class DNSPacket extends UDPPacket {
 		
 		this.data = buffer.array();
 		
+	}
+	
+	public String getDomainName() {
+		
+		
+		ArrayList<Byte> query = new ArrayList<Byte>();
+		
+		//skip the packet header (first 12 bytes)
+		int pos = 13;
+		byte block = this.data[pos];
+		
+		while( block != 0x00 && pos < this.data.length ) {
+			
+			//If byte is over 0x21, then it's an ASCII character and
+			//we can add the byte to the string as-is
+			if (block >= 0x21) { 
+				query.add(block);		
+			} else {
+				//Otherwise add the ASCII dot character
+				query.add((byte) 0x2e);
+			}
+			
+			++pos;
+			block = this.data[pos];
+		}
+		
+		
+		//Convert ArrayList query to string
+		byte[] buffer = new byte[query.size()];
+		for( int i = 0; i < buffer.length; ++i ) {
+			buffer[i] = query.get(i);
+		}
+
+		return new String(buffer);
 	}
 	
 

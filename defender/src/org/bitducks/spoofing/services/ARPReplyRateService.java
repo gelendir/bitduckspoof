@@ -11,15 +11,40 @@ import jpcap.packet.Packet;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.ARPRule;
 
+/**
+ * This class is a detector of ARP spoofing. It calculates the
+ * rate between the number of the ARP replies and ARP requests
+ * received. If there is more than one ARP reply for an
+ * IP address, this means that this IP address may be spoofed.
+ * 
+ * @author Frédérik Paradis
+ */
 public class ARPReplyRateService extends Service {
 
+	/**
+	 * The interval between each calculation of the rate in seconds.
+	 */
 	private int interval;
-	
+
+	/**
+	 * This constructor. Initializes the service with the 
+	 * interval between each calculation of the rate.
+	 * 
+	 * @param interval The interval between each calculation
+	 * of the rate in seconds.
+	 */
 	public ARPReplyRateService(int interval) {
+		//TODO: greg: intervalle d'attente avant de verifier le ratio
 		this.getPolicy().addRule(new ARPRule());
 		this.interval = interval;
 	}
 
+	/**
+	 * This method waits for an interval and calculates the rate between
+	 * the number of ARP requests and ARP responses received. 
+	 * If there is more than one ARP reply for an IP address, this 
+	 * means that this IP address may be spoofed.
+	 */
 	@Override
 	public void run() {
 		while(!this.isCloseRequested()) {
@@ -45,7 +70,7 @@ public class ARPReplyRateService extends Service {
 					addr = (InetAddress) arp.getSenderProtocolAddress();
 					bound = 1;
 				}
-				
+
 				if(arp.operation == 1 || arp.operation == 2) {
 					if(c.containsKey(addr)) {
 						c.put(addr, c.get(addr) + bound);
@@ -53,10 +78,10 @@ public class ARPReplyRateService extends Service {
 						c.put(addr, bound);
 					}	
 				}
-				
+
 				p = this.getNextNonBlockingPacket();
 			}
-			
+
 			boolean possible = false;
 			for(Entry<InetAddress, Integer> entry : c.entrySet()) {
 				if(entry.getValue() > 0) {
@@ -64,7 +89,7 @@ public class ARPReplyRateService extends Service {
 					possible = true;
 				}
 			}
-			
+
 			if(!possible) {
 				this.logger.info("There is NO possibility that you are under ARP spoofing.");
 			}

@@ -17,7 +17,6 @@ import jpcap.packet.Packet;
 import jpcap.packet.UDPPacket;
 
 import org.bitducks.spoofing.core.InterfaceInfo;
-import org.bitducks.spoofing.core.Policy;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DHCPRule;
@@ -87,10 +86,21 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	 */
 	public static final int TIME_TO_CHECK_IP = 10 * 1000; //60 * 60 * 1000; //For 1 hour
 	
-	private InetAddress gateway;
+	/**
+	 * The gateway sent in DHCP request and DHCP ACK
+	 */
+	private InetAddress gateway = this.DHCPServerIP;
 	
-	private InetAddress dns;
+	/**
+	 * The DNS server sent in DHCP request and DHCP ACK
+	 */
+	private InetAddress dns = this.DHCPServerIP;
 
+	/**
+	 * 
+	 * @param gateway
+	 * @param dns
+	 */
 	public RogueDHCPService(InetAddress gateway, InetAddress dns) {
 		this();
 		this.gateway = gateway;
@@ -122,7 +132,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	}
 
 	/***
-	 * This method is use by the Thread class to start
+	 * This method is used by the Thread class to start
 	 * the service. A scan of all the netwok is made before
 	 * the start and may take few seconds.
 	 */
@@ -313,19 +323,41 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 		this.timer.schedule(new ArpScanTimer(this.givenAdresses, this.arpScan, this.receiver, this), RogueDHCPService.TIME_TO_CHECK_IP);
 	}
 
+	/**
+	 * This method return the DNS IP address given by the rogue
+	 * DHCP server.
+	 * @return Return the DNS IP address given by the rogue
+	 * DHCP server.
+	 */
 	public InetAddress getDNS() {
 		return dns;
 	}
 
+	/**
+	 * This method set the DNS IP address given by the rogue
+	 * DHCP server.
+	 * @param dns The DNS IP address
+	 */
 	public void setDNS(InetAddress dns) {
 		this.dns = dns;
 		this.logger.info("The new DNS is " + this.dns.getHostAddress());
 	}
-
+	
+	/**
+	 * This method return the gateway IP address given by the rogue
+	 * DHCP server.
+	 * @return Return the gateway IP address given by the rogue
+	 * DHCP server.
+	 */
 	public InetAddress getGateway() {
 		return gateway;
 	}
 
+	/**
+	 * This method set the gateway IP address given by the rogue
+	 * DHCP server.
+	 * @param dns The gateway IP address
+	 */
 	public void setGateway(InetAddress gateway) {
 		this.gateway = gateway;
 		this.logger.info("The new Gateway is " + this.gateway.getHostAddress());
