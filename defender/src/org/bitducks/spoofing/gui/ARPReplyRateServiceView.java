@@ -33,7 +33,6 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 	private JButton changeInterval = new JButton();
 	
 	private int interval = 10;
-	private ARPReplyRateService service = null;
 	
 	public ARPReplyRateServiceView() {
 		super( ARPReplyRateServiceView.TITLE );
@@ -80,6 +79,7 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		
 		String retval = "";
 		if ((retval = JOptionPane.showInputDialog(ARPReplyRateServiceView.ENTER_INTERVAL, this.interval + ""))
@@ -104,19 +104,17 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 		
 		// Setting the new interval
 		this.interval = intRetval;
-		if (service != null)
+		if (service != null && service instanceof ARPReplyRateService)
 		{
-			service.setInterval(this.interval);
+			((ARPReplyRateService)service).setInterval(this.interval);
 		}
 		
 		this.intervalLabel.setText(ARPReplyRateServiceView.BEGIN_TEXT_INTERVAL + this.interval);
 	}
 	
 	@Override
-	protected Service createService() {
-		service = new ARPReplyRateService(this.interval);
-		
-		return service;
+	protected Service createService() {		
+		return new ARPReplyRateService(this.interval);
 	}
 
 }

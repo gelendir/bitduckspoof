@@ -59,6 +59,16 @@ public class RogueDHCPDetectionService extends Service {
 		this.getPolicy().addRule(new DHCPServerRule());
 		this.supposedServer = supposedServer;
 	}
+	
+	public synchronized void addSupposedServer(InetAddress addr)
+	{
+		this.supposedServer.add(addr);
+	}
+	
+	public synchronized void removeSupposedServer(InetAddress addr)
+	{
+		this.supposedServer.remove(addr);
+	}
 
 	/**
 	 * This method sends a DHCP discover and verifies if all the offers match with
