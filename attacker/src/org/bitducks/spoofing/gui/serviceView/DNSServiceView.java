@@ -111,10 +111,6 @@ public class DNSServiceView extends View implements ActionListener{
 		}
 		
 		InetAddress addr = InetAddress.getByName(ipAddr);
-
-		if (this.service != null && this.service instanceof DNSService) {
-			((DNSService)this.service).addDnsPacketFilter(regex, addr);
-		}
 		
 		this.dnsPacketFilter.put(regex, addr);
 	}
