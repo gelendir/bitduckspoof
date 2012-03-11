@@ -70,6 +70,6 @@ public class ActiveARPProtectionService extends Service {
 	 */
 	/* package visibility */ void setGoodAddress(InetAddress addr) {
 		this.blacklist.remove(addr);
-		this.logger.warn("There is NO possibility of spoof of the address " + addr);
+		this.logger.info("There is NO possibility of spoof of the address " + addr);
 	}
 }

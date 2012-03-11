@@ -85,7 +85,7 @@ public class RogueDHCPDetectionService extends Service {
 		this.illegalServer.removeAll(this.supposedServer);
 		
 		if(!this.illegalServer.isEmpty()) {
-			this.logger.info("There is " + this.illegalServer.size() + " illegal DHCP server on the network: " +
+			this.logger.warn("There is " + this.illegalServer.size() + " illegal DHCP server on the network: " +
 					this.illegalServer.toString());
 		} else {
 			this.logger.info("There is no illegal DHCP Server on the network.");
