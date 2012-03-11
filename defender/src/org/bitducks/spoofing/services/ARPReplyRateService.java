@@ -95,4 +95,9 @@ public class ARPReplyRateService extends Service {
 			}
 		}
 	}
+	
+	public void setInterval(int interval)
+	{
+		this.interval = interval;
+	}
 }

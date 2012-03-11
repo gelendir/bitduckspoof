@@ -21,6 +21,7 @@ public class mainUI {
 			gui.setVisible(true);
 			gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		} else {
+			//TODO Erase that is the 2 ui starter
 			System.out.println("WHY THE FUCK DID YOU CLICK CANCEL ?!?!?!");
 		}
 		

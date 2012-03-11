@@ -10,9 +10,9 @@ import org.bitducks.spoofing.services.RogueDHCPDetectionService;
 public class RogueDHCPDetectionServiceView extends View {
 
 	final public static String TITLE = "Rogue DHCP Detection";
-	final public static String EXPLANATION = "Rogue DHCP Detection is used to detect rogue DHCP servers " +
-			"by sending a DHCP discover and comparing the offers with the available " +
-			"trusted DHCP servers in the list bellow.";
+	final public static String EXPLANATION = "<html>Rogue DHCP Detection is used to detect rogue DHCP servers<br /> " +
+			"by sending a DHCP discover and comparing the offers with the available<br /> " +
+			"trusted DHCP servers in the list bellow.<br />";
 	
 	public RogueDHCPDetectionServiceView() {
 		super( RogueDHCPDetectionServiceView.TITLE );

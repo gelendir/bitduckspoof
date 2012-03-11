@@ -10,9 +10,9 @@ import org.bitducks.spoofing.services.ActiveARPProtectionService;
 public class ActiveARPProtectionServiceView extends View {
 
 	final public static String TITLE = "Active ARP Protection";
-	final public static String EXPLANATION = "Scans the network for ARP reply and when when the " +
-			"service receives an ARP reply, it will send a request to verify if the reply was " +
-			"authentic or not.";
+	final public static String EXPLANATION = "<html>Scans the network for ARP reply and when when the <br />" +
+			"service receives an ARP reply, it will send a request to verify if the reply was <br />" +
+			"authentic or not.<br />";
 	
 	public ActiveARPProtectionServiceView() {
 		super( ActiveARPProtectionServiceView.TITLE );
