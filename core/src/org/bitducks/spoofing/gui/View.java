@@ -19,6 +19,11 @@ import org.bitducks.spoofing.core.Service;
 
 public abstract class View extends JPanel implements ActionListener {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static final String STOP = "Stop";
 	private static final String START = "Start";
  	private static final String STARTED = "Started";

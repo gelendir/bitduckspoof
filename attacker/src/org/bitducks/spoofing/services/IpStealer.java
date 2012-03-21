@@ -16,7 +16,6 @@ import org.bitducks.spoofing.core.rules.DHCPRule;
 import org.bitducks.spoofing.util.Constants;
 import org.dhcp4java.DHCPConstants;
 import org.dhcp4java.DHCPPacket;
-import org.dhcp4java.DHCPResponseFactory;
 
 
 public class IpStealer extends Service {

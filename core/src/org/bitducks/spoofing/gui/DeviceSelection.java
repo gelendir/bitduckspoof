@@ -22,6 +22,12 @@ import jpcap.NetworkInterface;
 
 public class DeviceSelection extends JDialog implements ActionListener, MouseListener  {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@SuppressWarnings("rawtypes")
 	private JList deviceList;
 	
 	private JButton okButton;
@@ -72,6 +78,7 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private JPanel selectionPanel() {
 		
 		JPanel panel = new JPanel();

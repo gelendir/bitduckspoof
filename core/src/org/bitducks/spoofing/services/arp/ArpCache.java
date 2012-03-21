@@ -2,7 +2,6 @@ package org.bitducks.spoofing.services.arp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;

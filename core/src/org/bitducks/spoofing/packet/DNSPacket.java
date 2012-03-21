@@ -1,19 +1,18 @@
 package org.bitducks.spoofing.packet;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.bitducks.spoofing.util.Constants;
-
-import jpcap.packet.DatalinkPacket;
-import jpcap.packet.EthernetPacket;
-import jpcap.packet.Packet;
 import jpcap.packet.UDPPacket;
 
 public class DNSPacket extends UDPPacket {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public DNSPacket(int src_port, int dst_port) {
 		super(dst_port, src_port);

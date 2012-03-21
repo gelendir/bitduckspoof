@@ -2,8 +2,6 @@ package org.bitducks.spoofing.core.rules;
 
 import jpcap.packet.Packet;
 
-import org.bitducks.spoofing.core.Rule;
-
 public class DNSIpv4Rule extends DNSQueryrule {
 
 	@Override

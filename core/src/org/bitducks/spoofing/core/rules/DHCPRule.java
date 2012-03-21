@@ -1,9 +1,6 @@
 package org.bitducks.spoofing.core.rules;
 
 import jpcap.packet.Packet;
-import jpcap.packet.UDPPacket;
-
-import org.bitducks.spoofing.core.Rule;
 
 /**
  * This rule filters DHCP Packets on the network.

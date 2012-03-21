@@ -1,7 +1,6 @@
 package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;

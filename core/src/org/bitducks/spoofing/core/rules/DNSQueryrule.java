@@ -1,9 +1,6 @@
 package org.bitducks.spoofing.core.rules;
 
 import jpcap.packet.Packet;
-import jpcap.packet.UDPPacket;
-
-import org.bitducks.spoofing.core.Rule;
 
 public class DNSQueryrule extends DNSRule {
 
