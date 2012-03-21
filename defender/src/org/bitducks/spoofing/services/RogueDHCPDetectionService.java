@@ -76,6 +76,8 @@ public class RogueDHCPDetectionService extends Service {
 	 */
 	@Override
 	public void run() {
+		this.clearQueue();
+		
 		this.logger.info("Discovery in progress...");
 		this.doDiscover();
 		try {
@@ -84,7 +86,7 @@ public class RogueDHCPDetectionService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		UDPPacket p = (UDPPacket)this.getNextNonBlockingPacket();
 		while(p != null) {
 			this.availableDHCPServer.add(p.src_ip);
