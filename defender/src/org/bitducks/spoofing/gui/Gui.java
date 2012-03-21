@@ -12,6 +12,11 @@ import jpcap.NetworkInterface;
 
 public class Gui extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private JTabbedPane tab = new JTabbedPane(JTabbedPane.NORTH);
 	
 	public Gui(NetworkInterface myInterface) throws IOException {

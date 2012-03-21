@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,11 +15,15 @@ import javax.swing.JPanel;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.gui.View;
-import org.bitducks.spoofing.services.DNSService;
 import org.bitducks.spoofing.services.RogueDHCPService;
 
 public class RogueDHCPServiceView extends View implements  ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public static final String CHANGE_GATEWAY = "Change Gateway";
 	public static final String CHANGE_DNS = "Change DNS";
 	

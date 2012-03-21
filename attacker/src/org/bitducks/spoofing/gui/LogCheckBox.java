@@ -6,6 +6,11 @@ import org.bitducks.spoofing.core.Service;
 
 public class LogCheckBox extends JCheckBox {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private GUILogAppender appender;
 	private Service service;
 

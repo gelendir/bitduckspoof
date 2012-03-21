@@ -13,9 +13,13 @@ import org.bitducks.spoofing.gui.serviceView.BroadcastARPServiceView;
 import org.bitducks.spoofing.gui.serviceView.DNSServiceView;
 import org.bitducks.spoofing.gui.serviceView.IPStealerServiceView;
 import org.bitducks.spoofing.gui.serviceView.RogueDHCPServiceView;
-import org.bitducks.spoofing.services.IpStealer;
 
 public class Gui extends JFrame {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private JTabbedPane tab = new JTabbedPane(JTabbedPane.NORTH);
 

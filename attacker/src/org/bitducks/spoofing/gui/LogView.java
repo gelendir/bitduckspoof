@@ -3,23 +3,24 @@ package org.bitducks.spoofing.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
-import org.apache.log4j.Layout;
-import org.apache.log4j.PatternLayout;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 
 public class LogView extends JPanel implements ActionListener {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private static int NB_COLS = 40;
 	private static int NB_ROWS = 60;

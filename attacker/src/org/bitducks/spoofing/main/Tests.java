@@ -13,7 +13,6 @@ import jpcap.NetworkInterfaceAddress;
 import jpcap.packet.ARPPacket;
 import jpcap.packet.Packet;
 
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
@@ -22,12 +21,7 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.gateway.GatewayFindService;
 import org.bitducks.spoofing.gui.DeviceSelection;
 import org.bitducks.spoofing.gui.Gui;
-import org.bitducks.spoofing.gui.LogView;
-//import org.bitducks.spoofing.scan.ArpService;
 import org.bitducks.spoofing.packet.PacketGenerator;
-
-
-
 import org.bitducks.spoofing.services.ArpRecieveService;
 import org.bitducks.spoofing.services.ArpScanService;
 import org.bitducks.spoofing.services.MacFindService;
@@ -37,7 +31,6 @@ import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
-import org.bitducks.spoofing.util.gateway.GatewayFinder;
 
 public class Tests {
 	

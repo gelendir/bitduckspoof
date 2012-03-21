@@ -7,9 +7,7 @@ import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.services.DNSService;
-import org.bitducks.spoofing.services.IpStealer;
 
 public class testSimon {
 

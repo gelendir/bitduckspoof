@@ -10,6 +10,11 @@ import org.bitducks.spoofing.services.BroadcastARPService;
 
 public class BroadcastARPServiceView extends View {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	final static private String TITLE = "ARP Broadcast Service";
 	final static private String EXPLANATION = "This service will DO STUFF.";
 

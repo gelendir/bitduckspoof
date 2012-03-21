@@ -9,6 +9,11 @@ import org.bitducks.spoofing.services.DNSProtectionService;
 
 public class DNSProtectionServiceView extends View {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	final public static String TITLE = "DNS spoof detection";
 	final public static String EXPLANATION = "Scans the network for DNS spoofing, adds the spoofers to the log.";
 

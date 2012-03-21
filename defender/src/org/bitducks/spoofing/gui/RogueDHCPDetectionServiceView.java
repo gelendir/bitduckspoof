@@ -25,6 +25,11 @@ import org.bitducks.spoofing.services.RogueDHCPDetectionService;
 
 public class RogueDHCPDetectionServiceView extends View implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public static final String ADD_SERVER = "Add";
 	public static final String REMOVE_SERVER = "Remove";
 	

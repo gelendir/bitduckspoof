@@ -14,7 +14,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,6 +25,11 @@ import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.DNSService;
 
 public class DNSServiceView extends View implements ActionListener{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	public static final String ADD_REGEX = "Add";
 	public static final String REMOVE_REGEX = "Remove";
