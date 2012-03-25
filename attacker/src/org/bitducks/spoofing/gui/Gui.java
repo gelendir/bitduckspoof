@@ -12,6 +12,7 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.gui.serviceView.BroadcastARPServiceView;
 import org.bitducks.spoofing.gui.serviceView.DNSServiceView;
 import org.bitducks.spoofing.gui.serviceView.IPStealerServiceView;
+import org.bitducks.spoofing.gui.serviceView.ARPReplySpoofingView;
 import org.bitducks.spoofing.gui.serviceView.RogueDHCPServiceView;
 
 public class Gui extends JFrame {
@@ -49,6 +50,9 @@ public class Gui extends JFrame {
 		tab.addTab(view.getTitle(), view);
 		
 		view = new BroadcastARPServiceView();
+		tab.addTab(view.getTitle(), view);
+		
+		view = new ARPReplySpoofingView();
 		tab.addTab(view.getTitle(), view);
 		
 		LogView logView = new LogView();

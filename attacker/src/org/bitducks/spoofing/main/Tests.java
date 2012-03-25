@@ -88,6 +88,7 @@ public class Tests {
 		
 	}
 
+	@SuppressWarnings("unused")
 	private static void testLogView() throws Exception {
 		
 		BasicConfigurator.configure();
@@ -114,6 +115,7 @@ public class Tests {
 		return new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN);
 	}
 	
+	@SuppressWarnings("unused")
 	private static void testLogging() {
 		
 		//BasicConfigurator.configure();
@@ -127,6 +129,7 @@ public class Tests {
 		
 	}
 
+	@SuppressWarnings("unused")
 	private static void testGatewayFinder() throws Exception {
 		
 		Server.createInstance( getDevice() );
@@ -186,7 +189,7 @@ public class Tests {
 		
 	}
 
-
+	@SuppressWarnings("unused")
 	private static void testIpUtils() {
 		
 		NetworkInterface device = getDevice();
@@ -205,7 +208,8 @@ public class Tests {
 		System.out.println( IpUtil.lastIpInNetwork(deviceAddress) );
 		
 	}
-
+	
+	@SuppressWarnings("unused")
 	private static void testIpMask() {
 		
 		NetworkInterface device = getDevice();
