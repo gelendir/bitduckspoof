@@ -84,7 +84,7 @@ public class RogueDHCPService extends Service implements ArpScanFinish {
 	/**
 	 * The time between each call to the ArpFreeAddressService.
 	 */
-	public static final int TIME_TO_CHECK_IP = 10 * 1000; //60 * 60 * 1000; //For 1 hour
+	public static final int TIME_TO_CHECK_IP = 60 * 60 * 1000; //For 1 hour
 	
 	/**
 	 * The gateway sent in DHCP request and DHCP ACK
