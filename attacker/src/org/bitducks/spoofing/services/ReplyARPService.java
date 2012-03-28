@@ -1,7 +1,6 @@
 package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
-import java.util.Arrays;
 
 import jpcap.packet.ARPPacket;
 
@@ -28,12 +27,12 @@ public class ReplyARPService extends Service {
 		MacFindService finderTarget = new MacFindService(target);
 		Server.getInstance().addService(finderTarget);
 		targetMAC = finderTarget.getMacAddress();
-		System.out.println(Arrays.toString(targetMAC));
+		System.out.println(targetMAC);
 		
 		while(! this.isCloseRequested()){
 			replySpoof();
 			
-			//Waiting 500ms to be sure we don't use all the CPU
+			//Waiting 1000ms to be sure we don't use all the CPU
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

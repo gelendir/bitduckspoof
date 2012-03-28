@@ -1,6 +1,5 @@
 package org.bitducks.spoofing.services;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,13 +15,11 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.customrules.IpAndMacFilterRule;
 import org.bitducks.spoofing.gateway.GatewayFindService;
-import org.bitducks.spoofing.util.gateway.GatewayFinder;
 
 public class RedirectMITM extends Service {
 
 	private InterfaceInfo serverInfo;
 	private HashMap<InetAddress, byte[]> ipToMac = new HashMap<InetAddress, byte[]>();
-	private InetAddress gatewayIP;
 	private byte[] gatewayMAC;
 
 	//TODO: Make a NAT and change the port
@@ -31,11 +28,6 @@ public class RedirectMITM extends Service {
 		logger = Logger.getLogger(RedirectMITM.class);
 		serverInfo = Server.getInstance().getInfo();
 		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getAddress(), serverInfo.getMacAddress()));
-		try {
-			gatewayIP = GatewayFinder.find(serverInfo.getDevice());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -58,9 +50,9 @@ public class RedirectMITM extends Service {
 		IPPacket victimIP = (IPPacket)p;
 		EthernetPacket victimEthernet = (EthernetPacket)p.datalink;
 		
-		if (!isPacketResponse(p)) {	
+		if (!isFromGateway(p)) {	
 			logger.info("-Packet from someone");
-			if (ipToMac.get(victimIP) == null || Arrays.equals(ipToMac.get(victimIP), victimEthernet.src_mac)) {
+			if (ipToMac.get(victimIP.src_ip) == null || Arrays.equals(ipToMac.get(victimIP.src_ip), victimEthernet.src_mac)) {
 				System.out.println("--New HashMap entry " + victimEthernet.src_mac);
 				ipToMac.put(victimIP.src_ip, victimEthernet.src_mac);
 			}
@@ -95,16 +87,16 @@ public class RedirectMITM extends Service {
 		byte[] toReturn = null;
 		
 		for(InetAddress IP : IPs) {
-			if(Arrays.equals(IP.getAddress(), address.getAddress()) && toReturn != null);
-			{
+			if(IP == address) {
 				toReturn = ipToMac.get(IP);
+				logger.info("IP is present in the HashMap!!");
 			}
 		}
 		
 		return toReturn;	
 	}
 
-	public boolean isPacketResponse(Packet p) {
+	public boolean isFromGateway(Packet p) {
 		if ( Arrays.equals(gatewayMAC, ((EthernetPacket)p.datalink).src_mac)) {
 			return true;
 		}
