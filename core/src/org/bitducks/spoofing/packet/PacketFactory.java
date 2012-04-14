@@ -58,8 +58,12 @@ public class PacketFactory {
 		//set frame type as IP
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;
 		//set source and destination MAC addresses
-		ether.src_mac = Server.getInstance().getInfo().getMacAddress();
-		ether.dst_mac =  ((EthernetPacket)queryPacket.datalink).src_mac;
+		//ether.src_mac = Server.getInstance().getInfo().getMacAddress();
+		//ether.dst_mac =  ((EthernetPacket)queryPacket.datalink).src_mac;
+		ether.src_mac = ((EthernetPacket)queryPacket.datalink).src_mac;
+		ether.dst_mac =  ((EthernetPacket)queryPacket.datalink).dst_mac;
+		
+		
 		
 		//set the datalink frame of the packet p as ether
 		dnsPacket.datalink = ether;

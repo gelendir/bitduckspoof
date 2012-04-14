@@ -21,7 +21,7 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final String CHANGE_INTERVAL = "Change DNS";
+	public static final String CHANGE_INTERVAL = "Change Interval";
 	
 	public static final String BEGIN_TEXT_INTERVAL = "Interval : ";
 	

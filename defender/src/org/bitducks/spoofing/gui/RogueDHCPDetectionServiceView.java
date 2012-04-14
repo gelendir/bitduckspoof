@@ -58,7 +58,7 @@ public class RogueDHCPDetectionServiceView extends View implements ActionListene
 		
 		this.servicePanel.setLayout(new BorderLayout());
 		
-		JLabel descLabel = new JLabel( ARPReplyRateServiceView.EXPLANATION );
+		JLabel descLabel = new JLabel( RogueDHCPDetectionServiceView.EXPLANATION );
 		this.servicePanel.add(descLabel, BorderLayout.NORTH);
 		
 		jlist = new JList<String>(modelList);

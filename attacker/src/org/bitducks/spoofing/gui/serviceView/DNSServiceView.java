@@ -35,7 +35,7 @@ public class DNSServiceView extends View implements ActionListener{
 	public static final String REMOVE_REGEX = "Remove";
 	public static final String CHANGE_FALSE_IP = "Default DNS IP";
 	
-	public static final String WARNING_NO_ENTRY = "Invalid operation: ':' is prohibited.";
+	public static final String WARNING_NO_ENTRY = "This list must contain 1 or more entry.";
 	public static final String ENTER_DNS_NAME = "Enter the DNS name you want to add rule.";
 	public static final String ENTER_IP_ADDR = "Enter the IP address you want to redirect the user to.";
 	public static final String ERROR_BAD_IP = "Invalid operation: The Ip address you have provided is not valid.";
@@ -120,17 +120,17 @@ public class DNSServiceView extends View implements ActionListener{
 	}
 	
 	private void removeFromList(String line) throws UnknownHostException {
-		if (this.modelList.getSize() > 1 ) {
+		/*if (this.modelList.getSize() > 1 ) {*/
 			String splitResult[] = line.split(":");
 			this.dnsPacketFilter.remove(splitResult[0].trim());
 			
-		} else if (JOptionPane.showConfirmDialog(null, DNSServiceView.WARNING_NO_ENTRY) == 0) {
+		/*} else if (JOptionPane.showConfirmDialog(null, DNSServiceView.WARNING_NO_ENTRY) == 0) {
 			String splitResult[] = line.split(":");
 			this.dnsPacketFilter.remove(splitResult[0].trim());
 			
 			InetAddress addr = InetAddress.getByName(JOptionPane.showInputDialog(DNSServiceView.ENTER_IP_ADDR, Server.getInstance().getInfo().getDeviceAddress().address.getHostAddress()));
 			this.addDefaultFilter(addr);
-		}
+		}*/
 		
 
 	}
@@ -186,7 +186,7 @@ public class DNSServiceView extends View implements ActionListener{
 				try {
 					this.removeFromList(regex);
 					if (this.service != null && this.service instanceof DNSService) {
-						((DNSService)service).removeDnsPacketFilter(regex);
+						((DNSService)service).removeDnsPacketFilter(regex.split("   :   ")[0]);
 					}
 				} catch (UnknownHostException e1) {
 					JOptionPane.showMessageDialog(null, DNSServiceView.ERROR_BAD_IP);

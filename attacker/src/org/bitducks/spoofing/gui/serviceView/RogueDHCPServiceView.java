@@ -110,16 +110,16 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 		
 		String ipAddr = "";
 		
-		if ((ipAddr = JOptionPane.showInputDialog(RogueDHCPServiceView.ENTER_IP_ADDR,
-				Server.getInstance().getInfo().getDeviceAddress().address.getHostAddress()))
-				== null) {
-			// If cancel is called
-			return;
-		}
-		
 		switch (e.getActionCommand()) {
 		
 		case RogueDHCPServiceView.CHANGE_GATEWAY:
+			
+			if ((ipAddr = JOptionPane.showInputDialog(RogueDHCPServiceView.ENTER_IP_ADDR,
+					Server.getInstance().getInfo().getDeviceAddress().address.getHostAddress()))
+					== null) {
+				// If cancel is called
+				return;
+			}
 			
 			try {
 				this.gatewayAddr = InetAddress.getByName(ipAddr);
@@ -134,6 +134,13 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 			break;
 			
 		case RogueDHCPServiceView.CHANGE_DNS:
+			
+			if ((ipAddr = JOptionPane.showInputDialog(RogueDHCPServiceView.ENTER_IP_ADDR,
+					Server.getInstance().getInfo().getDeviceAddress().address.getHostAddress()))
+					== null) {
+				// If cancel is called
+				return;
+			}
 			
 			try {
 				this.dnsAddr = InetAddress.getByName(ipAddr);
