@@ -95,11 +95,20 @@ public class ARPReplyRateService extends Service {
 		}
 	}
 	
+	/**
+	 * This method set the interval used between each calculation of the rate.
+	 * @param interval The interval used between each calculation of the rate.
+	 */
 	public void setInterval(int interval)
 	{
 		this.interval = interval;
 	}
 	
+	/**
+	 * This method overwrite closeService to notify the wait call
+	 * in the service thread.
+	 * @see Service#closeService()
+	 */
 	@Override
 	public synchronized void closeService() {
 		super.closeService();
