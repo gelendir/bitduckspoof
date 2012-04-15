@@ -27,6 +27,7 @@ public abstract class View extends JPanel implements ActionListener {
 	private static final String STOP = "Stop";
 	private static final String START = "Start";
  	private static final String STARTED = "Started";
+ 	private static final String CLEAR = "Clear";
 	
 	private String title = "";
 	protected Service service = null;
@@ -36,6 +37,7 @@ public abstract class View extends JPanel implements ActionListener {
 	
 	private JButton start = new JButton();
 	private JButton stop = new JButton();
+	private JButton clear = new JButton();
 	
 	GUILogAppender logger = null;
 	
@@ -58,7 +60,7 @@ public abstract class View extends JPanel implements ActionListener {
 		
 		this.add(Box.createRigidArea(new Dimension(0, 10)));
 		
-		this.setUpStartStopButton();
+		this.setUpStartStopClearButton();
 		this.add(this.startStopbuttonPanel);
 		
 		this.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -70,7 +72,7 @@ public abstract class View extends JPanel implements ActionListener {
 		
 	}
 	
-	private void setUpStartStopButton() {
+	private void setUpStartStopClearButton() {
 		this.startStopbuttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		this.start.setText(View.START);
@@ -84,6 +86,11 @@ public abstract class View extends JPanel implements ActionListener {
 		this.stop.setEnabled(false);
 		this.startStopbuttonPanel.add(this.stop);
 		
+		this.clear.setText(View.CLEAR);
+		this.clear.addActionListener(this);
+		this.clear.setActionCommand(View.CLEAR);
+		this.clear.setEnabled(true);
+		this.startStopbuttonPanel.add(this.clear);		
 	}
 	
 	private void setUpTerminal() {
@@ -134,6 +141,8 @@ public abstract class View extends JPanel implements ActionListener {
 			this.stop.setEnabled(false);
 			this.start.setText(View.START);
 			break;
+		case View.CLEAR:
+			this.terminal.setText("");
 		}
 	}
 	
