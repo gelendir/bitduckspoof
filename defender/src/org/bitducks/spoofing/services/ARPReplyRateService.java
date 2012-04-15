@@ -24,7 +24,7 @@ public class ARPReplyRateService extends Service {
 	/**
 	 * The interval between each calculation of the rate in seconds.
 	 */
-	private int interval;
+	private volatile int interval;
 
 	/**
 	 * This constructor. Initializes the service with the 
@@ -34,7 +34,6 @@ public class ARPReplyRateService extends Service {
 	 * of the rate in seconds.
 	 */
 	public ARPReplyRateService(int interval) {
-		//TODO: greg: intervalle d'attente avant de verifier le ratio
 		this.getPolicy().addRule(new ARPRule());
 		this.interval = interval;
 	}
@@ -49,7 +48,7 @@ public class ARPReplyRateService extends Service {
 	public void run() {
 		while(!this.isCloseRequested()) {
 			try {
-				Thread.sleep(this.interval * 1000);
+				this.wait(this.interval * 1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -99,5 +98,11 @@ public class ARPReplyRateService extends Service {
 	public void setInterval(int interval)
 	{
 		this.interval = interval;
+	}
+	
+	@Override
+	public synchronized void closeService() {
+		super.closeService();
+		this.notify();
 	}
 }
