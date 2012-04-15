@@ -12,6 +12,7 @@ import jpcap.packet.UDPPacket;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.DNSIpv4Rule;
+import org.bitducks.spoofing.core.rules.NotMyIpPacketRule;
 import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.packet.PacketFactory;
 
@@ -22,6 +23,7 @@ public class DNSService extends Service {
 	public DNSService() {
 		super();
 		this.getPolicy().addRule(new DNSIpv4Rule());
+		this.getPolicy().addRule(new NotMyIpPacketRule(Server.getInstance().getInfo().getAddress()));
 		
 		this.getPolicy().setStrict(true);
 		
