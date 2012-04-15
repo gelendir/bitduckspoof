@@ -23,7 +23,6 @@ public class LogView extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	private static int NB_COLS = 40;
-	private static int NB_ROWS = 60;
 	
 	private JTextArea logView = null;
 	private JPanel serviceList = null;

@@ -45,7 +45,6 @@ public class DNSServiceView extends View implements ActionListener{
 	private JList<String> jlist;
 	private DefaultListModel<String> modelList = new DefaultListModel<String>();
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
-	private InetAddress defaultFalseIp = null;
 	
 	private JButton addRegex = new JButton();
 	private JButton removeRegex = new JButton();

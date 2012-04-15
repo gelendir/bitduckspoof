@@ -86,35 +86,38 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
 		
-		String retval = "";
-		if ((retval = JOptionPane.showInputDialog(ARPReplyRateServiceView.ENTER_INTERVAL, this.interval + ""))
-				== null) {
-			// If cancel is called
-			return;
-		}
-		
-		int intRetval;
-		try {
-			intRetval = Integer.parseInt(retval);
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, ARPReplyRateServiceView.ERROR_WRONG_NUMBER);
-			return;
-		}
-		
-		if (intRetval <= 0)
+		if (e.getActionCommand() == ARPReplyRateServiceView.CHANGE_INTERVAL)
 		{
-			JOptionPane.showMessageDialog(null, ARPReplyRateServiceView.ERROR_WRONG_NUMBER);
-			return;
+			String retval = "";
+			if ((retval = JOptionPane.showInputDialog(ARPReplyRateServiceView.ENTER_INTERVAL, this.interval + ""))
+					== null) {
+				// If cancel is called
+				return;
+			}
+			
+			int intRetval;
+			try {
+				intRetval = Integer.parseInt(retval);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, ARPReplyRateServiceView.ERROR_WRONG_NUMBER);
+				return;
+			}
+			
+			if (intRetval <= 0)
+			{
+				JOptionPane.showMessageDialog(null, ARPReplyRateServiceView.ERROR_WRONG_NUMBER);
+				return;
+			}
+			
+			// Setting the new interval
+			this.interval = intRetval;
+			if (service != null && service instanceof ARPReplyRateService)
+			{
+				((ARPReplyRateService)service).setInterval(this.interval);
+			}
+			
+			this.intervalLabel.setText(ARPReplyRateServiceView.BEGIN_TEXT_INTERVAL + this.interval);
 		}
-		
-		// Setting the new interval
-		this.interval = intRetval;
-		if (service != null && service instanceof ARPReplyRateService)
-		{
-			((ARPReplyRateService)service).setInterval(this.interval);
-		}
-		
-		this.intervalLabel.setText(ARPReplyRateServiceView.BEGIN_TEXT_INTERVAL + this.interval);
 	}
 	
 	@Override

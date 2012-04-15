@@ -48,7 +48,9 @@ public class ARPReplyRateService extends Service {
 	public void run() {
 		while(!this.isCloseRequested()) {
 			try {
-				this.wait(this.interval * 1000);
+				synchronized (this) {
+					this.wait(this.interval * 1000);
+				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
