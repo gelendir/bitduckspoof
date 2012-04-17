@@ -7,7 +7,7 @@ public class OsDiscovery {
 		String identifier = System.getProperty("os.name").toLowerCase();
 				
 		for( Os testOs: Os.values() ) {
-			if( testOs.getIdentifier().equals( identifier ) ) {
+			if( identifier.startsWith( testOs.getIdentifier() ) ) {
 				return testOs;
 			}
 		}
