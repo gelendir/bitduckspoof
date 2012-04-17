@@ -1,5 +1,6 @@
 package org.bitducks.spoofing.main;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -17,6 +18,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.gateway.GatewayFindService;
 import org.bitducks.spoofing.gui.DeviceSelection;
@@ -31,10 +33,13 @@ import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
+import org.bitducks.spoofing.util.gateway.GatewayFinder;
+import org.bitducks.spoofing.util.os.Os;
+import org.bitducks.spoofing.util.os.OsDiscovery;
 
 public class Tests {
 	
-	final static private int NB_DEVICE = 0;
+	static private int NB_DEVICE = 0;
 	
 	/**
 	 * @param args
@@ -54,11 +59,30 @@ public class Tests {
 		//testGatewayFinder();
 		//testLogging();
 		//testLogView();
-		testMacFinder();		
+		//testMacFinder();
+		testGatewayFinder();
+		//testAddressFinder();
 		
 
 	}
 	
+	private static void testOsDiscovery() throws IOException {
+		
+		Os os = OsDiscovery.discover();
+		System.out.println(os);
+		
+		InetAddress address = GatewayFinder.find( getDevice() );
+		System.out.println(address);
+		
+	}
+	
+	private static void testAddressFinder() throws Exception {
+		
+		InterfaceInfo info = new InterfaceInfo( getDevice() );
+		System.out.println(info.getAddress());
+		
+	}
+
 	private static void testMacFinder() throws Exception {
 		
 		Server.createInstance( getDevice() );
@@ -184,6 +208,10 @@ public class Tests {
 	
 	public static NetworkInterface getDevice() {
 		
+		if( OsDiscovery.discover() == Os.WINDOWS ) {
+			Tests.NB_DEVICE = 1;
+		}
+
 		NetworkInterface device = JpcapCaptor.getDeviceList()[ Tests.NB_DEVICE ];
 		return device;
 		
