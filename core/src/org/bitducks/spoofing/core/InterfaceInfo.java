@@ -1,6 +1,9 @@
 package org.bitducks.spoofing.core;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+
+import org.bitducks.spoofing.exception.UnexpectedErrorException;
 
 import jpcap.NetworkInterface;
 import jpcap.NetworkInterfaceAddress;
@@ -18,6 +21,11 @@ public class InterfaceInfo {
 	NetworkInterface device;
 	
 	/**
+	 * IPv4 Address used by the device
+	 */
+	NetworkInterfaceAddress deviceAddress = null;
+	
+	/**
 	 * The constructor initialize the object with
 	 * a network interface.
 	 * @param device A network interface
@@ -33,7 +41,19 @@ public class InterfaceInfo {
 	 * the network interface.
 	 */
 	public NetworkInterfaceAddress getDeviceAddress() {
-		return this.device.addresses[0];
+		
+		if( this.deviceAddress != null) {
+			return this.deviceAddress;
+		}
+		
+		for ( NetworkInterfaceAddress interfaceAddress: this.device.addresses ) {
+			if( interfaceAddress.address instanceof Inet4Address ) {
+				this.deviceAddress = interfaceAddress;
+				return interfaceAddress;
+			}
+		}
+		
+		throw new UnexpectedErrorException("did not find any IPv4 address");
 	}
 	
 	/**
