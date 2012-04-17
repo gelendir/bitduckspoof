@@ -87,7 +87,7 @@ public class RedirectMITM extends Service {
 		byte[] toReturn = null;
 		
 		for(InetAddress IP : IPs) {
-			if(IP == address) {
+			if(IP.equals(address)) {
 				toReturn = ipToMac.get(IP);
 				logger.info("IP is present in the HashMap!!");
 			}

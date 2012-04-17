@@ -1,14 +1,12 @@
 package org.bitducks.spoofing.main;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
 import jpcap.JpcapCaptor;
 
 import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.services.RedirectMITM;
-import org.bitducks.spoofing.services.ReplyARPService;
+import org.bitducks.spoofing.services.RedirectNAT;
 
 public class MainLED {
 
@@ -22,11 +20,8 @@ public class MainLED {
 		BasicConfigurator.configure();
 		
 		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
-		Server.getInstance().addService(new ReplyARPService(InetAddress.getByName("192.168.2.110"), InetAddress.getByName("192.168.2.1")));
-
-		Server.getInstance().addService(new ReplyARPService(InetAddress.getByName("192.168.2.1"), InetAddress.getByName("192.168.2.110")));
+		Server.getInstance().addService(new RedirectNAT());
 		
-		Server.getInstance().addService(new RedirectMITM());
 		Server.getInstance().start();
 		Server.getInstance().join();
 		Server.getInstance().stopServer();
