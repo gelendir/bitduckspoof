@@ -3,10 +3,11 @@ package org.bitducks.spoofing.util.gateway;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import org.bitducks.spoofing.exception.UnexpectedErrorException;
-import org.bitducks.spoofing.util.os.*;
-
 import jpcap.NetworkInterface;
+
+import org.bitducks.spoofing.exception.UnexpectedErrorException;
+import org.bitducks.spoofing.util.os.Os;
+import org.bitducks.spoofing.util.os.OsDiscovery;
 
 public abstract class GatewayFinder {
 	
@@ -22,6 +23,8 @@ public abstract class GatewayFinder {
 		
 		if( os == Os.LINUX ) { 
 			parser = new LinuxGatewayParser();
+		} else if ( os == Os.WINDOWS ) {
+			parser = new WindowsGatewayParser();
 		}
 		
 		InetAddress address = parser.findAndParse(device);
