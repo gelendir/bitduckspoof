@@ -30,6 +30,8 @@ public abstract class View extends JPanel implements ActionListener {
  	private static final String CLEAR = "Clear";
 	
 	private String title = "";
+	protected boolean running = false;
+	
 	protected Service service = null;
 	protected JPanel servicePanel = new JPanel();
 	private JPanel startStopbuttonPanel = new JPanel();
@@ -112,6 +114,8 @@ public abstract class View extends JPanel implements ActionListener {
 		switch (e.getActionCommand()) {
 		
 		case View.START:
+			running = true;
+			
 			this.start.setEnabled(false);
 			this.stop.setEnabled(true);
 			// Create the Service instance
@@ -126,6 +130,8 @@ public abstract class View extends JPanel implements ActionListener {
 			break;
 			
 		case View.STOP:
+			running = false;
+			
 			Server.getInstance().removeService(this.service);
 			try {
 				service.join();

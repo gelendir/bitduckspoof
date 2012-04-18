@@ -15,10 +15,15 @@ public class ReplyARPService extends Service {
 	private InetAddress host;
 	private InterfaceInfo infoInterface;
 	
-	public ReplyARPService(InetAddress target, InetAddress host) {
+	public static int FREQ_SPOOF_DEFAULT = 1000;
+	private int freqSpoof = FREQ_SPOOF_DEFAULT;
+	
+	
+	public ReplyARPService(InetAddress target, InetAddress host, int freqSpoof) {
 		super();
 		this.target = target;
 		this.host = host;
+		this.freqSpoof = freqSpoof;
 		infoInterface = Server.getInstance().getInfo();
 	}
 	
@@ -34,7 +39,7 @@ public class ReplyARPService extends Service {
 			
 			//Waiting 1000ms to be sure we don't use all the CPU
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(freqSpoof);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -16,7 +16,7 @@ public class BroadcastARPServiceView extends View {
 	private static final long serialVersionUID = 1L;
 	
 	final static private String TITLE = "ARP Broadcast Service";
-	final static private String EXPLANATION = "This service will DO STUFF.";
+	final static private String EXPLANATION = "This service will arp poison the cache of all the user on the network to make them think you're the gateway.";
 
 	public BroadcastARPServiceView() {
 		super( BroadcastARPServiceView.TITLE );
@@ -34,6 +34,7 @@ public class BroadcastARPServiceView extends View {
 			
 	}
 
+	
 	@Override
 	protected Service createService() {
 		return new BroadcastARPService();

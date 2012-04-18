@@ -6,7 +6,6 @@ import jpcap.JpcapCaptor;
 
 import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.core.Server;
-import org.bitducks.spoofing.services.RedirectNAT;
 
 public class MainLED {
 
@@ -20,7 +19,7 @@ public class MainLED {
 		BasicConfigurator.configure();
 		
 		Server.createInstance(JpcapCaptor.getDeviceList()[0]);
-		Server.getInstance().addService(new RedirectNAT());
+		//Server.getInstance().addService(new RedirectNAT());
 		
 		Server.getInstance().start();
 		Server.getInstance().join();

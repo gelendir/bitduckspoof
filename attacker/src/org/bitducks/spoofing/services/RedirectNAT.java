@@ -1,7 +1,6 @@
 package org.bitducks.spoofing.services;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -26,10 +25,18 @@ public class RedirectNAT extends Service {
 	private byte[] gatewayMAC;
 	private final int FIRST_PORT = 60000;
 	private int nextPort = FIRST_PORT - 1;
+	
+	private InetAddress target;
+	private InetAddress host;
+	private int freqSpoof;
 
 	//TODO: Make a NAT and change the port
 
-	public RedirectNAT() {
+	public RedirectNAT(InetAddress target, InetAddress host, int freqSpoof) {
+		this.target = target;
+		this.host = host;
+		this.freqSpoof = freqSpoof;
+		
 		logger = Logger.getLogger(RedirectNAT.class);
 		serverInfo = Server.getInstance().getInfo();
 		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getAddress(), serverInfo.getMacAddress()));
@@ -44,11 +51,8 @@ public class RedirectNAT extends Service {
 		gatewayMAC = finder.getMacAddress();
 		logger.info("Gateway MAC Address found!");
 		//TODO: Get the IP address from this server
-		try {
-			Server.getInstance().addService(new ReplyARPService(InetAddress.getByName("192.168.1.100"), InetAddress.getByName("192.168.1.1")));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		Server.getInstance().addService(new ReplyARPService(this.target, this.host, this.freqSpoof));
+
 		while(! this.isCloseRequested()){
 			Packet toTransfer = this.getNextBlockingPacket();
 			redirectPacket(toTransfer);
