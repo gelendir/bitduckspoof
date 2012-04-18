@@ -1,6 +1,5 @@
 package org.bitducks.spoofing.main;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -18,7 +17,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.bitducks.spoofing.core.InterfaceInfo;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.gateway.GatewayFindService;
 import org.bitducks.spoofing.gui.DeviceSelection;
@@ -26,14 +24,12 @@ import org.bitducks.spoofing.gui.Gui;
 import org.bitducks.spoofing.packet.PacketGenerator;
 import org.bitducks.spoofing.services.ArpRecieveService;
 import org.bitducks.spoofing.services.ArpScanService;
-import org.bitducks.spoofing.services.MacFindService;
 import org.bitducks.spoofing.services.arp.ArpCache;
 import org.bitducks.spoofing.test.CustomAppender;
 import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
-import org.bitducks.spoofing.util.gateway.GatewayFinder;
 import org.bitducks.spoofing.util.os.Os;
 import org.bitducks.spoofing.util.os.OsDiscovery;
 
@@ -66,52 +62,6 @@ public class Tests {
 
 	}
 	
-	private static void testOsDiscovery() throws IOException {
-		
-		Os os = OsDiscovery.discover();
-		System.out.println(os);
-		
-		InetAddress address = GatewayFinder.find( getDevice() );
-		System.out.println(address);
-		
-	}
-	
-	private static void testAddressFinder() throws Exception {
-		
-		InterfaceInfo info = new InterfaceInfo( getDevice() );
-		System.out.println(info.getAddress());
-		
-	}
-
-	private static void testMacFinder() throws Exception {
-		
-		Server.createInstance( getDevice() );
-		Server server = Server.getInstance();
-		server.start();
-		//Thread.sleep(50);
-		
-		InetAddress address = InetAddress.getByName("10.17.65.1");
-		
-		System.out.println("adding service");
-		
-		MacFindService finder = new MacFindService( address );
-		
-		server.addService(finder);
-		
-		byte[] macFound = finder.getMacAddress();
-		
-		System.out.println("mac found: " + IpUtil.prettyPrintMac( macFound ) );
-		
-		finder = new MacFindService( address );
-		
-		server.addService(finder);
-		
-		macFound = finder.getMacAddress();
-		
-		System.out.println("mac found: " + IpUtil.prettyPrintMac( macFound ) );
-		
-	}
-
 	@SuppressWarnings("unused")
 	private static void testLogView() throws Exception {
 		
@@ -153,7 +103,6 @@ public class Tests {
 		
 	}
 
-	@SuppressWarnings("unused")
 	private static void testGatewayFinder() throws Exception {
 		
 		Server.createInstance( getDevice() );
