@@ -53,7 +53,7 @@ public class ArpScanService extends Service {
 		PacketGenerator generator = new PacketGenerator(device);
 		
 		InetAddress start = IpUtil.network( device );
-		InetAddress end = IpUtil.lastIpInNetwork( device );
+		InetAddress end = IpUtil.lastIpInNetwork2( server.getInfo().getDeviceAddress() );
 		
 		IpRange ipRange = new IpRange(start, end);
 		
