@@ -8,7 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.gui.DeviceSelection;
 import org.bitducks.spoofing.gui.Gui;
 
-public class mainUI {
+public class Launcher {
 
 	public static void main(String[] args) throws Exception {
 		
@@ -20,10 +20,6 @@ public class mainUI {
 			Gui gui = new Gui(device);
 			gui.setVisible(true);
 			gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		} else {
-			System.out.println("WHY THE FUCK DID YOU CLICK CANCEL ?!?!?!");
 		}
-		
-		
 	}
 }
