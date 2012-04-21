@@ -31,18 +31,6 @@ public class DNSService extends Service {
 		//this.setDNSFalseIp(Server.getInstance().getInfo().getAddress());
 	}
 	
-	/*public void setDNSFalseIp(String falseHostIp) {
-		try {
-			this.setDNSFalseIp(InetAddress.getByName(falseHostIp));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}		
-	}
-	
-	public void setDNSFalseIp(InetAddress falseHostIp) {
-		this.falseDefaultIpAddr = falseHostIp;
-	}*/
-	
 	public void addDnsPacketFilter(String regex, InetAddress addr) {
 		this.dnsPacketFilter.put(regex, addr);
 	}
@@ -62,6 +50,10 @@ public class DNSService extends Service {
 		this.dnsPacketFilter.put(newRegex.replace("*", ".*"), addr);
 	}
 
+	/**
+	 * Main thread function
+	 * Will wait till it's the end or when it will get a DNS Packet to answers it.
+	 */
 	@Override
 	public void run() {
 		
