@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.gui;
+package org.bitducks.spoofing.gui.serviceView;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -11,8 +11,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.bitducks.spoofing.core.Service;
+import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.ARPReplyRateService;
 
+/**
+ * The view for Arp Reply Rate Service.
+ * @author Simon Perreault
+ *
+ */
 public class ARPReplyRateServiceView extends View implements ActionListener {
 
 	

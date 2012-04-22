@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.main;
+package org.bitducks.spoofing;
 
 import javax.swing.WindowConstants;
 
@@ -8,6 +8,11 @@ import org.apache.log4j.BasicConfigurator;
 import org.bitducks.spoofing.gui.DeviceSelection;
 import org.bitducks.spoofing.gui.Gui;
 
+/**
+ * Used to lauch the main UI for the Defender.
+ * @author Simon Perreault
+ *
+ */
 public class Launcher {
 
 	public static void main(String[] args) throws Exception {

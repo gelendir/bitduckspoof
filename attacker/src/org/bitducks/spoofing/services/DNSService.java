@@ -22,7 +22,6 @@ import org.bitducks.spoofing.packet.PacketFactory;
  *
  */
 public class DNSService extends Service {
-	//private InetAddress falseDefaultIpAddr = null;
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
 	
 	public DNSService() {
@@ -31,9 +30,6 @@ public class DNSService extends Service {
 		this.getPolicy().addRule(new NotMyIpPacketRule(Server.getInstance().getInfo().getAddress()));
 		
 		this.getPolicy().setStrict(true);
-		
-		// TODO Get our IP or the IP provided
-		//this.setDNSFalseIp(Server.getInstance().getInfo().getAddress());
 	}
 	
 	public void addDnsPacketFilter(String regex, InetAddress addr) {
@@ -108,7 +104,6 @@ public class DNSService extends Service {
 	public InetAddress isDNSPacketMatchingWithFilter(Packet p) {
 		// If empty --
 		if (this.dnsPacketFilter.isEmpty()) {
-			//return this.falseDefaultIpAddr;
 			return null;
 		}
 		

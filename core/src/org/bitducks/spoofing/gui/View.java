@@ -17,6 +17,11 @@ import javax.swing.text.DefaultCaret;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 
+/**
+ * Basic view for a service
+ * @author Simon Perreault
+ *
+ */
 public abstract class View extends JPanel implements ActionListener {
 	
 	/**
@@ -49,10 +54,17 @@ public abstract class View extends JPanel implements ActionListener {
 		setUpUI();
 	}
 	
+	/**
+	 * Get Title
+	 * @return the title
+	 */
 	public String getTitle() {
 		return this.title;
 	}
 	
+	/**
+	 * Setup the ui for all views.
+	 */
 	private void setUpUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -68,12 +80,14 @@ public abstract class View extends JPanel implements ActionListener {
 		this.add(Box.createRigidArea(new Dimension(0, 5)));
 		
 		this.setUpTerminal();
-		//this.add(this.terminal);
 		
 		this.add(Box.createRigidArea(new Dimension(0, 5)));
 		
 	}
 	
+	/**
+	 * Setup Start, Stop and Clear button.
+	 */
 	private void setUpStartStopClearButton() {
 		this.startStopbuttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
@@ -95,6 +109,9 @@ public abstract class View extends JPanel implements ActionListener {
 		this.startStopbuttonPanel.add(this.clear);		
 	}
 	
+	/**
+	 * Setup Terminal for each different views.
+	 */
 	private void setUpTerminal() {
 		this.terminal.setEditable(false);
 		JScrollPane scroll = new JScrollPane(this.terminal);
@@ -107,6 +124,9 @@ public abstract class View extends JPanel implements ActionListener {
 		this.add(scroll, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Callback when an action is performed.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

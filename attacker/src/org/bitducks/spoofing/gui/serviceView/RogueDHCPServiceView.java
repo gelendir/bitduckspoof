@@ -17,6 +17,11 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.RogueDHCPService;
 
+/**
+ * The view for Rogue DHCP Service
+ * @author Simon Perreault
+ *
+ */
 public class RogueDHCPServiceView extends View implements  ActionListener{
 
 	/**

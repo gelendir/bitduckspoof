@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.main;
+package org.bitducks.spoofing.test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -25,8 +25,6 @@ import org.bitducks.spoofing.packet.PacketGenerator;
 import org.bitducks.spoofing.services.ArpRecieveService;
 import org.bitducks.spoofing.services.ArpScanService;
 import org.bitducks.spoofing.services.arp.ArpCache;
-import org.bitducks.spoofing.test.CustomAppender;
-import org.bitducks.spoofing.test.DummyService;
 import org.bitducks.spoofing.util.Constants;
 import org.bitducks.spoofing.util.IpRange;
 import org.bitducks.spoofing.util.IpUtil;
