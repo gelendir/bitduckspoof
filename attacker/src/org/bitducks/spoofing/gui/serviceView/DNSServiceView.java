@@ -56,7 +56,9 @@ public class DNSServiceView extends View implements ActionListener{
 	//private JButton changeFalseIp = new JButton();
 	
 	
-
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public DNSServiceView() {
 		super( DNSServiceView.TITLE );
 		
@@ -65,11 +67,18 @@ public class DNSServiceView extends View implements ActionListener{
 		this.addDefaultFilter(Server.getInstance().getInfo().getDeviceAddress().address);
 	}
 	
+	/**
+	 * Add the default filter
+	 * @param addr the address to be related to the default filter
+	 */
 	private void addDefaultFilter(InetAddress addr) {
 		dnsPacketFilter.put(".*", addr);
 		this.refreshList();
 	}
 	
+	/**
+	 * Setup the component in the service panel.
+	 */
 	public void setUpServicePanel() {
 		
 		this.servicePanel.setLayout(new BorderLayout());
@@ -84,6 +93,9 @@ public class DNSServiceView extends View implements ActionListener{
 		this.setUpButton();
 	}
 	
+	/**
+	 * Will setup the button in the Service panel
+	 */
 	public void setUpButton() {
 		JPanel pan = new JPanel();
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
@@ -100,17 +112,16 @@ public class DNSServiceView extends View implements ActionListener{
 		this.removeRegex.setActionCommand(DNSServiceView.REMOVE_REGEX);
 		pan.add(this.removeRegex);
 		
-		/*pan.add(Box.createRigidArea(new Dimension(0, 5)));
-		
-		this.changeFalseIp.setText(DNSServiceView.CHANGE_FALSE_IP);
-		this.changeFalseIp.addActionListener(this);
-		this.changeFalseIp.setActionCommand(DNSServiceView.CHANGE_FALSE_IP);
-		pan.add(this.changeFalseIp);*/
-		
 		this.servicePanel.add(pan, BorderLayout.LINE_END);
 		
 	}
 	
+	/**
+	 * Will add an entry to the list.
+	 * @param regex
+	 * @param ipAddr
+	 * @throws UnknownHostException
+	 */
 	private void addToList(String regex, String ipAddr) throws UnknownHostException {
 		if (regex.contains(":")) {
 			// We do not accept the : character
@@ -123,22 +134,19 @@ public class DNSServiceView extends View implements ActionListener{
 		this.dnsPacketFilter.put(regex, addr);
 	}
 	
+	/**
+	 * Will remove an entry from the list
+	 * @param line
+	 * @throws UnknownHostException
+	 */
 	private void removeFromList(String line) throws UnknownHostException {
-		/*if (this.modelList.getSize() > 1 ) {*/
 			String splitResult[] = line.split(":");
 			this.dnsPacketFilter.remove(splitResult[0].trim());
-			
-		/*} else if (JOptionPane.showConfirmDialog(null, DNSServiceView.WARNING_NO_ENTRY) == 0) {
-			String splitResult[] = line.split(":");
-			this.dnsPacketFilter.remove(splitResult[0].trim());
-			
-			InetAddress addr = InetAddress.getByName(JOptionPane.showInputDialog(DNSServiceView.ENTER_IP_ADDR, Server.getInstance().getInfo().getDeviceAddress().address.getHostAddress()));
-			this.addDefaultFilter(addr);
-		}*/
-		
-
 	}
 	
+	/**
+	 * Will refresh the list
+	 */
 	private void refreshList() {
 	
 		this.modelList.clear();
@@ -151,6 +159,9 @@ public class DNSServiceView extends View implements ActionListener{
 		}
 	}
 	
+	/**
+	 * Used to execute an action depending of the button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
@@ -198,29 +209,14 @@ public class DNSServiceView extends View implements ActionListener{
 			}
 			this.refreshList();
 			break;
-			
-		/*case DNSServiceView.CHANGE_FALSE_IP:
-			
-			if (this.defaultFalseIp != null) {
-				ipAddr = JOptionPane.showInputDialog(DNSServiceView.ENTER_IP_ADDR, this.defaultFalseIp.getHostAddress());
-			} else {
-				ipAddr = JOptionPane.showInputDialog(DNSServiceView.ENTER_IP_ADDR, Server.getInstance().getInfo().getDeviceAddress().address.getHostAddress());
-			}
-			
-			try {
-				this.removeFromList("*: ");
-				this.addToList("*", ipAddr);
-				this.defaultFalseIp = InetAddress.getByName(ipAddr);
-			} catch (UnknownHostException e1) {
-				JOptionPane.showMessageDialog(null, DNSServiceView.ERROR_BAD_IP);
-			}
-			
-			this.refreshList();
-			break;*/
+
 		}
 		
 	}
 
+	/**
+	 * Will create the service with the Dns rules list in the Ui.
+	 */
 	@Override
 	protected Service createService() {
 		DNSService service = new DNSService();
@@ -231,10 +227,6 @@ public class DNSServiceView extends View implements ActionListener{
 			String next = it.next();
 			service.addDnsPacketFilter(next, this.dnsPacketFilter.get(next));
 		}
-		
-		/*if (this.defaultFalseIp != null) {
-			service.setDNSFalseIp(this.defaultFalseIp);
-		}*/
 
 		return service;
 	}

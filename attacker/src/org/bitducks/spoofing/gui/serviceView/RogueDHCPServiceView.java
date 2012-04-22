@@ -51,6 +51,9 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 	private InetAddress gatewayAddr = null;
 	private InetAddress dnsAddr = null;
 
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public RogueDHCPServiceView() {
 		super( RogueDHCPServiceView.TITLE );
 		
@@ -60,6 +63,9 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 		this.setupServicePanel();
 	}
 
+	/**
+	 * Setup the component in the service panel.
+	 */
 	private void setupServicePanel() {
 	
 		this.servicePanel.setLayout( new BorderLayout() );
@@ -71,6 +77,9 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 		setupButton();
 	}
 	
+	/**
+	 * Setup the text in the service panel.
+	 */
 	private void setupText() {
 		JPanel tmpPan = new JPanel();
 		tmpPan.setLayout(new BoxLayout(tmpPan, BoxLayout.Y_AXIS));
@@ -86,6 +95,9 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 		this.servicePanel.add(tmpPan, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Will setup the button in the Service panel
+	 */
 	private void setupButton() {
 		JPanel tmpPan = new JPanel();
 		tmpPan.setLayout(new BoxLayout(tmpPan, BoxLayout.Y_AXIS));
@@ -104,11 +116,17 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 		this.servicePanel.add(tmpPan, BorderLayout.LINE_END);
 	}
 
+	/**
+	 * Will create the service with the parameter specified in the ui.
+	 */
 	@Override
 	protected Service createService() {
 		return new RogueDHCPService(this.gatewayAddr, this.dnsAddr);
 	}
 	
+	/**
+	 * Used to execute an action depending of the button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
@@ -158,8 +176,6 @@ public class RogueDHCPServiceView extends View implements  ActionListener{
 			
 			this.dnsAddrLabel.setText(RogueDHCPServiceView.BEGIN_TEXT_DNS + this.dnsAddr.getHostAddress());
 			break;
-		
 		}
-		
 	}
 }

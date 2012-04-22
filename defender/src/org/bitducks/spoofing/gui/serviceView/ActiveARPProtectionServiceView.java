@@ -25,12 +25,18 @@ public class ActiveARPProtectionServiceView extends View {
 			"service receives an ARP reply, it will send a request to verify if the reply was <br />" +
 			"authentic or not.<br />";
 	
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public ActiveARPProtectionServiceView() {
 		super( ActiveARPProtectionServiceView.TITLE );
 		
 		this.setupServicePanel();
 	}
 
+	/**
+	 * Setup the component in the service panel.
+	 */
 	private void setupServicePanel() {
 	
 		this.servicePanel.setLayout( new BorderLayout() );
@@ -41,6 +47,9 @@ public class ActiveARPProtectionServiceView extends View {
 		
 	}
 	
+	/**
+	 * Will create the service
+	 */
 	@Override
 	protected Service createService() {
 		return new ActiveARPProtectionService();

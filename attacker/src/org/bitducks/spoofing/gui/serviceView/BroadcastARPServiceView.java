@@ -23,12 +23,18 @@ public class BroadcastARPServiceView extends View {
 	final static private String TITLE = "ARP Broadcast Service";
 	final static private String EXPLANATION = "This service will arp poison the cache of all the user on the network to make them think you're the gateway.";
 
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public BroadcastARPServiceView() {
 		super( BroadcastARPServiceView.TITLE );
 		
 		this.setupServicePanel();
 	}
 
+	/**
+	 * Setup the component in the service panel.
+	 */
 	private void setupServicePanel() {
 	
 		this.servicePanel.setLayout( new BorderLayout() );
@@ -39,7 +45,9 @@ public class BroadcastARPServiceView extends View {
 			
 	}
 
-	
+	/**
+	 * Will create the service
+	 */
 	@Override
 	protected Service createService() {
 		return new BroadcastARPService();

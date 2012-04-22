@@ -23,12 +23,18 @@ public class IPStealerServiceView extends View {
 	final static private String TITLE = "IP Stealer";
 	final static private String EXPLANATION = "This service will launch a DHCP starvation attack in the network.";
 
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public IPStealerServiceView() {
 		super( IPStealerServiceView.TITLE );
 		
 		this.setupServicePanel();
 	}
 
+	/**
+	 * Setup the component in the service panel.
+	 */
 	private void setupServicePanel() {
 	
 		this.servicePanel.setLayout( new BorderLayout() );
@@ -39,6 +45,9 @@ public class IPStealerServiceView extends View {
 			
 	}
 
+	/**
+	 * Will create the service
+	 */
 	@Override
 	protected Service createService() {
 		return new IpStealer();

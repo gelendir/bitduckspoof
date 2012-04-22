@@ -45,12 +45,18 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 	
 	private int interval = 10;
 	
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public ARPReplyRateServiceView() {
 		super( ARPReplyRateServiceView.TITLE );
 		
 		this.setupServicePanel();
 	}
 
+	/**
+	 * Setup the component in the service panel.
+	 */
 	private void setupServicePanel() {
 	
 		this.servicePanel.setLayout( new BorderLayout() );
@@ -62,6 +68,9 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 		setupButton();
 	}
 	
+	/**
+	 * Setup the text in the Service panel.
+	 */
 	private void setupText() {
 		JPanel tmpPan = new JPanel();
 		tmpPan.setLayout(new BoxLayout(tmpPan, BoxLayout.Y_AXIS));
@@ -75,6 +84,9 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 		this.servicePanel.add(tmpPan, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Setup the button in the Service panel
+	 */
 	private void setupButton() {
 		JPanel tmpPan = new JPanel();
 		tmpPan.setLayout(new BoxLayout(tmpPan, BoxLayout.Y_AXIS));
@@ -88,6 +100,9 @@ public class ARPReplyRateServiceView extends View implements ActionListener {
 		this.servicePanel.add(tmpPan, BorderLayout.LINE_END);
 	}
 	
+	/**
+	 * Used to execute an action depending of the button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);

@@ -54,12 +54,18 @@ public class RogueDHCPDetectionServiceView extends View implements ActionListene
 	private JButton addServer = new JButton();
 	private JButton removeServer = new JButton();
 	
+	/**
+	 * Constructor, will initialize the UI.
+	 */
 	public RogueDHCPDetectionServiceView() {
 		super( RogueDHCPDetectionServiceView.TITLE );
 		
 		this.setupServicePanel();
 	}
 
+	/**
+	 * Setup the component in the service panel.
+	 */
 	private void setupServicePanel() {
 		
 		this.servicePanel.setLayout(new BorderLayout());
@@ -76,6 +82,9 @@ public class RogueDHCPDetectionServiceView extends View implements ActionListene
 		this.setUpButton();
 	}
 	
+	/**
+	 * Setup the button for the service panel.
+	 */
 	public void setUpButton() {
 		JPanel pan = new JPanel();
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
@@ -95,18 +104,31 @@ public class RogueDHCPDetectionServiceView extends View implements ActionListene
 		this.servicePanel.add(pan, BorderLayout.LINE_END);
 	}
 	
+	/**
+	 * Will add it to the list
+	 * @param ipAddr
+	 * @throws UnknownHostException
+	 */
 	private void addToList(String ipAddr) throws UnknownHostException {
 		InetAddress addr = InetAddress.getByName(ipAddr);
 		
 		this.dhcpServerList.add(addr);
 	}
 	
+	/**
+	 * Will remove it from the list
+	 * @param ipAddr
+	 * @throws UnknownHostException
+	 */
 	private void removeFromList(String ipAddr) throws UnknownHostException {
 		InetAddress addr = InetAddress.getByName(ipAddr);
 		
 		this.dhcpServerList.remove(addr);
 	}
 	
+	/**
+	 * Will refresh the list
+	 */
 	private void refreshList() {
 		this.modelList.clear();
 		
@@ -118,6 +140,9 @@ public class RogueDHCPDetectionServiceView extends View implements ActionListene
 		}
 	}
 	
+	/**
+	 * Used to execute an action depending of the button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
@@ -163,6 +188,9 @@ public class RogueDHCPDetectionServiceView extends View implements ActionListene
 		}
 	}
 	
+	/**
+	 * Will create the service with the DHCP Server list chosen in the Ui.
+	 */
 	@Override
 	protected Service createService() {
 		return new RogueDHCPDetectionService(this.dhcpServerList);
