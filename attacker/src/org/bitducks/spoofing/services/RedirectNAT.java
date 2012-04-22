@@ -39,7 +39,7 @@ public class RedirectNAT extends Service {
 		
 		logger = Logger.getLogger(RedirectNAT.class);
 		serverInfo = Server.getInstance().getInfo();
-		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getAddress(), serverInfo.getMacAddress()));
+		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getMacAddress()));
 	}
 
 	@Override

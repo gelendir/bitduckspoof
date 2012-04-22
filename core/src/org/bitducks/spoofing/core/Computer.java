@@ -3,12 +3,28 @@ package org.bitducks.spoofing.core;
 import java.net.InetAddress;
 import java.util.Arrays;
 
+/**
+ * This class is used to keep all the information needed to
+ * keep a computer in the the NAT
+ * @author Louis-Étienne Dorval
+ */
 public class Computer {
 
+	/**
+	 * The IP address
+	 */
 	private InetAddress ipAddress;
+	
+	/**
+	 * The MAC address
+	 */
 	private byte[] macAddress;
+	
+	/**
+	 * The Port number
+	 */
 	private int portNumber;
-
+	
 	public InetAddress getIpAddress() {
 		return ipAddress;
 	}
@@ -36,6 +52,9 @@ public class Computer {
 		return this;
 	}
 
+	/**
+	 * Return a readable MAC Address
+	 */
 	private String getMacAddressString() {
 		String mac = "";
 		for (byte b : getMacAddress()) {  

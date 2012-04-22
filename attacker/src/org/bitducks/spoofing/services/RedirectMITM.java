@@ -27,7 +27,7 @@ public class RedirectMITM extends Service {
 	public RedirectMITM() {
 		logger = Logger.getLogger(RedirectMITM.class);
 		serverInfo = Server.getInstance().getInfo();
-		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getAddress(), serverInfo.getMacAddress()));
+		this.getPolicy().addRule(new IpAndMacFilterRule(serverInfo.getMacAddress()));
 	}
 
 	@Override

@@ -9,6 +9,12 @@ import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.packet.PacketFactory;
 
+/**
+ * This service send an spoofed ARP reply. The ARP reply
+ * is sent to a specified target and we spoof to be the specified
+ * host.
+ * @author Louis-Étienne Dorval
+ */
 public class ReplyARPService extends Service {
 	private InetAddress target;
 	private byte[] targetMAC;
@@ -18,7 +24,12 @@ public class ReplyARPService extends Service {
 	public static int FREQ_SPOOF_DEFAULT = 1000;
 	private int freqSpoof = FREQ_SPOOF_DEFAULT;
 	
-	
+	/**
+	 * Constructor
+	 * @param target
+	 * @param host
+	 * @param freqSpoof
+	 */
 	public ReplyARPService(InetAddress target, InetAddress host, int freqSpoof) {
 		super();
 		this.target = target;
@@ -27,6 +38,9 @@ public class ReplyARPService extends Service {
 		infoInterface = Server.getInstance().getInfo();
 	}
 	
+	/**
+	 * This method is called when the server start.
+	 */
 	@Override
 	public void run() {
 		MacFindService finderTarget = new MacFindService(target);
@@ -46,7 +60,10 @@ public class ReplyARPService extends Service {
 		}
 	}
 	
-	public void replySpoof() {
+	/**
+	 * Send a spoofed ARP reply
+	 */
+	private void replySpoof() {
 		ARPPacket spoofedPacket = PacketFactory.arpReply(infoInterface.getMacAddress(), host, targetMAC, target);
 		logger.info("Sending a spoofed ARP reply to " + target);
 		Server.getInstance().sendPacket(spoofedPacket);
