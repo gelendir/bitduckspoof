@@ -15,6 +15,16 @@ import javax.swing.text.DefaultCaret;
 import org.bitducks.spoofing.core.Server;
 import org.bitducks.spoofing.core.Service;
 
+/**
+ * 
+ * LogView is a GUI View used to show log messages
+ * coming from one or more servics. Log messages can be activated
+ * using a checkbox for each service that is running. Log messages
+ * can only be activated once a service has started.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class LogView extends JPanel implements ActionListener {
 	
 	/**
@@ -24,12 +34,24 @@ public class LogView extends JPanel implements ActionListener {
 	
 	private static int NB_COLS = 40;
 	
+	/**
+	 * All log messages will appeear in this textarea
+	 */
 	private JTextArea logView = null;
+	/**
+	 * Main container for the view
+	 */
 	private JPanel serviceList = null;
+	/**
+	 * button for refreshing the list of services that are running.
+	 */
 	private JButton refresh = null;
 	
 	private ArrayList<LogCheckBox> checkboxes = null;
 	
+	/**
+	 * Constructor. Create a new LogView 
+	 */
 	public LogView() {
 		super();
 		
@@ -45,6 +67,10 @@ public class LogView extends JPanel implements ActionListener {
 		
 	}
 	
+	/**
+	 * Refresh the whole panel, updating the list
+	 * of services that are running.
+	 */
 	public void refreshPanel() {
 		
 		this.removeAll();
@@ -58,6 +84,12 @@ public class LogView extends JPanel implements ActionListener {
 		
 	}
 
+	/**
+	 * Utility method for generating the textarea
+	 * that will be showing the log messages from the services.
+	 * 
+	 * @return textarea with log messages
+	 */
 	private JTextArea generateLogView() {
 		
 		JTextArea textArea = new JTextArea();
@@ -73,6 +105,12 @@ public class LogView extends JPanel implements ActionListener {
 		
 	}
 	
+	/**
+	 * Utility method for generating the button to
+	 * refresh the service list
+	 * 
+	 * @return the refresh button
+	 */
 	private JButton generateRefreshButton() {
 		
 		JButton button = new JButton("Refresh service list");
@@ -81,6 +119,12 @@ public class LogView extends JPanel implements ActionListener {
 		
 	}
 	
+	/**
+	 * Utility method for generating a panel with a list
+	 * of active services and checkboxes for activating the log of a service.
+	 * 
+	 * @return the service list in a panel
+	 */
 	private JPanel generateServiceList() {
 		
 		JPanel panel = new JPanel();
@@ -104,6 +148,14 @@ public class LogView extends JPanel implements ActionListener {
 		
 	}
 	
+	/**
+	 * Utility method for generating a checkbox for a service.
+	 * The checkbox is responsible of activating the logger
+	 * for a service when clicked.
+	 * 
+	 * @param service The service to monitor
+	 * @return the checkbox for activating a logger
+	 */
 	private LogCheckBox serviceCheckBox( Service service ) {
 			
 		LogCheckBox checkbox = new LogCheckBox( service );
@@ -115,6 +167,9 @@ public class LogView extends JPanel implements ActionListener {
 		
 	}
 
+	/**
+	 * Activates or deactivates a logger if a log checkbox has been checked by the user
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		

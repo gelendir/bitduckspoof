@@ -10,11 +10,31 @@ import org.bitducks.spoofing.core.rules.SingleARPResponseRule;
 import org.bitducks.spoofing.exception.UnexpectedErrorException;
 import org.bitducks.spoofing.packet.PacketGenerator;
 
+/**
+ * Utility service to find the MAC address of a device on the network. 
+ * Reuses the Service architecture to check if the MAC has already been 
+ * cached by the ARP Service.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class MacFindService extends Service {
 	
+	/**
+	 * IP Address to search MAC for
+	 */
 	private InetAddress ipAddress = null;
+	
+	/**
+	 * MAC Address for the IP Address we are searching
+	 */
 	private byte[] macAddress = null;
 	
+	/**
+	 * Constructor. Creates a new MacFindService.
+	 * 
+	 * @param ipAddress the IP Address for which we need to find the MAC
+	 */
 	public MacFindService( InetAddress ipAddress ) {
 		
 		this.ipAddress = ipAddress;
@@ -23,6 +43,11 @@ public class MacFindService extends Service {
 				new SingleARPResponseRule( this.ipAddress ) );
 	}
 	
+	/**
+	 * Main service loop. Send an ARP Request to find a MAC Address
+	 * and wait for the response.
+	 * 
+	 */
 	@Override
 	public void run() {
 		
@@ -43,6 +68,12 @@ public class MacFindService extends Service {
 		
 	}
 	
+	/**
+	 * Send an ARP request to find out the IP's MAC Address.
+	 * This method will block until an ARP Response has been received.
+	 * 
+	 * @return the MAC Address
+	 */
 	public byte[] getMacAddress() {
 		
 		synchronized( this ) {
