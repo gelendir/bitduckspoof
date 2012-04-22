@@ -1,4 +1,4 @@
-package org.bitducks.spoofing.gui;
+package org.bitducks.spoofing.gui.serviceView;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,8 +21,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.bitducks.spoofing.core.Service;
+import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.RogueDHCPDetectionService;
 
+/**
+ * The view for Rogue DHCP Detection service.3
+ * @author Simon Perreault
+ *
+ */
 public class RogueDHCPDetectionServiceView extends View implements ActionListener {
 
 	/**

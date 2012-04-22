@@ -8,6 +8,11 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.IpStealer;
 
+/**
+ * The view for Ip starvation service.
+ * @author Simon Perreault
+ *
+ */
 public class IPStealerServiceView extends View {
 	
 	/**

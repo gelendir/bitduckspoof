@@ -8,6 +8,11 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.BroadcastARPService;
 
+/**
+ * The view for Broadcast Arp Service.
+ * @author Simon Perreault
+ *
+ */
 public class BroadcastARPServiceView extends View {
 
 	/**

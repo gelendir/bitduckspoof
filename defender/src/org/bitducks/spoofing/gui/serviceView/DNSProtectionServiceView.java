@@ -1,12 +1,18 @@
-package org.bitducks.spoofing.gui;
+package org.bitducks.spoofing.gui.serviceView;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 
 import org.bitducks.spoofing.core.Service;
+import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.DNSProtectionService;
 
+/**
+ * The view for Dns protection Service
+ * @author Simon Perreault
+ *
+ */
 public class DNSProtectionServiceView extends View {
 	
 	/**

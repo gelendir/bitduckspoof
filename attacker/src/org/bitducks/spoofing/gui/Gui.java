@@ -15,6 +15,11 @@ import org.bitducks.spoofing.gui.serviceView.IPStealerServiceView;
 import org.bitducks.spoofing.gui.serviceView.ARPReplySpoofingView;
 import org.bitducks.spoofing.gui.serviceView.RogueDHCPServiceView;
 
+/**
+ * The main Ui witch contain tab of views.
+ * @author Simon Perreault
+ *
+ */
 public class Gui extends JFrame {
 	
 	/**
@@ -32,12 +37,12 @@ public class Gui extends JFrame {
 		}
 		
 		this.setUpUi();
-		//this.setSize(500, 500);
-		//this.repaint();
-		//this.revalidate();
 		this.pack();
 	}
 	
+	/**
+	 * Setup the Tab for the main Ui
+	 */
 	private void setUpUi() {
 		
 		View view = new DNSServiceView();

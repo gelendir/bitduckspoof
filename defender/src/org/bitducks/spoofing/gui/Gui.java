@@ -7,9 +7,18 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import org.bitducks.spoofing.core.Server;
+import org.bitducks.spoofing.gui.serviceView.ARPReplyRateServiceView;
+import org.bitducks.spoofing.gui.serviceView.ActiveARPProtectionServiceView;
+import org.bitducks.spoofing.gui.serviceView.DNSProtectionServiceView;
+import org.bitducks.spoofing.gui.serviceView.RogueDHCPDetectionServiceView;
 
 import jpcap.NetworkInterface;
 
+/**
+ * The main Ui witch contain tab of views.
+ * @author Simon Perreault
+ *
+ */
 public class Gui extends JFrame {
 	
 	/**
@@ -30,6 +39,9 @@ public class Gui extends JFrame {
 		this.pack();
 	}
 
+	/**
+	 * Setup the Tab for the main Ui
+	 */
 	private void setUpUi() {
 		
 		View view = new DNSProtectionServiceView();

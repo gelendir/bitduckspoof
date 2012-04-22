@@ -18,6 +18,11 @@ import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.RedirectNAT;
 import org.bitducks.spoofing.services.ReplyARPService;
 
+/**
+ * The view for Arp Reply Spoofing service
+ * @author Simon Perreault
+ *
+ */
 public class ARPReplySpoofingView extends View implements ActionListener {
 
 	/**

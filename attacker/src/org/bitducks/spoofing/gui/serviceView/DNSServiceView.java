@@ -24,6 +24,11 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.DNSService;
 
+/**
+ * The view for Dns poisoning service.
+ * @author Simon Perreault
+ *
+ */
 public class DNSServiceView extends View implements ActionListener{
 	
 	/**

@@ -1,12 +1,18 @@
-package org.bitducks.spoofing.gui;
+package org.bitducks.spoofing.gui.serviceView;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 
 import org.bitducks.spoofing.core.Service;
+import org.bitducks.spoofing.gui.View;
 import org.bitducks.spoofing.services.ActiveARPProtectionService;
 
+/**
+ * The view for Active Arp Protection Service.
+ * @author Simon Perreault
+ *
+ */
 public class ActiveARPProtectionServiceView extends View {
 
 	/**
