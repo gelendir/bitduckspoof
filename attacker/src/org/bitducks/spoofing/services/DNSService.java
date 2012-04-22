@@ -16,6 +16,11 @@ import org.bitducks.spoofing.core.rules.NotMyIpPacketRule;
 import org.bitducks.spoofing.packet.DNSPacket;
 import org.bitducks.spoofing.packet.PacketFactory;
 
+/**
+ * DNS Service will poison all the dns query receive and answer to them with false information.
+ * @author Simon Perreault
+ *
+ */
 public class DNSService extends Service {
 	//private InetAddress falseDefaultIpAddr = null;
 	private Map<String, InetAddress> dnsPacketFilter = new HashMap<String, InetAddress>();
