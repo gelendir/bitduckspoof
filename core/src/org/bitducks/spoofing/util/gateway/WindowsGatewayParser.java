@@ -10,6 +10,13 @@ import org.bitducks.spoofing.core.InterfaceInfo;
 
 import jpcap.NetworkInterface;
 
+/**
+ * Windows Gateway Parser. Uses the netstat command
+ * for finding the gateway of a network device.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class WindowsGatewayParser extends GatewayParser {
 	
 	private static String command = "netstat -nr";
@@ -18,6 +25,10 @@ public class WindowsGatewayParser extends GatewayParser {
 	private static String ipRouteTableHeader = "IPv4 Route Table";
 	private static String ipRouteTableBanner = "====";
 
+	/**
+	 * Parse the result of the netstat command and return the gateway's
+	 * IP Address.
+	 */
 	@Override
 	public InetAddress findAndParse(NetworkInterface device) throws IOException {
 		

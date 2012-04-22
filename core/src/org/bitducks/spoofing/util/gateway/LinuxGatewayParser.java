@@ -8,11 +8,24 @@ import java.util.LinkedList;
 
 import jpcap.NetworkInterface;
 
+/**
+ * Linux Gateway Parser. Uses the netstat command
+ * for finding the gateway of a network device.
+ * This implementation should also work for MAC OS X, but
+ * hasn't been tested for that platform.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class LinuxGatewayParser extends GatewayParser {
 	
 	private static String command = "netstat -nr";
 	private static String defaultGateway = "0.0.0.0";
 
+	/**
+	 * Parse the result of the netstat command and return the gateway's
+	 * IP Address.
+	 */
 	@Override
 	public InetAddress findAndParse(NetworkInterface device) throws IOException {
 		

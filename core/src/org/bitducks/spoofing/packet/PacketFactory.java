@@ -7,8 +7,22 @@ import jpcap.packet.ARPPacket;
 import jpcap.packet.EthernetPacket;
 import jpcap.packet.UDPPacket;
 
+/**
+ * Utility class for helping in building various types of packet used throughout
+ * the network services.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class PacketFactory {
 	
+	/**
+	 * Builds a raw ethernet packet to attach to all outgoing packets.
+	 * 
+	 * @param macSource packet's source MAC
+	 * @param macDestination packet's destination MAC
+	 * @return Ethernet header packet
+	 */
 	static public EthernetPacket ethernet( byte[] macSource, byte[] macDestination ) {
 		
 		EthernetPacket ether = new EthernetPacket();
@@ -20,6 +34,14 @@ public class PacketFactory {
 		
 	}
 	
+	/**
+	 * Builds an ARP Request packet for finding out a target's MAC Address
+	 * 
+	 * @param macSource sender's MAC Address
+	 * @param ipSource sender's IP Address
+	 * @param ipTarget IP queried for a MAC Address
+	 * @return the ARP Request packet
+	 */
 	static public ARPPacket arpRequest( byte[] macSource, InetAddress ipSource, InetAddress ipTarget ) {
 		
 		ARPPacket request = new ARPPacket();
@@ -42,6 +64,16 @@ public class PacketFactory {
 		
 	}
 	
+	/**
+	 * Builds a DNS packet for querying a DNS server
+	 * 
+	 * @param queryPacket the raw UDP packet to wrap around
+	 * @param transactionId a unique transaciton ID
+	 * @param questions raw DNS questions to send to the server
+	 * @param query raw DNS query
+	 * @param ipFalseDNS are we using a false IP ?
+	 * @return the DNS packet
+	 */
 	static public DNSPacket dnsRequest( UDPPacket queryPacket, 
 			byte[] transactionId, 
 			byte[] questions, 
@@ -72,6 +104,15 @@ public class PacketFactory {
 		return dnsPacket;
 	}
 
+	/**
+	 * Builds an ARP reply packet.
+	 * 
+	 * @param macSource sender's MAC Address
+	 * @param source sender's IP Address
+	 * @param macVictim the MAC of the victim
+	 * @param victim the IP of the victim
+	 * @return the ARP Request packet
+	 */
 	public static ARPPacket arpReply(byte[] macSource, InetAddress source, byte[] macVictim, InetAddress victim) {
 		
 		ARPPacket reply = new ARPPacket();

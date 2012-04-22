@@ -9,14 +9,34 @@ import java.util.Set;
 
 import org.bitducks.spoofing.util.Util;
 
+/**
+ * ARP Cache. Used for caching ARP requests
+ * received by an ARP Service. Can be queried later on
+ * to find the MAC Address for an IP Address.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class ArpCache {
 	
+	/**
+	 * Internal cache for MAC Addresses
+	 */
 	private HashMap<InetAddress, ArpCacheEntry> addresses;
 	
+	/**
+	 * Constructor. Create a new ArpCache
+	 */
 	public ArpCache() {
 		this.addresses = new HashMap<InetAddress, ArpCacheEntry>();
 	}
 	
+	/**
+	 * Add a new MAC Address to the cache.
+	 * 
+	 * @param address IP Address
+	 * @param mac MAC Address
+	 */
 	public void add(InetAddress address, byte[] mac) {
 		
 		ArpCacheEntry entry = this.addresses.get(address);
@@ -37,6 +57,12 @@ public class ArpCache {
 				
 	}
 	
+	/**
+	 * Add a new MAC Address to the cache
+	 * 
+	 * @param address IP Address (raw bytes)
+	 * @param mac MAC Address
+	 */
 	public void add(byte[] address, byte[] mac) {
 		
 		InetAddress iAddress;
@@ -49,10 +75,23 @@ public class ArpCache {
 		
 	}
 	
+	/**
+	 * Check if a MAC Address for a certain IP Address is in the cache
+	 * 
+	 * @param address IP Address to look for
+	 * @return True if the address is in the cache
+	 */
 	public boolean hasAddress( InetAddress address ) {
 		return this.addresses.containsKey(address);
 	}
 	
+	/**
+	 * Check if a MAC Address for a certain IP Address is in the cache
+	 * 
+	 * @param address IP Address to look for
+	 * @parma timeout ARP Reply timeout. If the query is older than the timeout, discard the result from the lookup.
+	 * @return True if the address is in the cache
+	 */
 	public boolean hasAddress( InetAddress address, int timeout ) {
 		
 		ArpCacheEntry entry = this.addresses.get(address);
@@ -69,10 +108,22 @@ public class ArpCache {
 		
 	}
 	
+	/**
+	 * Return a list of all addresses currently in the cache
+	 * 
+	 * @return list of IP -> MAC Addresses
+	 */
 	public Set<InetAddress> allAdresses() {
 		return this.addresses.keySet();
 	}
 	
+	/**
+	 * Return a list of all addresses currently in the cache that
+	 * are not older than a certain timeout
+	 * 
+	 * @param timeout number of seconds
+	 * @return list of IP -> MAC Addresses
+	 */
 	public Set<InetAddress> allAddresses( int timeout ) {
 		
 		long minimum = Util.unixTimestampMillis() - (long)timeout;
@@ -90,10 +141,20 @@ public class ArpCache {
 		
 	}
 	
+	/**
+	 * Get the MAC Address corresponding to a IP address.
+	 * Retruns null if the IP isn't in the cache.
+	 * 
+	 * @param address IP Address
+	 * @return MAC Address
+	 */
 	public byte[] getMac(InetAddress address) {
 		return this.addresses.get(address).getMacAddress();
 	}
 		
+	/**
+	 * Textual representation of the current state of the ARP cache.
+	 */
 	public String toString() {
 		return this.addresses.toString();
 	}

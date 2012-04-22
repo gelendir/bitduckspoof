@@ -10,10 +10,25 @@ import org.bitducks.spoofing.core.Service;
 import org.bitducks.spoofing.core.rules.ARPResponseRule;
 import org.bitducks.spoofing.services.arp.ArpCache;
 
+/**
+ * Service for listening on a network connection and
+ * accumulating ARP Replies. IP and MAC addresses received
+ * through the replies are added to a ARP cache for later
+ * retreival.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class ArpRecieveService extends Service {
 	
+	/**
+	 * The internal ARP cache for storing addresses
+	 */
 	ArpCache cache;
 	
+	/**
+	 * Constructor. Creates a new ArpReceiveService
+	 */
 	public ArpRecieveService() {
 		
 		this.cache = new ArpCache();
@@ -23,6 +38,11 @@ public class ArpRecieveService extends Service {
 		
 	}
 	
+	/**
+	 * Main service loop. Listens for ARP Replies and
+	 * caches the IP and MAC addresses.
+	 * 
+	 */
 	public void run() {
 		
 		this.logger.info("ARP recieving service started");
@@ -47,6 +67,12 @@ public class ArpRecieveService extends Service {
 		
 	}
 
+	/**
+	 * Returns the ARP Cache containing all the IP and MAC
+	 * addresses received.
+	 * 
+	 * @return The ARP Cache.
+	 */
 	public ArpCache getCache() {
 		return this.cache;
 	}

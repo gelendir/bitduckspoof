@@ -20,6 +20,12 @@ import javax.swing.border.Border;
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 
+/**
+ * Small dialog to help the user select a device when starting a GUI program.
+ * 
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class DeviceSelection extends JDialog implements ActionListener, MouseListener  {
 	
 	/**
@@ -27,14 +33,31 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The device list to show to the user
+	 */
 	@SuppressWarnings("rawtypes")
 	private JList deviceList;
 	
+	/**
+	 * OK button for selecting a device
+	 */
 	private JButton okButton;
+	
+	/**
+	 * Cancel button for closing the dialog
+	 */
 	private JButton cancelButton;
 	
+	/**
+	 * Index of the device that was selected.
+	 */
 	private Integer index;
 	
+	/**
+	 * Returns the device that was selected byt the user in the dialog.
+	 * @return Network device selected by the user.
+	 */
 	static public NetworkInterface getSelectedDevice() {
 		
 		DeviceSelection dialog = new DeviceSelection();
@@ -53,11 +76,18 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		
 	}
 	
+	/**
+	 * Show the dialog to the user, letting him select a network device.
+	 * @return the index of the device selected (in the device list)
+	 */
 	private Integer showDialog() {
 		this.setVisible(true);
 		return this.index;
 	}
 
+	/**
+	 * Constructor. Create a new dialog.
+	 */
 	private DeviceSelection() {
 		super();
 		this.setTitle("Device Selection");
@@ -65,6 +95,9 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		this.generateLayout();
 	}
 	
+	/**
+	 * Utility method for generating the panel's layout.
+	 */
 	private void generateLayout() {
 		
 		JPanel panel = this.selectionPanel();
@@ -78,6 +111,11 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		
 	}
 	
+	/**
+	 * Utility method for generating the panel with the device selection
+	 * list.
+	 * @return
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private JPanel selectionPanel() {
 		
@@ -103,6 +141,12 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		
 	}
 	
+	/**
+	 * Utility method that returns a name for each network
+	 * device available.
+	 * 
+	 * @return Array of Strings with each device's name.
+	 */
 	private String[] deviceList() {
 		
 		NetworkInterface devices[] = JpcapCaptor.getDeviceList();
@@ -125,6 +169,12 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		
 	}
 	
+	/**
+	 * Utility method for generating the panel containing
+	 * the OK and Cancel button.
+	 * 
+	 * @return The button panel.
+	 */
 	private JPanel buttonPanel() {
 		
 		JPanel buttonPanel = new JPanel();
@@ -143,10 +193,18 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		return buttonPanel;
 	}
 	
+	/**
+	 * Utility method for generating a border for the dialog.
+	 * @return
+	 */
 	private Border defaultBorder() {
 		return BorderFactory.createEmptyBorder(10,10,10,10);
 	}
 
+	/**
+	 * Finds out what device the user has selected and
+	 * closes the dialog after a button click.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		
@@ -159,6 +217,10 @@ public class DeviceSelection extends JDialog implements ActionListener, MouseLis
 		this.dispose();
 	}
 
+	/**
+	 * Finds out what device the user has selected and
+	 * closes the dialog after a mouse click.
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		

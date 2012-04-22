@@ -1,5 +1,12 @@
 package org.bitducks.spoofing.util.os;
 
+/**
+ * Identifier for detecting an OS. Used in conjunction with
+ * OsDiscovery.
+ *  
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public enum Os {
 	
 	WINDOWS("windows"),
@@ -7,6 +14,10 @@ public enum Os {
 	MAC("mac"),
 	UNKNOWN("");
 	
+	/**
+	 * String for identifying the OS
+	 * 
+	 */
 	private String identifier;
 	
 	private Os(String identifier) {
