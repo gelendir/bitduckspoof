@@ -1,0 +1,31 @@
+Ce projet implémente plusieurs preuves de concept concernant les protocoles 
+ARP, DHCP et DNS. Le projet comprend deux parties: une partie qui consiste 
+en l'implémentation d'attaque et l'autre partie qui consiste en 
+l'implémentation de diverses défenses par rapport à plusieurs de ces
+attaques.
+
+Les deux parties du projet nécessite le téléchargement et l'installation de
+Jpcap:
+* http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/download.html pour le
+téléchargement.
+* http://netresearch.ics.uci.edu/kfujii/Jpcap/doc/install.html pour
+les étapes d'installation.
+
+Le projet nécessite également la version 7 de Java.
+
+Pour pouvoir exécuter les deux parties du projet, le répertoire « lib » 
+doit être à côté des JARs.
+
+Pour démarrer la partie « d'attaque » du projet, il suffit d'entrer la 
+commande suivante:
+
+	java -jar attacker.jar
+
+Pour démarer la partie de « défense » du projet, il suffit d'entrer la
+commande suivant:
+
+	java -jar defender.jar
+
+Si vous êtes sur Windows, vous pouvez tout simplement double-cliquer sur
+le JAR.
+
