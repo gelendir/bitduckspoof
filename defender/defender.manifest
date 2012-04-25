@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: . lib/log4j-1.2.16.jar lib/dhcp4java-1.00.jar
+Main-Class: org.bitducks.spoofing.Launcher
+
